@@ -1,0 +1,3 @@
+# No external dependencies - uses only Python standard library
+# curses - terminal UI
+# sqlite3 - data persistence
