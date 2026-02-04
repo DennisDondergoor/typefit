@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typefit - Typing Practice</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Main Menu Screen -->
+        <div id="menu-screen" class="screen active">
+            <h1>Typefit</h1>
+            <p class="subtitle">Typing Practice</p>
+
+            <div class="menu-section">
+                <h2>Select Mode</h2>
+                <div class="mode-buttons">
+                    <button class="mode-btn" data-mode="words">Words</button>
+                    <button class="mode-btn" data-mode="sentences">Sentences</button>
+                    <button class="mode-btn" data-mode="python">Python Code</button>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <h2>Font Size</h2>
+                <div class="font-size-control">
+                    <span class="font-label">A</span>
+                    <input type="range" id="font-size-slider" min="16" max="48" value="24">
+                    <span class="font-label large">A</span>
+                    <span id="font-size-value">24px</span>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <button id="view-progress-btn" class="secondary-btn">View Progress</button>
+            </div>
+        </div>
+
+        <!-- Practice Screen -->
+        <div id="practice-screen" class="screen">
+            <div class="practice-header">
+                <button id="back-to-menu" class="icon-btn">&larr; Menu</button>
+                <div class="stats-bar">
+                    <span id="live-wpm">WPM: --</span>
+                    <span id="live-accuracy">Accuracy: --</span>
+                    <span id="live-progress">Progress: 0%</span>
+                </div>
+            </div>
+
+            <div id="text-display" class="text-display">
+                <!-- Characters will be rendered here -->
+            </div>
+
+            <div class="practice-footer">
+                <p class="hint">Type the text above. Press Backspace to correct mistakes.</p>
+                <p class="hint">Press Escape to return to menu.</p>
+            </div>
+        </div>
+
+        <!-- Summary Screen -->
+        <div id="summary-screen" class="screen">
+            <h1>Session Complete!</h1>
+
+            <div class="summary-stats">
+                <div class="stat-box">
+                    <span class="stat-value" id="summary-wpm">--</span>
+                    <span class="stat-label">WPM</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-value" id="summary-accuracy">--</span>
+                    <span class="stat-label">Accuracy</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-value" id="summary-time">--</span>
+                    <span class="stat-label">Time</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-value" id="summary-chars">--</span>
+                    <span class="stat-label">Characters</span>
+                </div>
+            </div>
+
+            <div id="problem-keys-section" class="summary-section">
+                <h2>Problem Keys</h2>
+                <div id="problem-keys-display"></div>
+            </div>
+
+            <div class="summary-actions">
+                <button id="practice-again" class="primary-btn">Practice Again</button>
+                <button id="back-to-menu-summary" class="secondary-btn">Back to Menu</button>
+            </div>
+        </div>
+
+        <!-- Progress Screen -->
+        <div id="progress-screen" class="screen">
+            <div class="progress-header">
+                <button id="back-from-progress" class="icon-btn">&larr; Back</button>
+                <h1>Your Progress</h1>
+            </div>
+
+            <div class="progress-overview">
+                <div class="stat-box">
+                    <span class="stat-value" id="total-sessions">--</span>
+                    <span class="stat-label">Sessions</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-value" id="avg-wpm">--</span>
+                    <span class="stat-label">Avg WPM</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-value" id="avg-accuracy">--</span>
+                    <span class="stat-label">Avg Accuracy</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-value" id="best-wpm">--</span>
+                    <span class="stat-label">Best WPM</span>
+                </div>
+            </div>
+
+            <div class="progress-section">
+                <h2>Top Problem Keys</h2>
+                <div id="top-problem-keys"></div>
+            </div>
+
+            <div class="progress-section">
+                <h2>Recent Sessions</h2>
+                <div id="session-history"></div>
+            </div>
+
+            <div class="progress-actions">
+                <button id="clear-data" class="danger-btn">Clear All Data</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
