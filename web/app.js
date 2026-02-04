@@ -441,14 +441,22 @@ class App {
         this.bookHint = document.querySelector('.book-hint');
 
         // Menu elements
+        this.modeBtns = document.querySelectorAll('.mode-btn');
+        this.viewProgressBtn = document.getElementById('view-progress-btn');
+        this.openSettingsBtn = document.getElementById('open-settings-btn');
+
+        // Length modal elements
+        this.lengthModal = document.getElementById('length-modal');
+        this.lengthBtns = document.querySelectorAll('.length-btn');
+        this.startPracticeBtn = document.getElementById('start-practice-btn');
+        this.cancelLengthBtn = document.getElementById('cancel-length-btn');
+
+        // Settings modal elements
+        this.settingsModal = document.getElementById('settings-modal');
+        this.closeSettingsBtn = document.getElementById('close-settings-btn');
         this.fontBtns = document.querySelectorAll('.font-btn');
         this.fontSizeSlider = document.getElementById('font-size-slider');
         this.fontSizeValue = document.getElementById('font-size-value');
-        this.modeBtns = document.querySelectorAll('.mode-btn');
-        this.lengthBtns = document.querySelectorAll('.length-btn');
-        this.viewProgressBtn = document.getElementById('view-progress-btn');
-
-        // Color inputs
         this.colorCorrect = document.getElementById('color-correct');
         this.colorIncorrect = document.getElementById('color-incorrect');
         this.colorCursor = document.getElementById('color-cursor');
@@ -519,7 +527,7 @@ class App {
                 if (this.currentMode === 'books') {
                     this.showBookSelection();
                 } else {
-                    this.startPractice();
+                    this.showLengthModal();
                 }
             });
         });
@@ -534,13 +542,28 @@ class App {
             this.showBookSelection();
         });
 
-        // Length buttons
+        // Length modal
         this.lengthBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 this.lengthBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 this.exerciseLength = parseInt(btn.dataset.length);
             });
+        });
+        this.startPracticeBtn.addEventListener('click', () => {
+            this.hideLengthModal();
+            this.startPractice();
+        });
+        this.cancelLengthBtn.addEventListener('click', () => {
+            this.hideLengthModal();
+        });
+
+        // Settings modal
+        this.openSettingsBtn.addEventListener('click', () => {
+            this.showSettingsModal();
+        });
+        this.closeSettingsBtn.addEventListener('click', () => {
+            this.hideSettingsModal();
         });
 
         // View progress
@@ -639,6 +662,22 @@ class App {
         this.stopUpdateInterval();
         this.session = null;
         this.showScreen(this.menuScreen);
+    }
+
+    showLengthModal() {
+        this.lengthModal.classList.remove('hidden');
+    }
+
+    hideLengthModal() {
+        this.lengthModal.classList.add('hidden');
+    }
+
+    showSettingsModal() {
+        this.settingsModal.classList.remove('hidden');
+    }
+
+    hideSettingsModal() {
+        this.settingsModal.classList.add('hidden');
     }
 
     pausePractice() {
@@ -784,6 +823,18 @@ class App {
     }
 
     handleKeyDown(e) {
+        // Handle Escape for modals
+        if (e.key === 'Escape') {
+            if (!this.lengthModal.classList.contains('hidden')) {
+                this.hideLengthModal();
+                return;
+            }
+            if (!this.settingsModal.classList.contains('hidden')) {
+                this.hideSettingsModal();
+                return;
+            }
+        }
+
         // Only handle keys during practice
         if (!this.session || !this.practiceScreen.classList.contains('active')) {
             return;

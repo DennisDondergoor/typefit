@@ -16,65 +16,77 @@
             <h1>Typefit</h1>
             <p class="subtitle">Typing Practice</p>
 
-            <div class="menu-section">
-                <h2>Select Mode</h2>
-                <div class="mode-buttons">
-                    <button class="mode-btn" data-mode="words">Words</button>
-                    <button class="mode-btn" data-mode="sentences">Sentences</button>
-                    <button class="mode-btn" data-mode="python">Python Code</button>
-                    <button class="mode-btn" data-mode="books">Books</button>
-                </div>
+            <div class="mode-buttons">
+                <button class="mode-btn" data-mode="words">Words</button>
+                <button class="mode-btn" data-mode="sentences">Sentences</button>
+                <button class="mode-btn" data-mode="python">Python Code</button>
+                <button class="mode-btn" data-mode="books">Books</button>
             </div>
 
-            <div class="menu-section">
+            <div class="menu-footer">
+                <button id="view-progress-btn" class="text-btn">Progress</button>
+                <button id="open-settings-btn" class="text-btn">Settings</button>
+            </div>
+        </div>
+
+        <!-- Length Selection Modal -->
+        <div id="length-modal" class="modal hidden">
+            <div class="modal-content">
                 <h2>Exercise Length</h2>
                 <div class="length-buttons">
                     <button class="length-btn active" data-length="10">10</button>
                     <button class="length-btn" data-length="25">25</button>
                     <button class="length-btn" data-length="50">50</button>
                 </div>
+                <button id="start-practice-btn" class="primary-btn">Start</button>
+                <button id="cancel-length-btn" class="text-btn">Cancel</button>
             </div>
+        </div>
 
-            <div class="menu-section">
-                <h2>Font</h2>
-                <div class="font-buttons" id="font-buttons">
-                    <button class="font-btn active" data-font="JetBrains Mono">JetBrains Mono</button>
-                    <button class="font-btn" data-font="Fira Code">Fira Code</button>
-                    <button class="font-btn" data-font="Source Code Pro">Source Code Pro</button>
-                    <button class="font-btn" data-font="Ubuntu Mono">Ubuntu Mono</button>
-                </div>
-            </div>
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Settings</h2>
 
-            <div class="menu-section">
-                <h2>Font Size</h2>
-                <div class="font-size-control">
-                    <span class="font-label">A</span>
-                    <input type="range" id="font-size-slider" min="32" max="40" value="36">
-                    <span class="font-label large">A</span>
-                    <span id="font-size-value">24px</span>
-                </div>
-            </div>
-
-            <div class="menu-section">
-                <h2>Colors</h2>
-                <div class="color-controls">
-                    <div class="color-control">
-                        <label for="color-correct">Correct</label>
-                        <input type="color" id="color-correct" value="#4ade80">
-                    </div>
-                    <div class="color-control">
-                        <label for="color-incorrect">Incorrect</label>
-                        <input type="color" id="color-incorrect" value="#dc2626">
-                    </div>
-                    <div class="color-control">
-                        <label for="color-cursor">Cursor</label>
-                        <input type="color" id="color-cursor" value="#ffffff">
+                <div class="settings-section">
+                    <h3>Font</h3>
+                    <div class="font-buttons" id="font-buttons">
+                        <button class="font-btn active" data-font="JetBrains Mono">JetBrains Mono</button>
+                        <button class="font-btn" data-font="Fira Code">Fira Code</button>
+                        <button class="font-btn" data-font="Source Code Pro">Source Code Pro</button>
+                        <button class="font-btn" data-font="Ubuntu Mono">Ubuntu Mono</button>
                     </div>
                 </div>
-            </div>
 
-            <div class="menu-section">
-                <button id="view-progress-btn" class="secondary-btn">View Progress</button>
+                <div class="settings-section">
+                    <h3>Font Size</h3>
+                    <div class="font-size-control">
+                        <span class="font-label">A</span>
+                        <input type="range" id="font-size-slider" min="32" max="40" value="36">
+                        <span class="font-label large">A</span>
+                        <span id="font-size-value">36px</span>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Colors</h3>
+                    <div class="color-controls">
+                        <div class="color-control">
+                            <label for="color-correct">Correct</label>
+                            <input type="color" id="color-correct" value="#4ade80">
+                        </div>
+                        <div class="color-control">
+                            <label for="color-incorrect">Incorrect</label>
+                            <input type="color" id="color-incorrect" value="#dc2626">
+                        </div>
+                        <div class="color-control">
+                            <label for="color-cursor">Cursor</label>
+                            <input type="color" id="color-cursor" value="#ffffff">
+                        </div>
+                    </div>
+                </div>
+
+                <button id="close-settings-btn" class="primary-btn">Done</button>
             </div>
         </div>
 
