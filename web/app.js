@@ -26,25 +26,26 @@ class StorageManager {
 
     getBookStats(book) {
         const progress = this.getBookProgress(book.id);
-        let totalParagraphs = 0;
-        let completedParagraphs = 0;
+        let totalChars = 0;
+        let completedChars = 0;
 
         for (let i = 0; i < book.chapters.length; i++) {
-            const chapterParagraphs = book.chapters[i].paragraphs.length;
-            totalParagraphs += chapterParagraphs;
-            if (i < progress.chapter) {
-                completedParagraphs += chapterParagraphs;
-            } else if (i === progress.chapter) {
-                completedParagraphs += progress.paragraph;
+            const chapter = book.chapters[i];
+            for (let j = 0; j < chapter.paragraphs.length; j++) {
+                const paragraphLength = chapter.paragraphs[j].length;
+                totalChars += paragraphLength;
+                if (i < progress.chapter || (i === progress.chapter && j < progress.paragraph)) {
+                    completedChars += paragraphLength;
+                }
             }
         }
 
         return {
             currentChapter: progress.chapter + 1,
             totalChapters: book.chapters.length,
-            completedParagraphs,
-            totalParagraphs,
-            percentComplete: Math.round((completedParagraphs / totalParagraphs) * 100)
+            completedChars,
+            totalChars,
+            percentComplete: totalChars > 0 ? Math.round((completedChars / totalChars) * 100) : 0
         };
     }
 
