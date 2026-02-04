@@ -11,22 +11,26 @@ class StorageManager {
         };
     }
 
-    getBookProgress() {
+    getBookProgress(bookId) {
         const data = localStorage.getItem(this.KEYS.BOOK_PROGRESS);
-        return data ? JSON.parse(data) : { chapter: 0, paragraph: 0 };
+        const allProgress = data ? JSON.parse(data) : {};
+        return allProgress[bookId] || { chapter: 0, paragraph: 0 };
     }
 
-    setBookProgress(chapter, paragraph) {
-        localStorage.setItem(this.KEYS.BOOK_PROGRESS, JSON.stringify({ chapter, paragraph }));
+    setBookProgress(bookId, chapter, paragraph) {
+        const data = localStorage.getItem(this.KEYS.BOOK_PROGRESS);
+        const allProgress = data ? JSON.parse(data) : {};
+        allProgress[bookId] = { chapter, paragraph };
+        localStorage.setItem(this.KEYS.BOOK_PROGRESS, JSON.stringify(allProgress));
     }
 
-    getBookStats() {
-        const progress = this.getBookProgress();
+    getBookStats(book) {
+        const progress = this.getBookProgress(book.id);
         let totalParagraphs = 0;
         let completedParagraphs = 0;
 
-        for (let i = 0; i < BOOK.chapters.length; i++) {
-            const chapterParagraphs = BOOK.chapters[i].paragraphs.length;
+        for (let i = 0; i < book.chapters.length; i++) {
+            const chapterParagraphs = book.chapters[i].paragraphs.length;
             totalParagraphs += chapterParagraphs;
             if (i < progress.chapter) {
                 completedParagraphs += chapterParagraphs;
@@ -37,7 +41,7 @@ class StorageManager {
 
         return {
             currentChapter: progress.chapter + 1,
-            totalChapters: BOOK.chapters.length,
+            totalChapters: book.chapters.length,
             completedParagraphs,
             totalParagraphs,
             percentComplete: Math.round((completedParagraphs / totalParagraphs) * 100)
@@ -137,7 +141,9 @@ class TypingSession {
         }
 
         const expected = this.text[this.position];
-        const isCorrect = key === expected;
+        // Normalize accented characters (ü→u, î→i, ô→o, etc.)
+        const normalizedExpected = expected.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const isCorrect = key === expected || key === normalizedExpected;
 
         this.totalTyped++;
 
@@ -354,6 +360,7 @@ class App {
         this.currentMode = 'words';
         this.exerciseLength = 25;
         this.updateInterval = null;
+        this.currentBook = null;
         this.bookChapter = 0;
         this.bookParagraph = 0;
 
@@ -368,6 +375,11 @@ class App {
         this.practiceScreen = document.getElementById('practice-screen');
         this.summaryScreen = document.getElementById('summary-screen');
         this.progressScreen = document.getElementById('progress-screen');
+        this.bookSelectionScreen = document.getElementById('book-selection-screen');
+
+        // Book selection elements
+        this.bookList = document.getElementById('book-list');
+        this.backFromBooksBtn = document.getElementById('back-from-books');
 
         // Menu elements
         this.fontSizeSlider = document.getElementById('font-size-slider');
@@ -414,8 +426,17 @@ class App {
         this.modeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 this.currentMode = btn.dataset.mode;
-                this.startPractice();
+                if (this.currentMode === 'books') {
+                    this.showBookSelection();
+                } else {
+                    this.startPractice();
+                }
             });
+        });
+
+        // Back from book selection
+        this.backFromBooksBtn.addEventListener('click', () => {
+            this.showMenu();
         });
 
         // Length buttons
@@ -473,7 +494,7 @@ class App {
     }
 
     showScreen(screen) {
-        [this.menuScreen, this.practiceScreen, this.summaryScreen, this.progressScreen]
+        [this.menuScreen, this.practiceScreen, this.summaryScreen, this.progressScreen, this.bookSelectionScreen]
             .forEach(s => s.classList.remove('active'));
         screen.classList.add('active');
     }
@@ -487,22 +508,22 @@ class App {
     startPractice() {
         let text;
 
-        if (this.currentMode === 'book') {
+        if (this.currentMode === 'books' && this.currentBook) {
             // Load book progress
-            const progress = this.storage.getBookProgress();
+            const progress = this.storage.getBookProgress(this.currentBook.id);
             this.bookChapter = progress.chapter;
             this.bookParagraph = progress.paragraph;
 
             // Check if book is complete
-            if (this.bookChapter >= BOOK.chapters.length) {
+            if (this.bookChapter >= this.currentBook.chapters.length) {
                 alert('Congratulations! You have completed the entire book!');
                 this.bookChapter = 0;
                 this.bookParagraph = 0;
-                this.storage.setBookProgress(0, 0);
+                this.storage.setBookProgress(this.currentBook.id, 0, 0);
             }
 
             // Get current paragraph
-            const chapter = BOOK.chapters[this.bookChapter];
+            const chapter = this.currentBook.chapters[this.bookChapter];
             text = chapter.paragraphs[this.bookParagraph];
         } else {
             text = TextGenerator.getText(this.currentMode, this.exerciseLength);
@@ -550,8 +571,8 @@ class App {
         this.liveWpm.textContent = `WPM: ${stats.wpm}`;
         this.liveAccuracy.textContent = `Accuracy: ${stats.accuracy}%`;
 
-        if (this.currentMode === 'book') {
-            const bookStats = this.storage.getBookStats();
+        if (this.currentMode === 'books' && this.currentBook) {
+            const bookStats = this.storage.getBookStats(this.currentBook);
             this.liveProgress.textContent = `Chapter ${bookStats.currentChapter}/${bookStats.totalChapters} (${bookStats.percentComplete}% complete)`;
         } else {
             this.liveProgress.textContent = `Progress: ${stats.progress}%`;
@@ -652,10 +673,10 @@ class App {
         this.storage.saveSession(sessionData);
         this.storage.updateProblemKeys(stats.mistakes);
 
-        // Advance book progress if in book mode
-        if (this.currentMode === 'book') {
+        // Advance book progress if in books mode
+        if (this.currentMode === 'books' && this.currentBook) {
             this.bookParagraph++;
-            const chapter = BOOK.chapters[this.bookChapter];
+            const chapter = this.currentBook.chapters[this.bookChapter];
 
             if (this.bookParagraph >= chapter.paragraphs.length) {
                 // Move to next chapter
@@ -663,7 +684,7 @@ class App {
                 this.bookParagraph = 0;
             }
 
-            this.storage.setBookProgress(this.bookChapter, this.bookParagraph);
+            this.storage.setBookProgress(this.currentBook.id, this.bookChapter, this.bookParagraph);
         }
 
         // Show summary
@@ -732,6 +753,47 @@ class App {
         }
 
         this.showScreen(this.progressScreen);
+    }
+
+    showBookSelection() {
+        // Render book cards
+        this.bookList.innerHTML = BOOKS.map(book => {
+            const stats = this.storage.getBookStats(book);
+            return `
+                <div class="book-card" data-book-id="${book.id}">
+                    <div class="book-info">
+                        <h3>${book.title}</h3>
+                        <p class="book-author">${book.author}</p>
+                        <div class="book-progress">
+                            <div class="book-progress-bar">
+                                <div class="book-progress-fill" style="width: ${stats.percentComplete}%"></div>
+                            </div>
+                            <span>${stats.percentComplete}%</span>
+                        </div>
+                    </div>
+                    <div class="book-stats">
+                        <span class="chapters">${stats.totalChapters} chapters</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Add click handlers
+        this.bookList.querySelectorAll('.book-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const bookId = card.dataset.bookId;
+                this.selectBook(bookId);
+            });
+        });
+
+        this.showScreen(this.bookSelectionScreen);
+    }
+
+    selectBook(bookId) {
+        this.currentBook = BOOKS.find(b => b.id === bookId);
+        if (this.currentBook) {
+            this.startPractice();
+        }
     }
 
     formatTime(seconds) {
