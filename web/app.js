@@ -407,7 +407,7 @@ class App {
         this.storage = new StorageManager();
         this.session = null;
         this.currentMode = 'words';
-        this.exerciseLength = 25;
+        this.exerciseLength = 10;
         this.updateInterval = null;
         this.currentBook = null;
         this.bookChapter = 0;
@@ -702,22 +702,49 @@ class App {
     renderText() {
         if (!this.session) return;
 
-        const states = this.session.getCharStates();
-        this.textDisplay.innerHTML = states.map(({ char, state }) => {
-            // Handle special characters for display
+        // Build all spans once
+        const text = this.session.text;
+        this.textDisplay.innerHTML = text.split('').map((char, i) => {
             let displayChar = char;
             if (char === '\n') {
-                displayChar = '\u21b5\n'; // Show return symbol before newline
+                displayChar = '\u21b5\n';
             } else if (char === '\t') {
-                displayChar = '    '; // Show spaces for tab
+                displayChar = '    ';
             }
+            const state = i === 0 ? 'current' : 'pending';
             return `<span class="char ${state}">${this.escapeHtml(displayChar)}</span>`;
         }).join('');
 
+        // Store span references for fast updates
+        this.charSpans = this.textDisplay.querySelectorAll('.char');
+    }
+
+    updateCharDisplay(fromPos = null) {
+        if (!this.session || !this.charSpans) return;
+
+        const pos = this.session.position;
+        const lastIncorrect = this.session.lastKeyIncorrect;
+
+        // Update from specified position (or pos-1) to current position +1
+        const start = fromPos !== null ? fromPos : Math.max(0, pos - 1);
+        const end = Math.min(pos + 1, this.charSpans.length - 1);
+
+        for (let i = start; i <= end; i++) {
+            const span = this.charSpans[i];
+            span.classList.remove('correct', 'incorrect', 'current', 'pending');
+
+            if (i < pos) {
+                span.classList.add('correct');
+            } else if (i === pos) {
+                span.classList.add(lastIncorrect ? 'incorrect' : 'current');
+            } else {
+                span.classList.add('pending');
+            }
+        }
+
         // Scroll current character into view
-        const currentChar = this.textDisplay.querySelector('.char.current');
-        if (currentChar) {
-            currentChar.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        if (this.charSpans[pos]) {
+            this.charSpans[pos].scrollIntoView({ block: 'center', behavior: 'smooth' });
         }
     }
 
@@ -799,7 +826,7 @@ class App {
         if (e.key === 'Backspace') {
             e.preventDefault();
             this.session.handleBackspace();
-            this.renderText();
+            this.updateCharDisplay();
             return;
         }
 
@@ -816,8 +843,9 @@ class App {
         // Handle Tab - skip up to 4 spaces
         if (e.key === 'Tab') {
             e.preventDefault();
+            const oldPos = this.session.position;
             const complete = this.session.handleTab();
-            this.renderText();
+            this.updateCharDisplay(oldPos);
             if (complete) {
                 this.endSession();
             }
@@ -828,7 +856,7 @@ class App {
         if (e.key === 'Enter') {
             e.preventDefault();
             const complete = this.session.handleKey('\n');
-            this.renderText();
+            this.updateCharDisplay();
             if (complete) {
                 this.endSession();
             }
@@ -839,7 +867,7 @@ class App {
         if (e.key.length === 1) {
             e.preventDefault();
             const complete = this.session.handleKey(e.key);
-            this.renderText();
+            this.updateCharDisplay();
             if (complete) {
                 this.endSession();
             }
