@@ -7,7 +7,13 @@ class StorageManager {
             SESSIONS: 'typefit_sessions',
             PROBLEM_KEYS: 'typefit_problem_keys',
             FONT_SIZE: 'typefit_font_size',
-            BOOK_PROGRESS: 'typefit_book_progress'
+            BOOK_PROGRESS: 'typefit_book_progress',
+            COLORS: 'typefit_colors'
+        };
+        this.DEFAULT_COLORS = {
+            correct: '#4ade80',
+            incorrect: '#dc2626',
+            cursor: '#ffffff'
         };
     }
 
@@ -85,6 +91,17 @@ class StorageManager {
         localStorage.setItem(this.KEYS.FONT_SIZE, size.toString());
     }
 
+    getColors() {
+        const data = localStorage.getItem(this.KEYS.COLORS);
+        return data ? JSON.parse(data) : { ...this.DEFAULT_COLORS };
+    }
+
+    setColor(key, value) {
+        const colors = this.getColors();
+        colors[key] = value;
+        localStorage.setItem(this.KEYS.COLORS, JSON.stringify(colors));
+    }
+
     clearAll() {
         localStorage.removeItem(this.KEYS.SESSIONS);
         localStorage.removeItem(this.KEYS.PROBLEM_KEYS);
@@ -126,6 +143,7 @@ class TypingSession {
         this.endTime = null;
         this.correctChars = 0;
         this.totalTyped = 0;
+        this.lastKeyIncorrect = false;
     }
 
     start() {
@@ -152,6 +170,7 @@ class TypingSession {
             this.typedChars.push({ expected, typed: key, correct: true });
             this.correctChars++;
             this.position++;
+            this.lastKeyIncorrect = false;
 
             if (this.position >= this.text.length) {
                 this.endTime = Date.now();
@@ -159,6 +178,7 @@ class TypingSession {
             }
         } else {
             // Don't advance position on incorrect key
+            this.lastKeyIncorrect = true;
             const displayKey = this.getDisplayKey(expected);
             this.mistakes[displayKey] = (this.mistakes[displayKey] || 0) + 1;
         }
@@ -230,7 +250,7 @@ class TypingSession {
             if (i < this.position) {
                 state = 'correct';
             } else if (i === this.position) {
-                state = 'current';
+                state = this.lastKeyIncorrect ? 'incorrect' : 'current';
             } else {
                 state = 'pending';
             }
@@ -389,6 +409,11 @@ class App {
         this.lengthBtns = document.querySelectorAll('.length-btn');
         this.viewProgressBtn = document.getElementById('view-progress-btn');
 
+        // Color inputs
+        this.colorCorrect = document.getElementById('color-correct');
+        this.colorIncorrect = document.getElementById('color-incorrect');
+        this.colorCursor = document.getElementById('color-cursor');
+
         // Practice elements
         this.backToMenuBtn = document.getElementById('back-to-menu');
         this.textDisplay = document.getElementById('text-display');
@@ -421,6 +446,17 @@ class App {
         this.fontSizeSlider.addEventListener('input', () => {
             const size = this.fontSizeSlider.value;
             this.setFontSize(size);
+        });
+
+        // Color inputs
+        this.colorCorrect.addEventListener('input', () => {
+            this.setColor('correct', this.colorCorrect.value);
+        });
+        this.colorIncorrect.addEventListener('input', () => {
+            this.setColor('incorrect', this.colorIncorrect.value);
+        });
+        this.colorCursor.addEventListener('input', () => {
+            this.setColor('cursor', this.colorCursor.value);
         });
 
         // Mode buttons
@@ -486,12 +522,31 @@ class App {
         const fontSize = this.storage.getFontSize();
         this.fontSizeSlider.value = fontSize;
         this.setFontSize(fontSize);
+
+        // Load colors
+        const colors = this.storage.getColors();
+        this.colorCorrect.value = colors.correct;
+        this.colorIncorrect.value = colors.incorrect;
+        this.colorCursor.value = colors.cursor;
+        this.applyColors(colors);
     }
 
     setFontSize(size) {
         document.documentElement.style.setProperty('--font-size', `${size}px`);
         this.fontSizeValue.textContent = `${size}px`;
         this.storage.setFontSize(size);
+    }
+
+    setColor(key, value) {
+        this.storage.setColor(key, value);
+        const colors = this.storage.getColors();
+        this.applyColors(colors);
+    }
+
+    applyColors(colors) {
+        document.documentElement.style.setProperty('--success-color', colors.correct);
+        document.documentElement.style.setProperty('--error-bg', colors.incorrect);
+        document.documentElement.style.setProperty('--highlight-bg', colors.cursor);
     }
 
     showScreen(screen) {

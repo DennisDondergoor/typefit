@@ -172,6 +172,43 @@ body {
     min-width: 50px;
 }
 
+.color-controls {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.color-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.color-control label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.color-control input[type="color"] {
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    background: none;
+    padding: 2px;
+}
+
+.color-control input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-control input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 4px;
+}
+
 .primary-btn, .secondary-btn, .danger-btn {
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
