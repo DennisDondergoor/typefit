@@ -75,6 +75,7 @@
                     <span id="live-progress">Progress: 0%</span>
                 </div>
             </div>
+            <div id="chapter-title" class="chapter-title hidden"></div>
 
             <div id="text-display" class="text-display">
                 <!-- Characters will be rendered here -->
@@ -92,6 +93,7 @@
             <div class="practice-footer">
                 <p class="hint">Type the text above. Press Backspace to correct mistakes.</p>
                 <p class="hint">Press Escape to pause.</p>
+                <p class="hint book-hint hidden">PageUp/PageDown to skip paragraphs.</p>
             </div>
         </div>
 
@@ -138,6 +140,18 @@
 
             <div id="book-list" class="book-list">
                 <!-- Book cards will be rendered here -->
+            </div>
+        </div>
+
+        <!-- Chapter Selection Screen -->
+        <div id="chapter-selection-screen" class="screen">
+            <div class="progress-header">
+                <button id="back-from-chapters" class="icon-btn">&larr; Back</button>
+                <h1 id="chapter-screen-title">Select a Chapter</h1>
+            </div>
+
+            <div id="chapter-list" class="chapter-list">
+                <!-- Chapter cards will be rendered here -->
             </div>
         </div>
 

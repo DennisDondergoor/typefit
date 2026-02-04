@@ -600,6 +600,79 @@ body {
     font-size: 0.85rem;
 }
 
+/* Chapter Selection Screen */
+.chapter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.chapter-card {
+    background-color: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chapter-card:hover {
+    border-color: var(--accent-color);
+}
+
+.chapter-card.current {
+    border-color: var(--success-color);
+    background-color: rgba(74, 222, 128, 0.1);
+}
+
+.chapter-card.completed {
+    opacity: 0.6;
+}
+
+.chapter-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.chapter-number {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    min-width: 3rem;
+}
+
+.chapter-card h4 {
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+.chapter-status {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.chapter-status.in-progress {
+    color: var(--success-color);
+}
+
+/* Chapter title in practice */
+.chapter-title {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+}
+
+.chapter-title.hidden {
+    display: none;
+}
+
 /* Responsive */
 @media (max-width: 600px) {
     .stats-bar {

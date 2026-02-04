@@ -416,10 +416,20 @@ class App {
         this.summaryScreen = document.getElementById('summary-screen');
         this.progressScreen = document.getElementById('progress-screen');
         this.bookSelectionScreen = document.getElementById('book-selection-screen');
+        this.chapterSelectionScreen = document.getElementById('chapter-selection-screen');
 
         // Book selection elements
         this.bookList = document.getElementById('book-list');
         this.backFromBooksBtn = document.getElementById('back-from-books');
+
+        // Chapter selection elements
+        this.chapterList = document.getElementById('chapter-list');
+        this.chapterScreenTitle = document.getElementById('chapter-screen-title');
+        this.backFromChaptersBtn = document.getElementById('back-from-chapters');
+
+        // Chapter title in practice
+        this.chapterTitle = document.getElementById('chapter-title');
+        this.bookHint = document.querySelector('.book-hint');
 
         // Menu elements
         this.fontSizeSlider = document.getElementById('font-size-slider');
@@ -498,6 +508,11 @@ class App {
         // Back from book selection
         this.backFromBooksBtn.addEventListener('click', () => {
             this.showMenu();
+        });
+
+        // Back from chapter selection
+        this.backFromChaptersBtn.addEventListener('click', () => {
+            this.showBookSelection();
         });
 
         // Length buttons
@@ -583,7 +598,7 @@ class App {
     }
 
     showScreen(screen) {
-        [this.menuScreen, this.practiceScreen, this.summaryScreen, this.progressScreen, this.bookSelectionScreen]
+        [this.menuScreen, this.practiceScreen, this.summaryScreen, this.progressScreen, this.bookSelectionScreen, this.chapterSelectionScreen]
             .forEach(s => s.classList.remove('active'));
         screen.classList.add('active');
     }
@@ -634,8 +649,15 @@ class App {
             // Get current paragraph
             const chapter = this.currentBook.chapters[this.bookChapter];
             text = chapter.paragraphs[this.bookParagraph];
+
+            // Show chapter title
+            this.chapterTitle.textContent = `Chapter ${chapter.number}: ${chapter.title}`;
+            this.chapterTitle.classList.remove('hidden');
+            this.bookHint.classList.remove('hidden');
         } else {
             text = TextGenerator.getText(this.currentMode, this.exerciseLength);
+            this.chapterTitle.classList.add('hidden');
+            this.bookHint.classList.add('hidden');
         }
 
         this.session = new TypingSession(text);
@@ -727,6 +749,20 @@ class App {
             return;
         }
 
+        // Paragraph navigation for books mode
+        if (this.currentMode === 'books' && this.currentBook) {
+            if (e.key === 'PageDown') {
+                e.preventDefault();
+                this.skipParagraph(1);
+                return;
+            }
+            if (e.key === 'PageUp') {
+                e.preventDefault();
+                this.skipParagraph(-1);
+                return;
+            }
+        }
+
         // Backspace
         if (e.key === 'Backspace') {
             e.preventDefault();
@@ -776,6 +812,49 @@ class App {
                 this.endSession();
             }
         }
+    }
+
+    skipParagraph(direction) {
+        if (!this.currentBook) return;
+
+        const chapter = this.currentBook.chapters[this.bookChapter];
+        let newParagraph = this.bookParagraph + direction;
+        let newChapter = this.bookChapter;
+
+        // Handle chapter boundaries
+        if (newParagraph < 0) {
+            // Go to previous chapter
+            if (newChapter > 0) {
+                newChapter--;
+                newParagraph = this.currentBook.chapters[newChapter].paragraphs.length - 1;
+            } else {
+                // Already at first paragraph of first chapter
+                return;
+            }
+        } else if (newParagraph >= chapter.paragraphs.length) {
+            // Go to next chapter
+            if (newChapter < this.currentBook.chapters.length - 1) {
+                newChapter++;
+                newParagraph = 0;
+            } else {
+                // Already at last paragraph of last chapter
+                return;
+            }
+        }
+
+        // Update progress and restart practice
+        this.bookChapter = newChapter;
+        this.bookParagraph = newParagraph;
+        this.storage.setBookProgress(this.currentBook.id, newChapter, newParagraph);
+
+        // Restart with new paragraph
+        const newChapterData = this.currentBook.chapters[newChapter];
+        const text = newChapterData.paragraphs[newParagraph];
+
+        this.session = new TypingSession(text);
+        this.chapterTitle.textContent = `Chapter ${newChapterData.number}: ${newChapterData.title}`;
+        this.renderText();
+        this.updateLiveStats();
     }
 
     endSession() {
@@ -913,8 +992,63 @@ class App {
     selectBook(bookId) {
         this.currentBook = BOOKS.find(b => b.id === bookId);
         if (this.currentBook) {
-            this.startPractice();
+            this.showChapterSelection();
         }
+    }
+
+    showChapterSelection() {
+        if (!this.currentBook) return;
+
+        this.chapterScreenTitle.textContent = this.currentBook.title;
+        const progress = this.storage.getBookProgress(this.currentBook.id);
+
+        this.chapterList.innerHTML = this.currentBook.chapters.map((chapter, index) => {
+            const isCurrent = index === progress.chapter;
+            const isCompleted = index < progress.chapter;
+            const paragraphCount = chapter.paragraphs.length;
+            const currentParagraph = isCurrent ? progress.paragraph : (isCompleted ? paragraphCount : 0);
+
+            let statusText;
+            let statusClass = '';
+            if (isCompleted) {
+                statusText = 'Completed';
+            } else if (isCurrent) {
+                statusText = `${currentParagraph}/${paragraphCount} paragraphs`;
+                statusClass = 'in-progress';
+            } else {
+                statusText = `${paragraphCount} paragraphs`;
+            }
+
+            const cardClass = isCurrent ? 'current' : (isCompleted ? 'completed' : '');
+
+            return `
+                <div class="chapter-card ${cardClass}" data-chapter-index="${index}">
+                    <div class="chapter-info">
+                        <span class="chapter-number">Ch. ${chapter.number}</span>
+                        <h4>${chapter.title}</h4>
+                    </div>
+                    <span class="chapter-status ${statusClass}">${statusText}</span>
+                </div>
+            `;
+        }).join('');
+
+        // Add click handlers
+        this.chapterList.querySelectorAll('.chapter-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const chapterIndex = parseInt(card.dataset.chapterIndex);
+                this.selectChapter(chapterIndex);
+            });
+        });
+
+        this.showScreen(this.chapterSelectionScreen);
+    }
+
+    selectChapter(chapterIndex) {
+        if (!this.currentBook) return;
+
+        // Update progress to start of selected chapter
+        this.storage.setBookProgress(this.currentBook.id, chapterIndex, 0);
+        this.startPractice();
     }
 
     formatTime(seconds) {
