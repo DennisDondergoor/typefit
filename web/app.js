@@ -144,6 +144,24 @@ class TypingSession {
         this.correctChars = 0;
         this.totalTyped = 0;
         this.lastKeyIncorrect = false;
+        this.isPaused = false;
+        this.pauseStartTime = null;
+        this.totalPausedTime = 0;
+    }
+
+    pause() {
+        if (!this.isPaused && this.startTime) {
+            this.isPaused = true;
+            this.pauseStartTime = Date.now();
+        }
+    }
+
+    resume() {
+        if (this.isPaused) {
+            this.totalPausedTime += Date.now() - this.pauseStartTime;
+            this.isPaused = false;
+            this.pauseStartTime = null;
+        }
     }
 
     start() {
@@ -262,7 +280,8 @@ class TypingSession {
 
     getStats() {
         const endTime = this.endTime || Date.now();
-        const elapsedMs = endTime - (this.startTime || endTime);
+        const totalElapsedMs = endTime - (this.startTime || endTime);
+        const elapsedMs = totalElapsedMs - this.totalPausedTime;
         const elapsedMinutes = elapsedMs / 60000;
         const elapsedSeconds = Math.floor(elapsedMs / 1000);
 
@@ -421,6 +440,11 @@ class App {
         this.liveAccuracy = document.getElementById('live-accuracy');
         this.liveProgress = document.getElementById('live-progress');
 
+        // Pause elements
+        this.pauseOverlay = document.getElementById('pause-overlay');
+        this.resumeBtn = document.getElementById('resume-btn');
+        this.quitBtn = document.getElementById('quit-btn');
+
         // Summary elements
         this.summaryWpm = document.getElementById('summary-wpm');
         this.summaryAccuracy = document.getElementById('summary-accuracy');
@@ -506,6 +530,15 @@ class App {
             this.startPractice();
         });
 
+        // Pause overlay buttons
+        this.resumeBtn.addEventListener('click', () => {
+            this.resumePractice();
+        });
+        this.quitBtn.addEventListener('click', () => {
+            this.hidePause();
+            this.showMenu();
+        });
+
         // Clear data
         this.clearDataBtn.addEventListener('click', () => {
             if (confirm('Are you sure you want to clear all your progress data?')) {
@@ -559,6 +592,26 @@ class App {
         this.stopUpdateInterval();
         this.session = null;
         this.showScreen(this.menuScreen);
+    }
+
+    pausePractice() {
+        if (this.session) {
+            this.session.pause();
+            this.stopUpdateInterval();
+            this.pauseOverlay.classList.remove('hidden');
+        }
+    }
+
+    resumePractice() {
+        if (this.session) {
+            this.session.resume();
+            this.startUpdateInterval();
+            this.pauseOverlay.classList.add('hidden');
+        }
+    }
+
+    hidePause() {
+        this.pauseOverlay.classList.add('hidden');
     }
 
     startPractice() {
@@ -655,10 +708,22 @@ class App {
             return;
         }
 
-        // Escape to return to menu
+        // If paused, any key resumes (except Escape which quits)
+        if (this.session.isPaused) {
+            e.preventDefault();
+            if (e.key === 'Escape') {
+                this.hidePause();
+                this.showMenu();
+            } else {
+                this.resumePractice();
+            }
+            return;
+        }
+
+        // Escape to pause
         if (e.key === 'Escape') {
             e.preventDefault();
-            this.showMenu();
+            this.pausePractice();
             return;
         }
 
