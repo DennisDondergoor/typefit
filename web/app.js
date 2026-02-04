@@ -7,6 +7,7 @@ class StorageManager {
             SESSIONS: 'typefit_sessions',
             PROBLEM_KEYS: 'typefit_problem_keys',
             FONT_SIZE: 'typefit_font_size',
+            FONT_FAMILY: 'typefit_font_family',
             BOOK_PROGRESS: 'typefit_book_progress',
             COLORS: 'typefit_colors'
         };
@@ -89,6 +90,14 @@ class StorageManager {
 
     setFontSize(size) {
         localStorage.setItem(this.KEYS.FONT_SIZE, size.toString());
+    }
+
+    getFontFamily() {
+        return localStorage.getItem(this.KEYS.FONT_FAMILY) || 'JetBrains Mono';
+    }
+
+    setFontFamily(font) {
+        localStorage.setItem(this.KEYS.FONT_FAMILY, font);
     }
 
     getColors() {
@@ -432,6 +441,7 @@ class App {
         this.bookHint = document.querySelector('.book-hint');
 
         // Menu elements
+        this.fontBtns = document.querySelectorAll('.font-btn');
         this.fontSizeSlider = document.getElementById('font-size-slider');
         this.fontSizeValue = document.getElementById('font-size-value');
         this.modeBtns = document.querySelectorAll('.mode-btn');
@@ -476,6 +486,15 @@ class App {
     }
 
     initEventListeners() {
+        // Font buttons
+        this.fontBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.fontBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.setFontFamily(btn.dataset.font);
+            });
+        });
+
         // Font size slider
         this.fontSizeSlider.addEventListener('input', () => {
             const size = this.fontSizeSlider.value;
@@ -567,6 +586,14 @@ class App {
     }
 
     loadSettings() {
+        // Load font family
+        const fontFamily = this.storage.getFontFamily();
+        this.setFontFamily(fontFamily);
+        this.fontBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.font === fontFamily);
+        });
+
+        // Load font size
         const fontSize = this.storage.getFontSize();
         this.fontSizeSlider.value = fontSize;
         this.setFontSize(fontSize);
@@ -583,6 +610,11 @@ class App {
         document.documentElement.style.setProperty('--font-size', `${size}px`);
         this.fontSizeValue.textContent = `${size}px`;
         this.storage.setFontSize(size);
+    }
+
+    setFontFamily(font) {
+        document.documentElement.style.setProperty('--font-family', `'${font}', monospace`);
+        this.storage.setFontFamily(font);
     }
 
     setColor(key, value) {
