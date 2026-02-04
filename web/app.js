@@ -6,7 +6,41 @@ class StorageManager {
         this.KEYS = {
             SESSIONS: 'typefit_sessions',
             PROBLEM_KEYS: 'typefit_problem_keys',
-            FONT_SIZE: 'typefit_font_size'
+            FONT_SIZE: 'typefit_font_size',
+            BOOK_PROGRESS: 'typefit_book_progress'
+        };
+    }
+
+    getBookProgress() {
+        const data = localStorage.getItem(this.KEYS.BOOK_PROGRESS);
+        return data ? JSON.parse(data) : { chapter: 0, paragraph: 0 };
+    }
+
+    setBookProgress(chapter, paragraph) {
+        localStorage.setItem(this.KEYS.BOOK_PROGRESS, JSON.stringify({ chapter, paragraph }));
+    }
+
+    getBookStats() {
+        const progress = this.getBookProgress();
+        let totalParagraphs = 0;
+        let completedParagraphs = 0;
+
+        for (let i = 0; i < BOOK.chapters.length; i++) {
+            const chapterParagraphs = BOOK.chapters[i].paragraphs.length;
+            totalParagraphs += chapterParagraphs;
+            if (i < progress.chapter) {
+                completedParagraphs += chapterParagraphs;
+            } else if (i === progress.chapter) {
+                completedParagraphs += progress.paragraph;
+            }
+        }
+
+        return {
+            currentChapter: progress.chapter + 1,
+            totalChapters: BOOK.chapters.length,
+            completedParagraphs,
+            totalParagraphs,
+            percentComplete: Math.round((completedParagraphs / totalParagraphs) * 100)
         };
     }
 
@@ -39,7 +73,7 @@ class StorageManager {
     }
 
     getFontSize() {
-        return parseInt(localStorage.getItem(this.KEYS.FONT_SIZE)) || 24;
+        return parseInt(localStorage.getItem(this.KEYS.FONT_SIZE)) || 36;
     }
 
     setFontSize(size) {
@@ -49,6 +83,7 @@ class StorageManager {
     clearAll() {
         localStorage.removeItem(this.KEYS.SESSIONS);
         localStorage.removeItem(this.KEYS.PROBLEM_KEYS);
+        localStorage.removeItem(this.KEYS.BOOK_PROGRESS);
     }
 
     getStats() {
@@ -237,8 +272,29 @@ class TypingSession {
 // ============================================
 class TextGenerator {
     static getWords(count = 25) {
-        const shuffled = [...WORDS].sort(() => Math.random() - 0.5);
-        return shuffled.slice(0, count).join(' ');
+        // Categorize words by length for better variety
+        const short = WORDS.filter(w => w.length <= 4);
+        const medium = WORDS.filter(w => w.length >= 5 && w.length <= 7);
+        const long = WORDS.filter(w => w.length >= 8);
+
+        // Target distribution: 40% short, 40% medium, 20% long
+        const shortCount = Math.round(count * 0.4);
+        const mediumCount = Math.round(count * 0.4);
+        const longCount = count - shortCount - mediumCount;
+
+        const pick = (arr, n) => {
+            const shuffled = [...arr].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, n);
+        };
+
+        const selected = [
+            ...pick(short, shortCount),
+            ...pick(medium, mediumCount),
+            ...pick(long, longCount)
+        ];
+
+        // Shuffle the final selection
+        return selected.sort(() => Math.random() - 0.5).join(' ');
     }
 
     static getSentences(targetWords = 25) {
@@ -298,6 +354,8 @@ class App {
         this.currentMode = 'words';
         this.exerciseLength = 25;
         this.updateInterval = null;
+        this.bookChapter = 0;
+        this.bookParagraph = 0;
 
         this.initElements();
         this.initEventListeners();
@@ -427,7 +485,29 @@ class App {
     }
 
     startPractice() {
-        const text = TextGenerator.getText(this.currentMode, this.exerciseLength);
+        let text;
+
+        if (this.currentMode === 'book') {
+            // Load book progress
+            const progress = this.storage.getBookProgress();
+            this.bookChapter = progress.chapter;
+            this.bookParagraph = progress.paragraph;
+
+            // Check if book is complete
+            if (this.bookChapter >= BOOK.chapters.length) {
+                alert('Congratulations! You have completed the entire book!');
+                this.bookChapter = 0;
+                this.bookParagraph = 0;
+                this.storage.setBookProgress(0, 0);
+            }
+
+            // Get current paragraph
+            const chapter = BOOK.chapters[this.bookChapter];
+            text = chapter.paragraphs[this.bookParagraph];
+        } else {
+            text = TextGenerator.getText(this.currentMode, this.exerciseLength);
+        }
+
         this.session = new TypingSession(text);
         this.renderText();
         this.updateLiveStats();
@@ -469,7 +549,13 @@ class App {
         const stats = this.session.getStats();
         this.liveWpm.textContent = `WPM: ${stats.wpm}`;
         this.liveAccuracy.textContent = `Accuracy: ${stats.accuracy}%`;
-        this.liveProgress.textContent = `Progress: ${stats.progress}%`;
+
+        if (this.currentMode === 'book') {
+            const bookStats = this.storage.getBookStats();
+            this.liveProgress.textContent = `Chapter ${bookStats.currentChapter}/${bookStats.totalChapters} (${bookStats.percentComplete}% complete)`;
+        } else {
+            this.liveProgress.textContent = `Progress: ${stats.progress}%`;
+        }
     }
 
     startUpdateInterval() {
@@ -565,6 +651,20 @@ class App {
         };
         this.storage.saveSession(sessionData);
         this.storage.updateProblemKeys(stats.mistakes);
+
+        // Advance book progress if in book mode
+        if (this.currentMode === 'book') {
+            this.bookParagraph++;
+            const chapter = BOOK.chapters[this.bookChapter];
+
+            if (this.bookParagraph >= chapter.paragraphs.length) {
+                // Move to next chapter
+                this.bookChapter++;
+                this.bookParagraph = 0;
+            }
+
+            this.storage.setBookProgress(this.bookChapter, this.bookParagraph);
+        }
 
         // Show summary
         this.showSummary(stats);
