@@ -149,11 +149,20 @@ class TypefitApp:
 
     def show_progress(self):
         """Show the progress screen."""
-        stats_summary = self.storage.get_stats_summary()
-        recent_sessions = self.storage.get_progress(20)
-        problem_keys = self.storage.get_problem_keys(10)
+        while True:
+            stats_summary = self.storage.get_stats_summary()
+            recent_sessions = self.storage.get_progress(20)
+            problem_keys = self.storage.get_problem_keys(10)
 
-        self.display.draw_progress_screen(stats_summary, recent_sessions, problem_keys)
+            result = self.display.draw_progress_screen(stats_summary, recent_sessions, problem_keys)
+
+            if result == "reset":
+                if self.display.draw_confirm_reset():
+                    self.storage.reset_statistics()
+                    self.display.show_message("Statistics reset successfully")
+                # Stay on progress screen to show updated (empty) stats
+            else:
+                return
 
     def manage_custom_texts(self):
         """Manage custom texts."""
@@ -186,6 +195,10 @@ def main():
         curses.wrapper(run_app)
     except KeyboardInterrupt:
         pass
+    except Exception as e:
+        print(f"Error: {e}")
+        import traceback
+        traceback.print_exc()
 
 
 def run_app(stdscr):

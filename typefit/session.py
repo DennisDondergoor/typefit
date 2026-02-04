@@ -109,8 +109,11 @@ class TypingSession:
         )
 
         self.stats.record_keystroke(expected, correct)
-        self.typed_chars.append(char)
-        self.position += 1
+
+        # Only advance if correct
+        if correct:
+            self.typed_chars.append(char)
+            self.position += 1
 
         if self.on_keystroke:
             self.on_keystroke(result)

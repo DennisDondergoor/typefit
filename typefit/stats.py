@@ -36,8 +36,7 @@ class SessionStats:
             self.error_counts[char] = self.error_counts.get(char, 0) + 1
 
     def record_backspace(self):
-        """Record a backspace keystroke."""
-        self.total_keystrokes += 1
+        """Record a backspace keystroke (does not affect accuracy)."""
         if self.characters_typed > 0:
             self.characters_typed -= 1
 

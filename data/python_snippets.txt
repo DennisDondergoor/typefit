@@ -88,3 +88,2130 @@ assert len(items) > 0, "List cannot be empty"
 while not done:
     process_next()
     done = check_completion()
+
+def greet(name: str = "World") -> str:
+    return f"Hello, {name}!"
+
+class Rectangle:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    @property
+    def area(self):
+        return self.width * self.height
+
+numbers = [1, 2, 3, 4, 5]
+doubled = list(map(lambda x: x * 2, numbers))
+
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: float
+    y: float
+
+def divide(a, b):
+    if b == 0:
+        raise ValueError("Cannot divide by zero")
+    return a / b
+
+import json
+data = json.loads('{"name": "Alice"}')
+
+with open("output.txt", "w") as f:
+    f.write("Hello, World!")
+
+class Counter:
+    count = 0
+
+    @classmethod
+    def increment(cls):
+        cls.count += 1
+
+from functools import reduce
+product = reduce(lambda x, y: x * y, [1, 2, 3, 4])
+
+def outer():
+    x = 10
+    def inner():
+        nonlocal x
+        x += 1
+    inner()
+    return x
+
+import re
+pattern = re.compile(r"\d+")
+matches = pattern.findall("abc123def456")
+
+class Singleton:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+from collections import defaultdict
+word_count = defaultdict(int)
+
+def memoize(func):
+    cache = {}
+    def wrapper(*args):
+        if args not in cache:
+            cache[args] = func(*args)
+        return cache[args]
+    return wrapper
+
+import itertools
+pairs = list(itertools.combinations([1, 2, 3], 2))
+
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+def is_palindrome(s):
+    s = s.lower()
+    return s == s[::-1]
+
+from enum import Enum
+
+class Color(Enum):
+    RED = 1
+    GREEN = 2
+    BLUE = 3
+
+def binary_search(arr, target):
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1
+
+import threading
+lock = threading.Lock()
+with lock:
+    shared_resource += 1
+
+class ContextManager:
+    def __enter__(self):
+        print("Entering")
+        return self
+
+    def __exit__(self, *args):
+        print("Exiting")
+
+from abc import ABC, abstractmethod
+
+class Shape(ABC):
+    @abstractmethod
+    def area(self):
+        pass
+
+def flatten(nested):
+    result = []
+    for item in nested:
+        if isinstance(item, list):
+            result.extend(flatten(item))
+        else:
+            result.append(item)
+    return result
+
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--name", default="World")
+args = parser.parse_args()
+
+class Queue:
+    def __init__(self):
+        self.items = []
+
+    def enqueue(self, item):
+        self.items.append(item)
+
+    def dequeue(self):
+        return self.items.pop(0)
+
+from pathlib import Path
+files = list(Path(".").glob("*.py"))
+
+def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    return merge(left, right)
+
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+class Observable:
+    def __init__(self):
+        self._observers = []
+
+    def subscribe(self, observer):
+        self._observers.append(observer)
+
+    def notify(self, data):
+        for observer in self._observers:
+            observer(data)
+
+from typing import Optional
+
+def find_user(user_id: int) -> Optional[dict]:
+    return users.get(user_id)
+
+def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quick_sort(left) + middle + quick_sort(right)
+
+import hashlib
+hash_value = hashlib.sha256(b"hello").hexdigest()
+
+class LRUCache:
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.cache = {}
+
+    def get(self, key):
+        return self.cache.get(key)
+
+    def put(self, key, value):
+        self.cache[key] = value
+
+from concurrent.futures import ThreadPoolExecutor
+
+with ThreadPoolExecutor(max_workers=4) as executor:
+    results = executor.map(process, items)
+
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
+    return a
+
+import datetime
+now = datetime.datetime.now()
+formatted = now.strftime("%Y-%m-%d %H:%M:%S")
+
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
+
+def inorder(node):
+    if node:
+        yield from inorder(node.left)
+        yield node.val
+        yield from inorder(node.right)
+
+from collections import Counter
+counts = Counter("hello world")
+
+def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, int(n ** 0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+import urllib.request
+response = urllib.request.urlopen("https://example.com")
+html = response.read().decode()
+
+class Validator:
+    def __init__(self, min_val, max_val):
+        self.min_val = min_val
+        self.max_val = max_val
+
+    def __call__(self, value):
+        return self.min_val <= value <= self.max_val
+
+from typing import TypeVar, Generic
+
+T = TypeVar("T")
+
+class Box(Generic[T]):
+    def __init__(self, item: T):
+        self.item = item
+
+def chunk_list(lst, size):
+    return [lst[i:i + size] for i in range(0, len(lst), size)]
+
+import sqlite3
+conn = sqlite3.connect("database.db")
+cursor = conn.cursor()
+cursor.execute("SELECT * FROM users")
+
+class Retry:
+    def __init__(self, max_attempts=3):
+        self.max_attempts = max_attempts
+
+    def __call__(self, func):
+        def wrapper(*args, **kwargs):
+            for _ in range(self.max_attempts):
+                try:
+                    return func(*args, **kwargs)
+                except Exception:
+                    continue
+            raise Exception("Max retries exceeded")
+        return wrapper
+
+from heapq import heappush, heappop
+
+def dijkstra(graph, start):
+    distances = {start: 0}
+    pq = [(0, start)]
+    while pq:
+        dist, node = heappop(pq)
+        for neighbor, weight in graph[node]:
+            d = dist + weight
+            if neighbor not in distances or d < distances[neighbor]:
+                distances[neighbor] = d
+                heappush(pq, (d, neighbor))
+    return distances
+
+import csv
+with open("data.csv", "r") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        print(row)
+
+class Event:
+    def __init__(self):
+        self._handlers = []
+
+    def __iadd__(self, handler):
+        self._handlers.append(handler)
+        return self
+
+    def fire(self, *args):
+        for handler in self._handlers:
+            handler(*args)
+
+from functools import wraps
+
+def timer(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        import time
+        start = time.time()
+        result = func(*args, **kwargs)
+        print(f"{func.__name__} took {time.time() - start:.2f}s")
+        return result
+    return wrapper
+
+def levenshtein(s1, s2):
+    if len(s1) < len(s2):
+        return levenshtein(s2, s1)
+    if len(s2) == 0:
+        return len(s1)
+    prev = range(len(s2) + 1)
+    for i, c1 in enumerate(s1):
+        curr = [i + 1]
+        for j, c2 in enumerate(s2):
+            insertions = prev[j + 1] + 1
+            deletions = curr[j] + 1
+            substitutions = prev[j] + (c1 != c2)
+            curr.append(min(insertions, deletions, substitutions))
+        prev = curr
+    return prev[-1]
+
+import asyncio
+
+async def main():
+    await asyncio.gather(
+        task1(),
+        task2(),
+        task3()
+    )
+
+asyncio.run(main())
+
+class Graph:
+    def __init__(self):
+        self.edges = {}
+
+    def add_edge(self, u, v):
+        self.edges.setdefault(u, []).append(v)
+        self.edges.setdefault(v, []).append(u)
+
+    def bfs(self, start):
+        visited = {start}
+        queue = [start]
+        while queue:
+            node = queue.pop(0)
+            for neighbor in self.edges.get(node, []):
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append(neighbor)
+        return visited
+
+from typing import Callable
+
+def compose(*funcs: Callable) -> Callable:
+    def composed(x):
+        for f in reversed(funcs):
+            x = f(x)
+        return x
+    return composed
+
+import struct
+packed = struct.pack("!I", 1024)
+unpacked = struct.unpack("!I", packed)[0]
+
+class BitSet:
+    def __init__(self, size):
+        self.bits = [False] * size
+
+    def set(self, index):
+        self.bits[index] = True
+
+    def get(self, index):
+        return self.bits[index]
+
+from contextlib import contextmanager
+
+@contextmanager
+def timer_context():
+    import time
+    start = time.time()
+    yield
+    print(f"Elapsed: {time.time() - start:.2f}s")
+
+def topological_sort(graph):
+    visited = set()
+    result = []
+
+    def dfs(node):
+        if node in visited:
+            return
+        visited.add(node)
+        for neighbor in graph.get(node, []):
+            dfs(neighbor)
+        result.append(node)
+
+    for node in graph:
+        dfs(node)
+    return result[::-1]
+
+import random
+sample = random.sample(range(100), 10)
+random.shuffle(sample)
+
+class Trie:
+    def __init__(self):
+        self.children = {}
+        self.is_end = False
+
+    def insert(self, word):
+        node = self
+        for char in word:
+            if char not in node.children:
+                node.children[char] = Trie()
+            node = node.children[char]
+        node.is_end = True
+
+    def search(self, word):
+        node = self
+        for char in word:
+            if char not in node.children:
+                return False
+            node = node.children[char]
+        return node.is_end
+
+from typing import Protocol
+
+class Drawable(Protocol):
+    def draw(self) -> None:
+        ...
+
+def render(items: list[Drawable]) -> None:
+    for item in items:
+        item.draw()
+
+import pickle
+with open("data.pkl", "wb") as f:
+    pickle.dump(data, f)
+
+class MaxHeap:
+    def __init__(self):
+        self.heap = []
+
+    def push(self, val):
+        self.heap.append(val)
+        self._sift_up(len(self.heap) - 1)
+
+    def pop(self):
+        if len(self.heap) == 1:
+            return self.heap.pop()
+        root = self.heap[0]
+        self.heap[0] = self.heap.pop()
+        self._sift_down(0)
+        return root
+
+from functools import lru_cache
+
+@lru_cache(maxsize=128)
+def expensive_computation(n):
+    return sum(i ** 2 for i in range(n))
+
+import secrets
+token = secrets.token_hex(16)
+secure_random = secrets.randbelow(100)
+
+class State:
+    def __init__(self):
+        self._state = {}
+        self._observers = []
+
+    def set(self, key, value):
+        self._state[key] = value
+        self._notify()
+
+    def get(self, key):
+        return self._state.get(key)
+
+    def _notify(self):
+        for observer in self._observers:
+            observer(self._state)
+
+from itertools import chain, islice
+
+def batched(iterable, n):
+    it = iter(iterable)
+    while batch := list(islice(it, n)):
+        yield batch
+
+import weakref
+
+class Cache:
+    def __init__(self):
+        self._cache = weakref.WeakValueDictionary()
+
+    def get(self, key):
+        return self._cache.get(key)
+
+    def set(self, key, value):
+        self._cache[key] = value
+
+def kadane(arr):
+    max_sum = curr_sum = arr[0]
+    for num in arr[1:]:
+        curr_sum = max(num, curr_sum + num)
+        max_sum = max(max_sum, curr_sum)
+    return max_sum
+
+from typing import NamedTuple
+
+class Point(NamedTuple):
+    x: float
+    y: float
+
+    def distance(self, other):
+        return ((self.x - other.x) ** 2 + (self.y - other.y) ** 2) ** 0.5
+
+import zlib
+compressed = zlib.compress(b"Hello, World!")
+decompressed = zlib.decompress(compressed)
+
+class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+
+    def union(self, x, y):
+        px, py = self.find(x), self.find(y)
+        if px == py:
+            return
+        if self.rank[px] < self.rank[py]:
+            px, py = py, px
+        self.parent[py] = px
+        if self.rank[px] == self.rank[py]:
+            self.rank[px] += 1
+
+from operator import itemgetter
+
+data = [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]
+sorted_by_age = sorted(data, key=itemgetter("age"))
+
+import base64
+encoded = base64.b64encode(b"Hello, World!")
+decoded = base64.b64decode(encoded)
+
+class Mixin:
+    def log(self, message):
+        print(f"[{self.__class__.__name__}] {message}")
+
+class Service(Mixin):
+    def run(self):
+        self.log("Service started")
+
+from typing import Union
+
+def process(value: Union[int, str]) -> str:
+    if isinstance(value, int):
+        return str(value)
+    return value.upper()
+
+import tempfile
+with tempfile.NamedTemporaryFile(delete=False) as f:
+    f.write(b"Temporary content")
+    print(f.name)
+
+def memoized_property(func):
+    attr_name = f"_cached_{func.__name__}"
+
+    @property
+    def wrapper(self):
+        if not hasattr(self, attr_name):
+            setattr(self, attr_name, func(self))
+        return getattr(self, attr_name)
+
+    return wrapper
+
+from collections import deque
+
+def sliding_window_max(nums, k):
+    result = []
+    window = deque()
+    for i, num in enumerate(nums):
+        while window and nums[window[-1]] < num:
+            window.pop()
+        window.append(i)
+        if window[0] <= i - k:
+            window.popleft()
+        if i >= k - 1:
+            result.append(nums[window[0]])
+    return result
+
+import sys
+sys.setrecursionlimit(10000)
+
+class Proxy:
+    def __init__(self, obj):
+        self._obj = obj
+
+    def __getattr__(self, name):
+        print(f"Accessing {name}")
+        return getattr(self._obj, name)
+
+from bisect import bisect_left, insort
+
+def binary_search_bisect(arr, target):
+    i = bisect_left(arr, target)
+    if i != len(arr) and arr[i] == target:
+        return i
+    return -1
+
+import uuid
+unique_id = str(uuid.uuid4())
+
+class Descriptor:
+    def __init__(self, name):
+        self.name = name
+
+    def __get__(self, obj, objtype=None):
+        return obj.__dict__.get(self.name)
+
+    def __set__(self, obj, value):
+        obj.__dict__[self.name] = value
+
+from typing import Iterator
+
+def infinite_sequence() -> Iterator[int]:
+    num = 0
+    while True:
+        yield num
+        num += 1
+
+import copy
+shallow = copy.copy(original)
+deep = copy.deepcopy(original)
+
+class Immutable:
+    __slots__ = ("_value",)
+
+    def __init__(self, value):
+        object.__setattr__(self, "_value", value)
+
+    def __setattr__(self, name, value):
+        raise AttributeError("Cannot modify immutable object")
+
+    @property
+    def value(self):
+        return self._value
+
+from functools import partial
+
+def power(base, exponent):
+    return base ** exponent
+
+square = partial(power, exponent=2)
+cube = partial(power, exponent=3)
+
+import inspect
+
+def get_function_signature(func):
+    sig = inspect.signature(func)
+    return {
+        name: param.annotation
+        for name, param in sig.parameters.items()
+    }
+
+class Builder:
+    def __init__(self):
+        self._config = {}
+
+    def set(self, key, value):
+        self._config[key] = value
+        return self
+
+    def build(self):
+        return self._config.copy()
+
+from dataclasses import field
+
+@dataclass
+class Config:
+    name: str
+    values: list = field(default_factory=list)
+    metadata: dict = field(default_factory=dict)
+
+import operator
+ops = {
+    "+": operator.add,
+    "-": operator.sub,
+    "*": operator.mul,
+    "/": operator.truediv,
+}
+result = ops["+"](10, 5)
+
+class Chainable:
+    def __init__(self, value):
+        self.value = value
+
+    def add(self, n):
+        return Chainable(self.value + n)
+
+    def multiply(self, n):
+        return Chainable(self.value * n)
+
+    def result(self):
+        return self.value
+
+from typing import Literal
+
+def set_mode(mode: Literal["read", "write", "append"]) -> None:
+    print(f"Mode set to: {mode}")
+
+import shutil
+shutil.copy("source.txt", "destination.txt")
+shutil.rmtree("directory")
+
+def retry_with_backoff(max_retries=3, base_delay=1):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            import time
+            for attempt in range(max_retries):
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    if attempt == max_retries - 1:
+                        raise
+                    delay = base_delay * (2 ** attempt)
+                    time.sleep(delay)
+        return wrapper
+    return decorator
+
+from string import Template
+t = Template("Hello, $name!")
+result = t.substitute(name="World")
+
+class Flyweight:
+    _cache = {}
+
+    def __new__(cls, key):
+        if key not in cls._cache:
+            instance = super().__new__(cls)
+            instance.key = key
+            cls._cache[key] = instance
+        return cls._cache[key]
+
+import platform
+print(f"Python: {platform.python_version()}")
+print(f"OS: {platform.system()} {platform.release()}")
+
+def deep_merge(dict1, dict2):
+    result = dict1.copy()
+    for key, value in dict2.items():
+        if key in result and isinstance(result[key], dict) and isinstance(value, dict):
+            result[key] = deep_merge(result[key], value)
+        else:
+            result[key] = value
+    return result
+
+from functools import total_ordering
+
+@total_ordering
+class Version:
+    def __init__(self, major, minor, patch):
+        self.major = major
+        self.minor = minor
+        self.patch = patch
+
+    def __eq__(self, other):
+        return (self.major, self.minor, self.patch) == (other.major, other.minor, other.patch)
+
+    def __lt__(self, other):
+        return (self.major, self.minor, self.patch) < (other.major, other.minor, other.patch)
+
+import traceback
+try:
+    risky_operation()
+except Exception:
+    traceback.print_exc()
+
+class Middleware:
+    def __init__(self, app):
+        self.app = app
+
+    def __call__(self, request):
+        self.before(request)
+        response = self.app(request)
+        self.after(response)
+        return response
+
+    def before(self, request):
+        pass
+
+    def after(self, response):
+        pass
+
+from typing import TypedDict
+
+class UserDict(TypedDict):
+    name: str
+    age: int
+    email: str
+
+def validate_user(user: UserDict) -> bool:
+    return all(key in user for key in UserDict.__annotations__)
+
+import gc
+gc.collect()
+gc.disable()
+
+def groupby_key(items, key_func):
+    groups = {}
+    for item in items:
+        key = key_func(item)
+        groups.setdefault(key, []).append(item)
+    return groups
+
+from decimal import Decimal, ROUND_HALF_UP
+price = Decimal("19.99")
+tax = price * Decimal("0.08")
+total = (price + tax).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+class Namespace:
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def __repr__(self):
+        items = (f"{k}={v!r}" for k, v in self.__dict__.items())
+        return f"Namespace({', '.join(items)})"
+
+import os
+for key, value in os.environ.items():
+    print(f"{key}={value}")
+
+def cached_property(func):
+    return property(lru_cache(maxsize=1)(func))
+
+from typing import Awaitable
+
+async def gather_with_limit(coros: list[Awaitable], limit: int):
+    semaphore = asyncio.Semaphore(limit)
+
+    async def limited(coro):
+        async with semaphore:
+            return await coro
+
+    return await asyncio.gather(*(limited(c) for c in coros))
+
+import fnmatch
+files = ["test.py", "main.py", "data.txt"]
+py_files = fnmatch.filter(files, "*.py")
+
+class Command:
+    def execute(self):
+        raise NotImplementedError
+
+    def undo(self):
+        raise NotImplementedError
+
+class CommandHistory:
+    def __init__(self):
+        self.history = []
+
+    def execute(self, command):
+        command.execute()
+        self.history.append(command)
+
+    def undo(self):
+        if self.history:
+            command = self.history.pop()
+            command.undo()
+
+from collections import OrderedDict
+
+class LRU(OrderedDict):
+    def __init__(self, capacity):
+        super().__init__()
+        self.capacity = capacity
+
+    def get(self, key):
+        if key in self:
+            self.move_to_end(key)
+            return self[key]
+        return None
+
+    def put(self, key, value):
+        if key in self:
+            self.move_to_end(key)
+        self[key] = value
+        if len(self) > self.capacity:
+            self.popitem(last=False)
+
+import socket
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.connect(("example.com", 80))
+    s.sendall(b"GET / HTTP/1.1\r\nHost: example.com\r\n\r\n")
+    data = s.recv(1024)
+
+def reverse_string(s):
+    return s[::-1]
+
+nums = [x for x in range(100) if x % 2 == 0]
+
+def get_env(key, default=None):
+    import os
+    return os.environ.get(key, default)
+
+class Animal:
+    def speak(self):
+        raise NotImplementedError
+
+class Dog(Animal):
+    def speak(self):
+        return "Woof!"
+
+response = requests.get(url, timeout=30)
+response.raise_for_status()
+
+def clamp(value, min_val, max_val):
+    return max(min_val, min(value, max_val))
+
+from datetime import timedelta
+delta = timedelta(days=7, hours=3)
+
+items = {"a": 1, "b": 2}
+merged = {**items, "c": 3}
+
+def safe_divide(a, b):
+    return a / b if b != 0 else None
+
+text = """
+Multi-line
+string here
+"""
+
+pattern = r"^\d{3}-\d{4}$"
+if re.match(pattern, phone):
+    print("Valid")
+
+@property
+def full_name(self):
+    return f"{self.first} {self.last}"
+
+cache = {}
+def cached(key, func):
+    if key not in cache:
+        cache[key] = func()
+    return cache[key]
+
+from collections import namedtuple
+Point = namedtuple("Point", ["x", "y"])
+
+def chunks(lst, n):
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+class Singleton:
+    _instance = None
+    def __new__(cls):
+        if not cls._instance:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+result = sum(x ** 2 for x in range(10))
+
+def flatten(lst):
+    return [x for sub in lst for x in sub]
+
+import time
+start = time.perf_counter()
+elapsed = time.perf_counter() - start
+
+try:
+    value = int(input("Enter: "))
+except ValueError:
+    value = 0
+
+words = "hello world".split()
+joined = "-".join(words)
+
+def first_or_none(lst):
+    return lst[0] if lst else None
+
+from functools import cached_property
+
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+
+    @cached_property
+    def area(self):
+        import math
+        return math.pi * self.radius ** 2
+
+data = [1, 2, 3]
+data.insert(0, 0)
+data.extend([4, 5])
+
+def is_even(n):
+    return n % 2 == 0
+
+evens = list(filter(is_even, range(20)))
+
+class Config:
+    DEBUG = True
+    SECRET = "key123"
+
+env = "prod" if Config.DEBUG else "dev"
+
+import json
+with open("config.json") as f:
+    config = json.load(f)
+
+def retry(func, attempts=3):
+    for i in range(attempts):
+        try:
+            return func()
+        except Exception:
+            if i == attempts - 1:
+                raise
+
+numbers = range(1, 101)
+total = sum(numbers)
+average = total / len(numbers)
+
+class Queue:
+    def __init__(self):
+        self._data = []
+
+    def push(self, item):
+        self._data.append(item)
+
+    def pop(self):
+        return self._data.pop(0)
+
+from pathlib import Path
+home = Path.home()
+config_dir = home / ".config" / "myapp"
+
+def log(msg, level="INFO"):
+    print(f"[{level}] {msg}")
+
+names = ["alice", "bob", "charlie"]
+upper_names = [n.upper() for n in names]
+
+class Counter:
+    def __init__(self):
+        self.value = 0
+
+    def __call__(self):
+        self.value += 1
+        return self.value
+
+import hashlib
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
+fruits = ["apple", "banana", "cherry"]
+for i, fruit in enumerate(fruits):
+    print(f"{i}: {fruit}")
+
+def compose(f, g):
+    return lambda x: f(g(x))
+
+double = lambda x: x * 2
+add_one = lambda x: x + 1
+double_then_add = compose(add_one, double)
+
+class BankAccount:
+    def __init__(self, balance=0):
+        self._balance = balance
+
+    def deposit(self, amount):
+        self._balance += amount
+
+    def withdraw(self, amount):
+        if amount <= self._balance:
+            self._balance -= amount
+            return True
+        return False
+
+matrix = [[1, 2], [3, 4], [5, 6]]
+transposed = list(zip(*matrix))
+
+def memoize(func):
+    cache = {}
+    def wrapper(*args):
+        if args not in cache:
+            cache[args] = func(*args)
+        return cache[args]
+    return wrapper
+
+@memoize
+def fib(n):
+    if n < 2:
+        return n
+    return fib(n - 1) + fib(n - 2)
+
+import sys
+args = sys.argv[1:]
+
+def parse_int(s, default=0):
+    try:
+        return int(s)
+    except (ValueError, TypeError):
+        return default
+
+class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y)
+
+    def __repr__(self):
+        return f"Vector({self.x}, {self.y})"
+
+from typing import Optional
+def find(items, predicate) -> Optional[any]:
+    for item in items:
+        if predicate(item):
+            return item
+    return None
+
+words = ["hello", "world", "python"]
+lengths = {w: len(w) for w in words}
+
+class Temperature:
+    def __init__(self, celsius):
+        self.celsius = celsius
+
+    @property
+    def fahrenheit(self):
+        return self.celsius * 9 / 5 + 32
+
+import random
+shuffled = random.sample(range(10), 10)
+
+def take(n, iterable):
+    from itertools import islice
+    return list(islice(iterable, n))
+
+class Timer:
+    def __enter__(self):
+        import time
+        self.start = time.time()
+        return self
+
+    def __exit__(self, *args):
+        self.elapsed = time.time() - self.start
+
+with Timer() as t:
+    time.sleep(0.1)
+print(f"Elapsed: {t.elapsed:.2f}s")
+
+items = [("a", 1), ("b", 2), ("c", 3)]
+d = dict(items)
+
+def unique(lst):
+    return list(dict.fromkeys(lst))
+
+class EventEmitter:
+    def __init__(self):
+        self._events = {}
+
+    def on(self, event, callback):
+        self._events.setdefault(event, []).append(callback)
+
+    def emit(self, event, *args):
+        for cb in self._events.get(event, []):
+            cb(*args)
+
+from operator import attrgetter
+users = sorted(users, key=attrgetter("name"))
+
+def deep_get(d, *keys, default=None):
+    for key in keys:
+        if isinstance(d, dict):
+            d = d.get(key, default)
+        else:
+            return default
+    return d
+
+class Lazy:
+    def __init__(self, func):
+        self.func = func
+        self._value = None
+
+    @property
+    def value(self):
+        if self._value is None:
+            self._value = self.func()
+        return self._value
+
+import itertools
+pairs = itertools.product([1, 2], ["a", "b"])
+
+def partition(lst, predicate):
+    true_list, false_list = [], []
+    for item in lst:
+        (true_list if predicate(item) else false_list).append(item)
+    return true_list, false_list
+
+class Interval:
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+
+    def __contains__(self, value):
+        return self.start <= value <= self.end
+
+r = Interval(1, 10)
+print(5 in r)
+
+from dataclasses import asdict
+@dataclass
+class User:
+    name: str
+    age: int
+
+user = User("Alice", 30)
+user_dict = asdict(user)
+
+def pipe(*funcs):
+    def piped(x):
+        for f in funcs:
+            x = f(x)
+        return x
+    return piped
+
+nums = [3, 1, 4, 1, 5, 9]
+sorted_nums = sorted(nums, reverse=True)
+
+class Validator:
+    def __init__(self, func, msg):
+        self.func = func
+        self.msg = msg
+
+    def validate(self, value):
+        if not self.func(value):
+            raise ValueError(self.msg)
+
+positive = Validator(lambda x: x > 0, "Must be positive")
+
+from collections import ChainMap
+defaults = {"a": 1, "b": 2}
+overrides = {"b": 3}
+config = ChainMap(overrides, defaults)
+
+def once(func):
+    called = False
+    result = None
+    def wrapper(*args):
+        nonlocal called, result
+        if not called:
+            result = func(*args)
+            called = True
+        return result
+    return wrapper
+
+import re
+def slugify(text):
+    text = text.lower().strip()
+    text = re.sub(r"[^\w\s-]", "", text)
+    return re.sub(r"[\s_-]+", "-", text)
+
+class Registry:
+    _items = {}
+
+    @classmethod
+    def register(cls, name):
+        def decorator(func):
+            cls._items[name] = func
+            return func
+        return decorator
+
+    @classmethod
+    def get(cls, name):
+        return cls._items.get(name)
+
+from typing import Callable
+def debounce(wait: float) -> Callable:
+    import threading
+    def decorator(func):
+        timer = None
+        def wrapper(*args, **kwargs):
+            nonlocal timer
+            if timer:
+                timer.cancel()
+            timer = threading.Timer(wait, func, args, kwargs)
+            timer.start()
+        return wrapper
+    return decorator
+
+text = "Hello, World!"
+clean = text.strip().lower().replace(",", "")
+
+class Fraction:
+    def __init__(self, num, den):
+        self.num = num
+        self.den = den
+
+    def __mul__(self, other):
+        return Fraction(self.num * other.num, self.den * other.den)
+
+from functools import singledispatch
+
+@singledispatch
+def process(arg):
+    return str(arg)
+
+@process.register(int)
+def _(arg):
+    return arg * 2
+
+@process.register(list)
+def _(arg):
+    return len(arg)
+
+import csv
+def read_csv(path):
+    with open(path) as f:
+        return list(csv.DictReader(f))
+
+class Flags:
+    READ = 1
+    WRITE = 2
+    EXECUTE = 4
+
+perms = Flags.READ | Flags.WRITE
+can_read = perms & Flags.READ
+
+def group_by(items, key):
+    groups = {}
+    for item in items:
+        k = key(item)
+        groups.setdefault(k, []).append(item)
+    return groups
+
+ages = [25, 30, 35, 40, 45]
+adults = [a for a in ages if a >= 18]
+
+class Color:
+    def __init__(self, r, g, b):
+        self.r = r
+        self.g = g
+        self.b = b
+
+    def __iter__(self):
+        yield self.r
+        yield self.g
+        yield self.b
+
+red = Color(255, 0, 0)
+r, g, b = red
+
+from typing import TypedDict
+
+class Person(TypedDict):
+    name: str
+    age: int
+
+def greet(person: Person) -> str:
+    return f"Hello, {person['name']}!"
+
+import contextlib
+
+@contextlib.contextmanager
+def suppress_errors():
+    try:
+        yield
+    except Exception:
+        pass
+
+with suppress_errors():
+    risky_operation()
+
+def sliding_window(seq, n):
+    it = iter(seq)
+    window = []
+    for x in it:
+        window.append(x)
+        if len(window) == n:
+            yield tuple(window)
+            window.pop(0)
+
+class Stack:
+    def __init__(self):
+        self._items = []
+
+    def push(self, item):
+        self._items.append(item)
+
+    def pop(self):
+        return self._items.pop() if self._items else None
+
+    def peek(self):
+        return self._items[-1] if self._items else None
+
+    def __len__(self):
+        return len(self._items)
+
+from enum import auto
+
+class Status(Enum):
+    PENDING = auto()
+    RUNNING = auto()
+    DONE = auto()
+
+import math
+def distance(p1, p2):
+    return math.sqrt((p2[0] - p1[0])**2 + (p2[1] - p1[1])**2)
+
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super().__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+class Database(metaclass=Singleton):
+    pass
+
+def safe_json_loads(s, default=None):
+    import json
+    try:
+        return json.loads(s)
+    except json.JSONDecodeError:
+        return default
+
+items = [1, 2, 3, 4, 5]
+*head, last = items
+first, *tail = items
+
+class classproperty:
+    def __init__(self, func):
+        self.func = func
+
+    def __get__(self, obj, cls):
+        return self.func(cls)
+
+class Config:
+    _debug = True
+
+    @classproperty
+    def debug(cls):
+        return cls._debug
+
+from heapq import nlargest, nsmallest
+top3 = nlargest(3, numbers)
+bottom3 = nsmallest(3, numbers)
+
+def tail(filename, n=10):
+    with open(filename) as f:
+        return f.readlines()[-n:]
+
+class DotDict(dict):
+    def __getattr__(self, key):
+        return self.get(key)
+
+    def __setattr__(self, key, value):
+        self[key] = value
+
+config = DotDict({"host": "localhost", "port": 8080})
+print(config.host)
+
+from typing import Iterable
+def first(iterable: Iterable, default=None):
+    return next(iter(iterable), default)
+
+def pluck(dicts, key):
+    return [d.get(key) for d in dicts]
+
+users = [{"name": "Alice"}, {"name": "Bob"}]
+names = pluck(users, "name")
+
+class Benchmark:
+    def __init__(self, name):
+        self.name = name
+
+    def __enter__(self):
+        import time
+        self.start = time.perf_counter()
+        return self
+
+    def __exit__(self, *args):
+        elapsed = time.perf_counter() - self.start
+        print(f"{self.name}: {elapsed:.4f}s")
+
+with Benchmark("sort"):
+    sorted(range(10000))
+
+from itertools import groupby
+data = [1, 1, 2, 2, 2, 3, 1, 1]
+groups = [(k, list(g)) for k, g in groupby(data)]
+
+def memoize_method(method):
+    cache_name = f"_cache_{method.__name__}"
+    def wrapper(self, *args):
+        cache = getattr(self, cache_name, None)
+        if cache is None:
+            cache = {}
+            setattr(self, cache_name, cache)
+        if args not in cache:
+            cache[args] = method(self, *args)
+        return cache[args]
+    return wrapper
+
+import string
+def random_string(length=10):
+    import random
+    chars = string.ascii_letters + string.digits
+    return "".join(random.choice(chars) for _ in range(length))
+
+class Node:
+    def __init__(self, value, children=None):
+        self.value = value
+        self.children = children or []
+
+def tree_map(node, func):
+    return Node(
+        func(node.value),
+        [tree_map(c, func) for c in node.children]
+    )
+
+from typing import Generic, TypeVar
+T = TypeVar("T")
+
+class Result(Generic[T]):
+    def __init__(self, value: T = None, error: str = None):
+        self.value = value
+        self.error = error
+
+    @property
+    def ok(self):
+        return self.error is None
+
+def ok(value):
+    return Result(value=value)
+
+def err(message):
+    return Result(error=message)
+
+import os
+def ensure_dir(path):
+    os.makedirs(path, exist_ok=True)
+
+class Throttle:
+    def __init__(self, rate):
+        self.rate = rate
+        self.last = 0
+
+    def __call__(self, func):
+        import time
+        def wrapper(*args):
+            now = time.time()
+            if now - self.last >= self.rate:
+                self.last = now
+                return func(*args)
+        return wrapper
+
+@Throttle(1.0)
+def log_event(msg):
+    print(msg)
+
+from bisect import insort
+sorted_list = []
+insort(sorted_list, 5)
+insort(sorted_list, 3)
+insort(sorted_list, 7)
+
+def curry(func):
+    from functools import partial
+    def curried(*args):
+        if len(args) >= func.__code__.co_argcount:
+            return func(*args)
+        return partial(curried, *args)
+    return curried
+
+@curry
+def add3(a, b, c):
+    return a + b + c
+
+add5 = add3(2)(3)
+
+class Observable:
+    def __init__(self, value):
+        self._value = value
+        self._callbacks = []
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, new_value):
+        old = self._value
+        self._value = new_value
+        for cb in self._callbacks:
+            cb(old, new_value)
+
+    def observe(self, callback):
+        self._callbacks.append(callback)
+
+import struct
+def pack_point(x, y):
+    return struct.pack("!ff", x, y)
+
+def unpack_point(data):
+    return struct.unpack("!ff", data)
+
+from collections import deque
+
+class BoundedQueue:
+    def __init__(self, maxlen):
+        self._queue = deque(maxlen=maxlen)
+
+    def put(self, item):
+        self._queue.append(item)
+
+    def get(self):
+        return self._queue.popleft()
+
+def truncate(s, length, suffix="..."):
+    if len(s) <= length:
+        return s
+    return s[:length - len(suffix)] + suffix
+
+class Trie:
+    def __init__(self):
+        self.children = {}
+        self.end = False
+
+    def insert(self, word):
+        node = self
+        for c in word:
+            node = node.children.setdefault(c, Trie())
+        node.end = True
+
+    def search(self, word):
+        node = self
+        for c in word:
+            if c not in node.children:
+                return False
+            node = node.children[c]
+        return node.end
+
+from datetime import datetime
+def format_date(dt, fmt="%Y-%m-%d"):
+    return dt.strftime(fmt)
+
+def parse_date(s, fmt="%Y-%m-%d"):
+    return datetime.strptime(s, fmt)
+
+class RateLimiter:
+    def __init__(self, max_calls, period):
+        self.max_calls = max_calls
+        self.period = period
+        self.calls = []
+
+    def allow(self):
+        import time
+        now = time.time()
+        self.calls = [t for t in self.calls if now - t < self.period]
+        if len(self.calls) < self.max_calls:
+            self.calls.append(now)
+            return True
+        return False
+
+import zipfile
+def extract_zip(path, dest):
+    with zipfile.ZipFile(path, "r") as z:
+        z.extractall(dest)
+
+def create_zip(path, files):
+    with zipfile.ZipFile(path, "w") as z:
+        for f in files:
+            z.write(f)
+
+class LazyProperty:
+    def __init__(self, func):
+        self.func = func
+        self.name = func.__name__
+
+    def __get__(self, obj, cls):
+        if obj is None:
+            return self
+        value = self.func(obj)
+        setattr(obj, self.name, value)
+        return value
+
+class ExpensiveObject:
+    @LazyProperty
+    def data(self):
+        print("Computing...")
+        return [i ** 2 for i in range(1000)]
+
+import gzip
+def compress_file(src, dest):
+    with open(src, "rb") as f_in:
+        with gzip.open(dest, "wb") as f_out:
+            f_out.writelines(f_in)
+
+def run_parallel(funcs, max_workers=4):
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers) as ex:
+        return list(ex.map(lambda f: f(), funcs))
+
+class CircularBuffer:
+    def __init__(self, size):
+        self.size = size
+        self.buffer = [None] * size
+        self.index = 0
+
+    def append(self, item):
+        self.buffer[self.index] = item
+        self.index = (self.index + 1) % self.size
+
+    def __iter__(self):
+        return iter(self.buffer)
+
+from typing import overload
+
+@overload
+def process(x: int) -> int: ...
+@overload
+def process(x: str) -> str: ...
+
+def process(x):
+    if isinstance(x, int):
+        return x * 2
+    return x.upper()
+
+def batch_process(items, batch_size, func):
+    results = []
+    for i in range(0, len(items), batch_size):
+        batch = items[i:i + batch_size]
+        results.extend(func(batch))
+    return results
+
+class LRUCache:
+    def __init__(self, capacity):
+        from collections import OrderedDict
+        self.cache = OrderedDict()
+        self.capacity = capacity
+
+    def get(self, key):
+        if key in self.cache:
+            self.cache.move_to_end(key)
+            return self.cache[key]
+        return None
+
+    def put(self, key, value):
+        if key in self.cache:
+            self.cache.move_to_end(key)
+        self.cache[key] = value
+        if len(self.cache) > self.capacity:
+            self.cache.popitem(last=False)
+
+import subprocess
+result = subprocess.run(
+    ["ls", "-la"],
+    capture_output=True,
+    text=True
+)
+print(result.stdout)
+
+def exponential_backoff(attempt, base=1, max_delay=60):
+    import random
+    delay = min(base * (2 ** attempt), max_delay)
+    jitter = random.uniform(0, delay * 0.1)
+    return delay + jitter
+
+class Subscriber:
+    def __init__(self):
+        self.messages = []
+
+    def receive(self, msg):
+        self.messages.append(msg)
+
+class Publisher:
+    def __init__(self):
+        self.subscribers = []
+
+    def subscribe(self, sub):
+        self.subscribers.append(sub)
+
+    def publish(self, msg):
+        for sub in self.subscribers:
+            sub.receive(msg)
+
+from functools import reduce
+def pipe_value(value, *funcs):
+    return reduce(lambda v, f: f(v), funcs, value)
+
+result = pipe_value(
+    " hello world ",
+    str.strip,
+    str.upper,
+    lambda s: s.replace(" ", "_")
+)
+
+import http.server
+def serve_directory(port=8000):
+    handler = http.server.SimpleHTTPRequestHandler
+    with http.server.HTTPServer(("", port), handler) as httpd:
+        httpd.serve_forever()
+
+def watch_file(path, callback, interval=1):
+    import time
+    import os
+    last_mtime = os.path.getmtime(path)
+    while True:
+        mtime = os.path.getmtime(path)
+        if mtime != last_mtime:
+            last_mtime = mtime
+            callback()
+        time.sleep(interval)
+
+class Monad:
+    def __init__(self, value):
+        self.value = value
+
+    def bind(self, func):
+        return Monad(func(self.value))
+
+    def __repr__(self):
+        return f"Monad({self.value})"
+
+result = (
+    Monad(5)
+    .bind(lambda x: x * 2)
+    .bind(lambda x: x + 1)
+)
+
+from typing import ParamSpec, Concatenate
+P = ParamSpec("P")
+
+def with_logging(func):
+    def wrapper(*args: P.args, **kwargs: P.kwargs):
+        print(f"Calling {func.__name__}")
+        return func(*args, **kwargs)
+    return wrapper
+
+import weakref
+class CacheWithWeakRefs:
+    def __init__(self):
+        self._cache = weakref.WeakValueDictionary()
+
+    def get(self, key, factory):
+        if key not in self._cache:
+            self._cache[key] = factory()
+        return self._cache[key]
+
+def timeit(func):
+    import time
+    from functools import wraps
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        result = func(*args, **kwargs)
+        elapsed = time.perf_counter() - start
+        print(f"{func.__name__}: {elapsed:.4f}s")
+        return result
+    return wrapper
+
+@timeit
+def slow_function():
+    import time
+    time.sleep(0.5)
+    return "done"
+
+def merge_dicts(*dicts):
+    result = {}
+    for d in dicts:
+        result.update(d)
+    return result
+
+class Immutable:
+    __slots__ = ("_data",)
+
+    def __init__(self, **kwargs):
+        object.__setattr__(self, "_data", kwargs)
+
+    def __getattr__(self, key):
+        return self._data[key]
+
+    def __setattr__(self, key, value):
+        raise AttributeError("Immutable object")
+
+from typing import Final
+MAX_SIZE: Final = 100
+
+def validate_email(email):
+    import re
+    pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+    return bool(re.match(pattern, email))
+
+class Comparable:
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
+    def __hash__(self):
+        return hash(tuple(sorted(self.__dict__.items())))
+
+from dataclasses import replace
+@dataclass(frozen=True)
+class Point:
+    x: int
+    y: int
+
+p1 = Point(1, 2)
+p2 = replace(p1, x=3)
+
+def attr_dict(obj):
+    return {k: v for k, v in obj.__dict__.items() if not k.startswith("_")}
+
+class AutoRepr:
+    def __repr__(self):
+        items = ", ".join(f"{k}={v!r}" for k, v in self.__dict__.items())
+        return f"{self.__class__.__name__}({items})"
+
+import textwrap
+def wrap_text(text, width=80):
+    return textwrap.fill(text, width=width)
+
+def indent_text(text, prefix="    "):
+    return textwrap.indent(text, prefix)
+
+class Countdown:
+    def __init__(self, start):
+        self.current = start
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.current <= 0:
+            raise StopIteration
+        self.current -= 1
+        return self.current + 1
+
+for n in Countdown(5):
+    print(n)
+
+def coalesce(*args):
+    for arg in args:
+        if arg is not None:
+            return arg
+    return None
+
+value = coalesce(None, None, "default")
+
+import os.path
+def get_extension(path):
+    return os.path.splitext(path)[1]
+
+def change_extension(path, new_ext):
+    base = os.path.splitext(path)[0]
+    return base + new_ext
+
+class Comparable:
+    def __lt__(self, other):
+        return NotImplemented
+
+    def __le__(self, other):
+        return self == other or self < other
+
+    def __gt__(self, other):
+        return not self <= other
+
+    def __ge__(self, other):
+        return not self < other
+
+from typing import Sequence
+def median(nums: Sequence[float]) -> float:
+    sorted_nums = sorted(nums)
+    n = len(sorted_nums)
+    mid = n // 2
+    if n % 2 == 0:
+        return (sorted_nums[mid - 1] + sorted_nums[mid]) / 2
+    return sorted_nums[mid]
+
+class Context:
+    _current = None
+
+    def __enter__(self):
+        self._previous = Context._current
+        Context._current = self
+        return self
+
+    def __exit__(self, *args):
+        Context._current = self._previous
+
+    @classmethod
+    def current(cls):
+        return cls._current
+
+from collections import Counter
+def most_common(items, n=1):
+    return Counter(items).most_common(n)
+
+def frequency(items):
+    return dict(Counter(items))
+
+class Percentage:
+    def __init__(self, value):
+        self.value = value
+
+    def of(self, total):
+        return total * self.value / 100
+
+    def __repr__(self):
+        return f"{self.value}%"
+
+tax = Percentage(8.5)
+amount = tax.of(100)
+
+import atexit
+def cleanup():
+    print("Cleaning up...")
+
+atexit.register(cleanup)
+
+def find_all(text, pattern):
+    import re
+    return [m.group() for m in re.finditer(pattern, text)]
+
+numbers = find_all("a1b2c3", r"\d")
+
+class Proxy:
+    def __init__(self, target):
+        self._target = target
+
+    def __getattr__(self, name):
+        return getattr(self._target, name)
+
+class LoggingProxy(Proxy):
+    def __getattr__(self, name):
+        print(f"Accessing: {name}")
+        return super().__getattr__(name)
+
+from typing import cast
+items: list = ["a", "b", "c"]
+first_item: str = cast(str, items[0])
+
+def retry_on_exception(exceptions, max_retries=3):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            for attempt in range(max_retries):
+                try:
+                    return func(*args, **kwargs)
+                except exceptions as e:
+                    if attempt == max_retries - 1:
+                        raise
+        return wrapper
+    return decorator
+
+@retry_on_exception((ValueError, IOError), max_retries=5)
+def unreliable_operation():
+    pass
+
+class Flags:
+    def __init__(self, **flags):
+        self.__dict__.update(flags)
+
+    def __bool__(self):
+        return any(self.__dict__.values())
+
+flags = Flags(debug=True, verbose=False)
+if flags:
+    print("Some flags are set")
+
+import html
+safe_text = html.escape("<script>alert('xss')</script>")
+
+def split_every(n, iterable):
+    from itertools import islice
+    it = iter(iterable)
+    while chunk := list(islice(it, n)):
+        yield chunk
+
+for chunk in split_every(3, range(10)):
+    print(chunk)
+
+class Singleton:
+    _instance = None
+
+    @classmethod
+    def instance(cls):
+        if cls._instance is None:
+            cls._instance = cls()
+        return cls._instance
+
+def humanize_bytes(size):
+    for unit in ["B", "KB", "MB", "GB", "TB"]:
+        if size < 1024:
+            return f"{size:.1f} {unit}"
+        size /= 1024
+    return f"{size:.1f} PB"
+
+print(humanize_bytes(1536))

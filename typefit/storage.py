@@ -210,3 +210,14 @@ class Storage:
 
         # Return in chronological order
         return [row["wpm"] for row in reversed(rows)]
+
+    def reset_statistics(self):
+        """Reset all statistics by clearing sessions and problem keys tables."""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("DELETE FROM sessions")
+        cursor.execute("DELETE FROM problem_keys")
+
+        conn.commit()
+        conn.close()

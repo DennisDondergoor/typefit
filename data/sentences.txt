@@ -30,10 +30,9 @@ A large fawn jumped quickly over white zinc boxes.
 Painful zombies quickly watch a jinxed graveyard.
 The public was amazed to view the quickness and dexterity of the juggler.
 While making deep excavations, we found some quaint bronze jewelry.
-Jelly-like above the high wire, six quaking pachyderms kept the climax of the extravaganza in a dazzling state of flux.
 Just keep examining every low bid quoted for zinc etchings.
 Back in June we delivered oxygen equipment of the same size.
-The explorer was frozen in his big kayak just after making some queer discoveries.
+The explorer was frozen in his big kayak just after making queer discoveries.
 Typing practice helps build muscle memory for faster and more accurate keystrokes.
 Regular practice sessions are more effective than occasional long sessions.
 Focus on accuracy first, then gradually increase your typing speed.
@@ -44,3 +43,1383 @@ Consistent practice leads to steady improvement over time.
 Challenge yourself with different types of content to improve versatility.
 Python programming requires typing special characters like brackets and colons.
 Learning to type code efficiently can significantly boost your productivity.
+The rain in Spain falls mainly on the plain.
+A journey of a thousand miles begins with a single step.
+To be or not to be, that is the question.
+All that glitters is not gold.
+Actions speak louder than words.
+The early bird catches the worm.
+Better late than never, but never late is better.
+A picture is worth a thousand words.
+When in Rome, do as the Romans do.
+The pen is mightier than the sword.
+Knowledge is power, but enthusiasm pulls the switch.
+Time flies when you are having fun.
+Practice makes perfect, but nobody is perfect.
+Where there is a will, there is a way.
+The best things in life are free.
+Every cloud has a silver lining.
+You cannot judge a book by its cover.
+Two wrongs do not make a right.
+The grass is always greener on the other side.
+A stitch in time saves nine.
+Birds of a feather flock together.
+When the going gets tough, the tough get going.
+No man is an island entire of itself.
+The only thing we have to fear is fear itself.
+Ask not what your country can do for you.
+I think, therefore I am.
+To thine own self be true.
+The truth will set you free.
+Fortune favors the bold.
+Carpe diem, seize the day.
+What does not kill us makes us stronger.
+The unexamined life is not worth living.
+In the middle of difficulty lies opportunity.
+Imagination is more important than knowledge.
+Be the change you wish to see in the world.
+The only way to do great work is to love what you do.
+Stay hungry, stay foolish.
+Think different.
+Move fast and break things.
+Done is better than perfect.
+First, solve the problem. Then, write the code.
+Simplicity is the ultimate sophistication.
+Any fool can write code that a computer can understand.
+Good programmers write code that humans can understand.
+Talk is cheap, show me the code.
+Programs must be written for people to read.
+The best code is no code at all.
+Premature optimization is the root of all evil.
+Make it work, make it right, make it fast.
+Code is read more often than it is written.
+Debugging is twice as hard as writing the code in the first place.
+The most dangerous phrase is: We have always done it this way.
+There are only two hard things in computer science: cache invalidation and naming things.
+Walking on water and developing software from a specification are easy if both are frozen.
+Measuring programming progress by lines of code is like measuring aircraft progress by weight.
+Nine people cannot make a baby in one month.
+Computers are incredibly fast, accurate, and stupid.
+The function of good software is to make the complex appear to be simple.
+The Internet is becoming the town square for the global village of tomorrow.
+Privacy is not something that I am merely entitled to, it is an absolute prerequisite.
+The advance of technology is based on making it fit in so that you do not notice it.
+It has become appallingly obvious that our technology has exceeded our humanity.
+The real problem is not whether machines think but whether men do.
+We are stuck with technology when what we really want is just stuff that works.
+The great myth of our times is that technology is communication.
+The human spirit must prevail over technology.
+Ethics change with technology.
+The technology you use impresses no one.
+People who are really serious about software should make their own hardware.
+Hardware eventually fails. Software eventually works.
+The best way to predict the future is to invent it.
+A computer lets you make more mistakes faster than any invention in human history.
+Computers are useless. They can only give you answers.
+The computer was born to solve problems that did not exist before.
+Never trust a computer you cannot throw out a window.
+The inside of a computer is as dumb as hell but it goes like mad.
+To err is human, but to really foul things up you need a computer.
+I do not fear computers. I fear the lack of them.
+Treat your password like your toothbrush.
+It is not that we use technology, we live technology.
+We are all now connected by the Internet, like neurons in a giant brain.
+The next big thing is the one that makes the last big thing usable.
+Innovation distinguishes between a leader and a follower.
+Your most unhappy customers are your greatest source of learning.
+The only way to win is to learn faster than anyone else.
+Quality means doing it right when no one is looking.
+Strive not to be a success, but rather to be of value.
+The difference between ordinary and extraordinary is that little extra.
+Success is not final, failure is not fatal: it is the courage to continue that counts.
+It always seems impossible until it is done.
+The only limit to our realization of tomorrow will be our doubts of today.
+Do what you can, with what you have, where you are.
+Believe you can and you are halfway there.
+The future belongs to those who believe in the beauty of their dreams.
+Life is what happens when you are busy making other plans.
+In three words I can sum up everything I have learned about life: it goes on.
+The purpose of our lives is to be happy.
+Get busy living or get busy dying.
+You only live once, but if you do it right, once is enough.
+If you want to live a happy life, tie it to a goal, not to people or things.
+Never let the fear of striking out keep you from playing the game.
+Money and success do not change people; they merely amplify what is already there.
+Your time is limited, so do not waste it living someone else's life.
+Not how long, but how well you have lived is the main thing.
+If life were predictable it would cease to be life, and be without flavor.
+In order to write about life first you must live it.
+The big lesson in life is never be scared of anyone or anything.
+Curiosity about life in all of its aspects is still the secret of great creative people.
+Life is not a problem to be solved, but a reality to be experienced.
+Turn your wounds into wisdom.
+Do not let yesterday take up too much of today.
+You learn more from failure than from success.
+People who are crazy enough to think they can change the world are the ones who do.
+Knowing is not enough; we must apply.
+We may encounter many defeats but we must not be defeated.
+Whether you think you can or you think you cannot, you are right.
+Security is mostly a superstition.
+You cannot cross the sea merely by standing and staring at the water.
+The successful warrior is the average man, with laser-like focus.
+Setting goals is the first step in turning the invisible into the visible.
+If you are going through hell, keep going.
+I find that the harder I work, the more luck I seem to have.
+The only place where success comes before work is in the dictionary.
+There is no traffic jam along the extra mile.
+It is better to fail in originality than to succeed in imitation.
+Successful people do what unsuccessful people are not willing to do.
+I never dreamed about success. I worked for it.
+The road to success and the road to failure are almost exactly the same.
+I failed my way to success.
+What seems to us as bitter trials are often blessings in disguise.
+The distance between insanity and genius is measured only by success.
+You miss one hundred percent of the shots you do not take.
+Champions keep playing until they get it right.
+You have to learn the rules of the game and then play better than anyone else.
+Do one thing every day that scares you.
+Dream big and dare to fail.
+Our greatest glory is not in never falling, but in rising every time we fall.
+The secret of getting ahead is getting started.
+Fall seven times, stand up eight.
+Hard work beats talent when talent does not work hard.
+The best revenge is massive success.
+Opportunities do not happen, you create them.
+Do not be afraid to give up the good to go for the great.
+Try not to become a man of success, but rather become a man of value.
+I attribute my success to this: I never gave or took any excuse.
+The best time to plant a tree was twenty years ago. The second best time is now.
+The only impossible journey is the one you never begin.
+Success usually comes to those who are too busy to be looking for it.
+If you really look closely, most overnight successes took a long time.
+The way to get started is to quit talking and begin doing.
+The pessimist sees difficulty in every opportunity.
+The optimist sees opportunity in every difficulty.
+Do not let what you cannot do interfere with what you can do.
+You are never too old to set another goal or to dream a new dream.
+A person who never made a mistake never tried anything new.
+Perfection is not attainable, but if we chase perfection we can catch excellence.
+There are no secrets to success.
+Life is ten percent what happens to you and ninety percent how you react to it.
+Keep your face always toward the sunshine and shadows will fall behind you.
+The mind is everything. What you think you become.
+An unexamined life is not worth living.
+Eighty percent of success is showing up.
+Your limitation is only your imagination.
+Push yourself, because no one else is going to do it for you.
+Sometimes later becomes never. Do it now.
+Great things never come from comfort zones.
+Dream it. Wish it. Do it.
+Success does not just find you. You have to go out and get it.
+The harder you work for something, the greater you will feel when you achieve it.
+Dream bigger. Do bigger.
+Do not stop when you are tired. Stop when you are done.
+Wake up with determination. Go to bed with satisfaction.
+Do something today that your future self will thank you for.
+Little things make big days.
+It is going to be hard, but hard does not mean impossible.
+Do not wait for opportunity. Create it.
+The key to success is to focus on goals, not obstacles.
+Dream it. Believe it. Build it.
+The secret of success is to do the common thing uncommonly well.
+If you can dream it, you can do it.
+Nothing is impossible. The word itself says I am possible.
+Start where you are. Use what you have. Do what you can.
+Failure is not the opposite of success; it is part of success.
+All progress takes place outside the comfort zone.
+Success is walking from failure to failure with no loss of enthusiasm.
+Hustle until you no longer have to introduce yourself.
+The only person you are destined to become is the person you decide to be.
+The question is not who is going to let me; it is who is going to stop me.
+Go the extra mile. It is never crowded there.
+Work hard in silence, let your success be your noise.
+Doubt kills more dreams than failure ever will.
+Everything you have ever wanted is on the other side of fear.
+Build your own dreams, or someone else will hire you to build theirs.
+Act as if what you do makes a difference. It does.
+The starting point of all achievement is desire.
+Success is liking yourself, liking what you do, and liking how you do it.
+Be so good they cannot ignore you.
+In the end, we only regret the chances we did not take.
+If opportunity does not knock, build a door.
+The man who moves a mountain begins by carrying away small stones.
+It does not matter how slowly you go as long as you do not stop.
+Knowing what must be done does away with fear.
+If you change nothing, nothing will change.
+Do the best you can until you know better. Then when you know better, do better.
+Only I can change my life. No one can do it for me.
+Change your thoughts and you change your world.
+Live as if you were to die tomorrow. Learn as if you were to live forever.
+Education is the most powerful weapon which you can use to change the world.
+An investment in knowledge pays the best interest.
+The roots of education are bitter, but the fruit is sweet.
+Education is not the filling of a pail, but the lighting of a fire.
+Tell me and I forget. Teach me and I remember. Involve me and I learn.
+Nine tenths of education is encouragement.
+The whole purpose of education is to turn mirrors into windows.
+The beautiful thing about learning is that nobody can take it away from you.
+Education is the passport to the future.
+The capacity to learn is a gift; the ability to learn is a skill; the willingness to learn is a choice.
+Anyone who stops learning is old, whether at twenty or eighty.
+The more that you read, the more things you will know.
+I am always doing that which I cannot do, in order that I may learn how to do it.
+Leadership and learning are indispensable to each other.
+Those who do not know history are doomed to repeat it.
+You do not learn to walk by following rules. You learn by doing and by falling over.
+The expert in anything was once a beginner.
+Learning never exhausts the mind.
+In learning you will teach, and in teaching you will learn.
+Education is the kindling of a flame, not the filling of a vessel.
+Change is the end result of all true learning.
+The mind is not a vessel to be filled, but a fire to be kindled.
+Being a student is easy. Learning requires actual work.
+Education is not preparation for life; education is life itself.
+The only true wisdom is in knowing you know nothing.
+By seeking and blundering we learn.
+Learning is a treasure that will follow its owner everywhere.
+Any fool can know. The point is to understand.
+Develop a passion for learning. If you do, you will never cease to grow.
+I have no special talents. I am only passionately curious.
+A teacher affects eternity; no one can tell where their influence stops.
+Teaching is the greatest act of optimism.
+The mediocre teacher tells. The good teacher explains. The great teacher inspires.
+The day you stop learning is the day you stop living.
+I cannot teach anybody anything. I can only make them think.
+Never let formal education get in the way of your learning.
+The past cannot be changed. The future is yet in your power.
+Study the past if you would define the future.
+All the world is a laboratory to the inquiring mind.
+Reading is to the mind what exercise is to the body.
+A room without books is like a body without a soul.
+The more you read, the more things you will know.
+Books are a uniquely portable magic.
+There is no friend as loyal as a book.
+A reader lives a thousand lives before he dies.
+Today a reader, tomorrow a leader.
+Reading gives us someplace to go when we have to stay where we are.
+Once you learn to read, you will be forever free.
+The reading of all good books is like a conversation with the finest minds.
+I find television very educating. Every time someone turns it on, I go and read a book.
+A book is a dream that you hold in your hand.
+Books are mirrors: you only see in them what you already have inside you.
+The only thing you absolutely have to know is the location of the library.
+So many books, so little time.
+A classic is a book that has never finished saying what it has to say.
+Books are the training weights of the mind.
+Sleep is good, and books are better.
+There is no substitute for books in the life of a child.
+Books are the plane, and the train, and the road.
+A great book should leave you with many experiences, and slightly exhausted at the end.
+The man who does not read has no advantage over the man who cannot read.
+Fill your house with stacks of books, in all the crannies and all the nooks.
+I have always imagined that paradise will be a kind of library.
+Books serve to show a man that those original thoughts of his are not very new after all.
+Good friends, good books, and a sleepy conscience: this is the ideal life.
+Think before you speak. Read before you think.
+A word after a word after a word is power.
+There is no greater agony than bearing an untold story inside you.
+The first draft is just you telling yourself the story.
+Start writing, no matter what. The water does not flow until the faucet is turned on.
+You can always edit a bad page. You cannot edit a blank page.
+If you want to be a writer, you must do two things: read a lot and write a lot.
+The scariest moment is always just before you start.
+Write what you know.
+Writing is easy. All you have to do is cross out the wrong words.
+The role of a writer is not to say what we can all say, but what we are unable to say.
+A writer is someone for whom writing is more difficult than it is for other people.
+I write to discover what I know.
+The pen is the tongue of the mind.
+You fail only if you stop writing.
+I can shake off everything as I write; my sorrows disappear, my courage is reborn.
+Writing is the painting of the voice.
+Either write something worth reading or do something worth writing.
+There is nothing to writing. All you do is sit down at a typewriter and bleed.
+The beautiful part of writing is that you do not have to get it right the first time.
+I kept always two books in my pocket: one to read, one to write in.
+Words can be like X-rays if you use them properly.
+The difference between the right word and the almost right word is the difference between lightning and a lightning bug.
+Creativity is intelligence having fun.
+The chief enemy of creativity is good sense.
+Creativity takes courage.
+You cannot use up creativity. The more you use, the more you have.
+Creativity is inventing, experimenting, growing, taking risks, breaking rules, making mistakes, and having fun.
+The desire to create is one of the deepest yearnings of the human soul.
+To be creative means to be in love with life.
+Creativity is seeing what others see and thinking what no one else ever thought.
+An essential aspect of creativity is not being afraid to fail.
+Creativity is allowing yourself to make mistakes. Art is knowing which ones to keep.
+The creative adult is the child who survived.
+Curiosity about life in all of its aspects is still the secret of great creative people.
+Every child is an artist. The problem is how to remain an artist once we grow up.
+Creativity is the power to connect the seemingly unconnected.
+The secret to creativity is knowing how to hide your sources.
+Creativity is just connecting things.
+Innovation is the specific instrument of entrepreneurship.
+The true sign of intelligence is not knowledge but imagination.
+Logic will get you from A to B. Imagination will take you everywhere.
+Imagination is the beginning of creation.
+Everything you can imagine is real.
+The world of reality has its limits; the world of imagination is boundless.
+Laughter is timeless. Imagination has no age. Dreams are forever.
+To bring anything into your life, imagine that it is already there.
+The man who has no imagination has no wings.
+Without leaps of imagination, or dreaming, we lose the excitement of possibilities.
+Reality leaves a lot to the imagination.
+The power of imagination makes us infinite.
+Imagination is more important than knowledge.
+First comes thought; then organization of that thought into ideas and plans.
+A new idea is delicate. It can be killed by a sneer or a yawn.
+An idea that is not dangerous is unworthy of being called an idea at all.
+Great ideas often receive violent opposition from mediocre minds.
+The way to get good ideas is to get lots of ideas and throw the bad ones away.
+No matter what people tell you, words and ideas can change the world.
+If at first the idea is not absurd, then there is no hope for it.
+A pile of rocks ceases to be a rock pile when somebody contemplates it with the idea of a cathedral in mind.
+New ideas pass through three periods: it cannot be done; it probably can be done but is not worth doing; I knew it was a good idea all along.
+The difficulty lies not so much in developing new ideas as in escaping from old ones.
+Ideas are like rabbits. You get a couple and learn how to handle them, and pretty soon you have a dozen.
+Good ideas are not adopted automatically. They must be driven into practice with courageous patience.
+An idea is salvation by imagination.
+Ideas are the beginning points of all fortunes.
+Great minds discuss ideas; average minds discuss events; small minds discuss people.
+Nothing is more powerful than an idea whose time has come.
+All achievements, all earned riches, have their beginning in an idea.
+Ideas won't keep. Something must be done about them.
+The best ideas come as jokes. Make your thinking as funny as possible.
+A single idea, if it is right, saves us the labor of an infinity of experiences.
+Art is not what you see, but what you make others see.
+Every artist was first an amateur.
+Art enables us to find ourselves and lose ourselves at the same time.
+The purpose of art is washing the dust of daily life off our souls.
+Art is the lie that enables us to realize the truth.
+Creativity is allowing yourself to make mistakes.
+Art is knowing which ones to keep.
+The earth has music for those who listen.
+Art is the most intense mode of individualism that the world has known.
+Without art, the crudeness of reality would make the world unbearable.
+Life beats down and crushes the soul, and art reminds you that you have one.
+Art should comfort the disturbed and disturb the comfortable.
+The aim of art is to represent not the outward appearance of things, but their inward significance.
+I dream my painting and I paint my dream.
+Every child is an artist.
+The object of art is not to reproduce reality, but to create a reality of the same intensity.
+Art is a harmony parallel with nature.
+To be an artist is to believe in life.
+In art, the hand can never execute anything higher than the heart can imagine.
+All art is autobiographical.
+Art is the signature of civilizations.
+I found I could say things with color and shapes that I could not say any other way.
+Music is the universal language of mankind.
+Where words fail, music speaks.
+Music gives a soul to the universe, wings to the mind, flight to the imagination, and life to everything.
+Without music, life would be a mistake.
+Music expresses that which cannot be put into words.
+One good thing about music, when it hits you, you feel no pain.
+Music is the strongest form of magic.
+Music can change the world because it can change people.
+Music is the soundtrack of your life.
+Life is like a piano. White keys are happy moments and black keys are sad moments.
+If music be the food of love, play on.
+Music is the art which is most nigh to tears and memory.
+Where words leave off, music begins.
+The only truth is music.
+Music is the wine that fills the cup of silence.
+I think music in itself is healing.
+Music is the divine way to tell beautiful, poetic things to the heart.
+Music has charms to soothe a savage breast.
+Music is what feelings sound like.
+Music is the literature of the heart; it commences where speech ends.
+Nature does not hurry, yet everything is accomplished.
+In every walk with nature, one receives far more than he seeks.
+Look deep into nature, and then you will understand everything better.
+The earth has music for those who listen.
+Study nature, love nature, stay close to nature. It will never fail you.
+Adopt the pace of nature: her secret is patience.
+Nature always wears the colors of the spirit.
+Those who contemplate the beauty of the earth find reserves of strength that will endure as long as life lasts.
+Keep your love of nature, for that is the true way to understand art more and more.
+In all things of nature there is something of the marvelous.
+The goal of life is living in agreement with nature.
+To forget how to dig the earth and to tend the soil is to forget ourselves.
+If you truly love nature, you will find beauty everywhere.
+Nature is the art of God.
+There is pleasure in the pathless woods, there is rapture in the lonely shore.
+Everything in nature invites us constantly to be what we are.
+Nature never did betray the heart that loved her.
+Heaven is under our feet as well as over our heads.
+The clearest way into the universe is through a forest wilderness.
+If we surrendered to earth's intelligence, we could rise up rooted like trees.
+Science is organized knowledge. Wisdom is organized life.
+The important thing is not to stop questioning.
+Science is a way of thinking much more than it is a body of knowledge.
+The good thing about science is that it is true whether or not you believe in it.
+Somewhere, something incredible is waiting to be known.
+Research is what I am doing when I do not know what I am doing.
+Science without religion is lame, religion without science is blind.
+The science of today is the technology of tomorrow.
+In science, there are no shortcuts to truth.
+Science is not only a disciple of reason but also one of romance and passion.
+Nothing in life is to be feared, it is only to be understood.
+I am among those who think that science has great beauty.
+The saddest aspect of life right now is that science gathers knowledge faster than society gathers wisdom.
+Science is simply common sense at its best.
+Equipped with his five senses, man explores the universe around him and calls the adventure science.
+The universe is under no obligation to make sense to you.
+Science is the great antidote to the poison of enthusiasm and superstition.
+Scientific discovery consists in the interpretation for our own convenience of a system of existence.
+Two things are infinite: the universe and human stupidity.
+The more I learn, the more I realize how much I do not know.
+Mathematics is the music of reason.
+Pure mathematics is, in its way, the poetry of logical ideas.
+Mathematics is the language in which God has written the universe.
+Mathematics is not about numbers, equations, or algorithms: it is about understanding.
+Life is good for only two things: discovering mathematics and teaching mathematics.
+Mathematics is the most beautiful and most powerful creation of the human spirit.
+The essence of mathematics lies in its freedom.
+Mathematics is the queen of science, and arithmetic is the queen of mathematics.
+In mathematics you do not understand things. You just get used to them.
+Go down deep enough into anything and you will find mathematics.
+Without mathematics, there is nothing you can do. Everything around you is mathematics.
+Mathematics is the door and key to the sciences.
+Nature is written in mathematical language.
+If people do not believe that mathematics is simple, it is only because they do not realize how complicated life is.
+A mathematician is a device for turning coffee into theorems.
+Do not worry about your difficulties in mathematics. I can assure you mine are still greater.
+The book of nature is written in the language of mathematics.
+Mathematics, rightly viewed, possesses not only truth but supreme beauty.
+The only way to learn mathematics is to do mathematics.
+History is not the past. It is the present.
+Those who cannot remember the past are condemned to repeat it.
+History is written by the victors.
+The more you know about the past, the better prepared you are for the future.
+History repeats itself, first as tragedy, second as farce.
+What is history but a fable agreed upon?
+Study the past, if you would divine the future.
+We are not makers of history. We are made by history.
+History is a gallery of pictures in which there are few originals and many copies.
+The history of the world is but the biography of great men.
+The past is never dead. It is not even past.
+History is the version of past events that people have decided to agree upon.
+People are trapped in history and history is trapped in them.
+If you want to understand today, you have to search yesterday.
+History is a relentless master.
+The very ink with which history is written is merely fluid prejudice.
+History does not repeat itself, but it often rhymes.
+There is properly no history, only biography.
+Human history becomes more and more a race between education and catastrophe.
+The only thing new in the world is the history you do not know.
+Philosophy is a battle against the bewitchment of our intelligence by means of language.
+The unexamined life is not worth living.
+I think, therefore I am.
+He who has a why to live can bear almost any how.
+The only true wisdom is in knowing you know nothing.
+Happiness is not an ideal of reason but of imagination.
+We are what we repeatedly do. Excellence, then, is not an act, but a habit.
+The mind is everything. What you think you become.
+Knowing yourself is the beginning of all wisdom.
+Man is condemned to be free; because once thrown into the world, he is responsible for everything he does.
+The only thing I know is that I know nothing.
+There is only one good, knowledge, and one evil, ignorance.
+It is the mark of an educated mind to be able to entertain a thought without accepting it.
+One cannot step twice in the same river.
+Time is the moving image of eternity.
+I am not what happened to me, I am what I choose to become.
+The greatest wealth is to live content with little.
+No man's knowledge here can go beyond his experience.
+Leisure is the mother of philosophy.
+The soul becomes dyed with the color of its thoughts.
+The greatest discovery of my generation is that a human being can alter his life by altering his attitudes.
+Happiness is when what you think, what you say, and what you do are in harmony.
+An eye for an eye only ends up making the whole world blind.
+The best way to find yourself is to lose yourself in the service of others.
+Live as if you were to die tomorrow; learn as if you were to live forever.
+Strength does not come from physical capacity. It comes from an indomitable will.
+Freedom is not worth having if it does not include the freedom to make mistakes.
+A man is but the product of his thoughts. What he thinks, he becomes.
+In a gentle way, you can shake the world.
+First they ignore you, then they ridicule you, then they fight you, and then you win.
+The weak can never forgive. Forgiveness is the attribute of the strong.
+You must not lose faith in humanity.
+Earth provides enough to satisfy every man's needs, but not every man's greed.
+Hate the sin, love the sinner.
+The future depends on what you do today.
+Our greatest ability as humans is not to change the world, but to change ourselves.
+The good man is the friend of all living things.
+Where there is love there is life.
+There is more to life than simply increasing its speed.
+You may never know what results come of your actions, but if you do nothing, there will be no results.
+A coward is incapable of exhibiting love; it is the prerogative of the brave.
+Prayer is not asking. It is a longing of the soul.
+The difference between what we do and what we are capable of doing would suffice to solve most of the world's problems.
+Satisfaction lies in the effort, not in the attainment.
+I will not let anyone walk through my mind with their dirty feet.
+There are two days in the year that we cannot do anything: yesterday and tomorrow.
+Do not dwell in the past, do not dream of the future, concentrate the mind on the present moment.
+Peace comes from within. Do not seek it without.
+Three things cannot be long hidden: the sun, the moon, and the truth.
+The only real failure in life is not to be true to the best one knows.
+An idea that is developed and put into action is more important than an idea that exists only as an idea.
+No one saves us but ourselves. No one can and no one may.
+You will not be punished for your anger; you will be punished by your anger.
+In the end, only three things matter: how much you loved, how gently you lived, and how gracefully you let go of things not meant for you.
+What we think, we become.
+Health is the greatest gift, contentment the greatest wealth, faithfulness the best relationship.
+Holding onto anger is like drinking poison and expecting the other person to die.
+Your work is to discover your world and then with all your heart give yourself to it.
+The trouble is, you think you have time.
+If you are facing in the right direction, all you need to do is keep on walking.
+Thousands of candles can be lit from a single candle.
+Words have the power to both destroy and heal.
+The world is full of magical things patiently waiting for our wits to grow sharper.
+The greatest weapon against stress is our ability to choose one thought over another.
+We become what we think about.
+Life is ten percent what happens to us and ninety percent how we respond to it.
+Nothing can stop the man with the right mental attitude from achieving his goal.
+Every strike brings me closer to the next home run.
+I have not failed. I have just found ten thousand ways that will not work.
+Success is how high you bounce when you hit bottom.
+Genius is one percent inspiration and ninety-nine percent perspiration.
+Opportunity is missed by most people because it is dressed in overalls and looks like work.
+Many of life's failures are people who did not realize how close they were to success when they gave up.
+To invent, you need a good imagination and a pile of junk.
+I never did a day's work in my life. It was all fun.
+The chief function of the body is to carry the brain around.
+Just because something does not do what you planned it to do does not mean it is useless.
+Five percent of the people think; ten percent of the people think they think; and the other eighty-five percent would rather die than think.
+When you have exhausted all possibilities, remember this: you have not.
+Our greatest weakness lies in giving up.
+The most certain way to succeed is always to try just one more time.
+There is no substitute for hard work.
+Be alone, that is the secret of invention; be alone, that is when ideas are born.
+Time is really the only capital that any human being has, and the only thing he cannot afford to lose.
+I have friends in overalls whose friendship I would not swap for the favor of the kings of the world.
+Everything comes to him who hustles while he waits.
+Results! Why, man, I have gotten a lot of results! I know several thousand things that won't work.
+The three great essentials to achieve anything worthwhile are: hard work, stick-to-itiveness, and common sense.
+I have never failed. I've just found ten thousand ways that won't work.
+Your worth consists in what you are and not in what you have.
+Discontent is the first necessity of progress.
+We often miss opportunity because it is dressed in overalls and looks like work.
+To have a great idea, have a lot of them.
+I start where the last man left off.
+The value of an idea lies in the using of it.
+Hell, there are no rules here. We are trying to accomplish something.
+I never perfected an invention that I did not think about in terms of the service it might give others.
+Success is one percent inspiration, ninety-nine percent perspiration.
+Being busy does not always mean real work.
+I readily absorb ideas from every source, frequently starting where the last person left off.
+If we all did the things we are really capable of doing, we would literally astound ourselves.
+The doctor of the future will give no medicine, but will interest his patients in the care of the human frame, in diet, and in the cause and prevention of disease.
+Anything that will not sell, I do not want to invent.
+What you are will show in what you do.
+Non-violence leads to the highest ethics, which is the goal of all evolution.
+One today is worth two tomorrows.
+An investment in knowledge pays the best interest.
+Tell me and I forget. Teach me and I remember. Involve me and I learn.
+Either write something worth reading or do something worth writing.
+Well done is better than well said.
+Never leave that till tomorrow which you can do today.
+Energy and persistence conquer all things.
+Dost thou love life? Then do not squander time, for that is the stuff life is made of.
+Early to bed and early to rise makes a man healthy, wealthy, and wise.
+By failing to prepare, you are preparing to fail.
+Honesty is the best policy.
+Without continual growth and progress, such words as improvement, achievement, and success have no meaning.
+We are all born ignorant, but one must work hard to remain stupid.
+It takes many good deeds to build a good reputation, and only one bad one to lose it.
+Content makes poor men rich; discontent makes rich men poor.
+He that is good for making excuses is seldom good for anything else.
+When you are finished changing, you are finished.
+Whatever is begun in anger ends in shame.
+Hide not your talents, they for use were made.
+Many people die at twenty five and are not buried until they are seventy five.
+Lost time is never found again.
+Diligence is the mother of good luck.
+Genius without education is like silver in the mine.
+Remember not only to say the right thing in the right place, but far more difficult still, to leave unsaid the wrong thing at the tempting moment.
+The Constitution only gives people the right to pursue happiness. You have to catch it yourself.
+The doorstep to the temple of wisdom is a knowledge of our own ignorance.
+Be at war with your vices, at peace with your neighbors, and let every new year find you a better man.
+Do not fear mistakes. You will know failure. Continue to reach out.
+Beware of little expenses. A small leak will sink a great ship.
+To succeed, jump as quickly at opportunities as you do at conclusions.
+In wine there is wisdom, in beer there is freedom, in water there is bacteria.
+A good conscience is a continual Christmas.
+The person who deserves most pity is a lonesome one on a rainy day who does not know how to read.
+Wealth is not his that has it, but his that enjoys it.
+Any fool can criticize, condemn, and complain, and most fools do.
+You can make more friends in two months by becoming interested in other people than you can in two years by trying to get other people interested in you.
+Feeling sorry for yourself, and your present condition, is not only a waste of energy but the worst habit you could possibly have.
+The successful man will profit from his mistakes and try again in a different way.
+If you are not willing to learn, no one can help you. If you are determined to learn, no one can stop you.
+Most of the important things in the world have been accomplished by people who have kept on trying when there seemed to be no hope at all.
+People rarely succeed unless they have fun in what they are doing.
+Develop success from failures. Discouragement and failure are two of the surest stepping stones to success.
+Take a chance! All life is a chance. The man who goes farthest is generally the one who is willing to do and dare.
+Act enthusiastic and you will be enthusiastic.
+Inaction breeds doubt and fear. Action breeds confidence and courage.
+Do the hard jobs first. The easy jobs will take care of themselves.
+Flaming enthusiasm, backed up by horse sense and persistence, is the quality that most frequently makes for success.
+The person who goes farthest is generally the one who is willing to do and dare.
+Remember, today is the tomorrow you worried about yesterday.
+Fear not those who argue but those who dodge.
+Big shots are only little shots who keep shooting.
+The person who seeks all their applause from outside has their happiness in another's keeping.
+Unless you are willing to drench yourself in your work beyond the capacity of the average man, you are just not cut out for positions at the top.
+If you can not do great things, do small things in a great way.
+Remember that failure is an event, not a person.
+People often say that motivation does not last. Well, neither does bathing.
+The major difference between successful and unsuccessful people is that the former look for problems to resolve, whereas the latter make every attempt to avoid them.
+Of all the things I have done, the most vital is coordinating those who work with me and aiming their efforts at a certain goal.
+All you need in this life is ignorance and confidence; then success is sure.
+The secret of success is to do the common things uncommonly well.
+Courage is resistance to fear, mastery of fear, not absence of fear.
+Do the thing you fear most and the death of fear is certain.
+Drag your thoughts away from your troubles, by the ears, by the heels, or any other way you can manage.
+A man cannot be comfortable without his own approval.
+The man who does not read has no advantage over the man who cannot read.
+Twenty years from now you will be more disappointed by the things you did not do than by the ones you did.
+Apparently there is nothing that cannot happen today.
+Kindness is a language which the deaf can hear and the blind can see.
+If you tell the truth, you do not have to remember anything.
+Part of the secret of a success in life is to eat what you like and let the food fight it out inside.
+A person who won't read has no advantage over one who can't read.
+A clear conscience is the sure sign of a bad memory.
+When angry, count to four; when very angry, swear.
+Patriotism is supporting your country all the time and your government when it deserves it.
+Giving up smoking is the easiest thing in the world. I know because I have done it thousands of times.
+Good friends, good books, and a sleepy conscience: this is the ideal life.
+The fear of death follows from the fear of life. A man who lives fully is prepared to die at any time.
+I have never let my schooling interfere with my education.
+Whenever you find yourself on the side of the majority, it is time to pause and reflect.
+If you pick up a starving dog and make him prosperous, he will not bite you. This is the principal difference between a dog and a man.
+The two most important days in your life are the day you are born and the day you find out why.
+Never put off till tomorrow what may be done day after tomorrow just as well.
+Truth is stranger than fiction, but it is because fiction is obliged to stick to possibilities; truth is not.
+Get your facts first, and then you can distort them as much as you please.
+The reports of my death are greatly exaggerated.
+Clothes make the man. Naked people have little or no influence in society.
+It is better to keep your mouth closed and let people think you are a fool than to open it and remove all doubt.
+The human race has one really effective weapon, and that is laughter.
+Never allow someone to be your priority while allowing yourself to be their option.
+Continuous effort, not strength or intelligence, is the key to unlocking our potential.
+In the middle of difficulty lies opportunity.
+Anyone who has never made a mistake has never tried anything new.
+Try not to become a man of success. Rather become a man of value.
+I have no special talent. I am only passionately curious.
+Two things are infinite: the universe and human stupidity.
+Science without religion is lame, religion without science is blind.
+If you cannot explain it simply, you do not understand it well enough.
+The important thing is not to stop questioning.
+Curiosity has its own reason for existing.
+Weakness of attitude becomes weakness of character.
+We cannot solve our problems with the same thinking we used when we created them.
+The world is a dangerous place to live, not because of the people who are evil, but because of the people who do not do anything about it.
+Peace cannot be kept by force; it can only be achieved by understanding.
+Look deep into nature, and then you will understand everything better.
+The only source of knowledge is experience.
+Information is not knowledge.
+Education is what remains after one has forgotten what one has learned in school.
+It is not that I am so smart, it is just that I stay with problems longer.
+Learn from yesterday, live for today, hope for tomorrow.
+Logic will get you from A to B. Imagination will take you everywhere.
+Life is like riding a bicycle. To keep your balance, you must keep moving.
+Only a life lived for others is a life worthwhile.
+The measure of intelligence is the ability to change.
+Gravitation is not responsible for people falling in love.
+A person who never made a mistake never tried anything new.
+Great spirits have always encountered violent opposition from mediocre minds.
+The true sign of intelligence is not knowledge but imagination.
+A table, a chair, a bowl of fruit and a violin; what else does a man need to be happy?
+Any man who reads too much and uses his own brain too little falls into lazy habits of thinking.
+Once we accept our limits, we go beyond them.
+Intellectuals solve problems, geniuses prevent them.
+I believe that a simple and unassuming manner of life is best for everyone.
+Strive not to be a success, but rather to be of value.
+The difference between stupidity and genius is that genius has its limits.
+Few are those who see with their own eyes and feel with their own hearts.
+You never fail until you stop trying.
+Everything should be made as simple as possible, but not simpler.
+Genius is one percent talent and ninety-nine percent hard work.
+I very rarely think in words at all. A thought comes, and I may try to express in words afterwards.
+When the solution is simple, God is answering.
+Out of clutter, find simplicity.
+The value of a man should be seen in what he gives and not in what he is able to receive.
+A question that sometimes drives me hazy: Am I, or are the others crazy?
+The only thing that interferes with my learning is my education.
+Reality is merely an illusion, albeit a very persistent one.
+The world as we have created it is a process of our thinking.
+If the facts do not fit the theory, change the facts.
+The only reason for time is so that everything does not happen at once.
+Common sense is the collection of prejudices acquired by age eighteen.
+I never think of the future. It comes soon enough.
+The pursuit of truth and beauty is a sphere of activity in which we are permitted to remain children all our lives.
+Imagination is everything. It is the preview of life's coming attractions.
+Whoever is careless with the truth in small matters cannot be trusted with important matters.
+I speak to everyone in the same way, whether he is the garbage man or the president of the university.
+Pure mathematics is, in its way, the poetry of logical ideas.
+The gift of fantasy has meant more to me than my talent for absorbing positive knowledge.
+I have no special talents. I am only passionately curious.
+I would teach peace rather than war, love rather than hate.
+If A is a success in life, then A equals x plus y plus z. Work is x; y is play; and z is keeping your mouth shut.
+A man should look for what is, and not for what he thinks should be.
+Coincidence is God's way of remaining anonymous.
+Student: Dr. Einstein, aren't these the same questions as last year's physics final exam? Dr. Einstein: Yes; but this year the answers are different.
+No problem can be solved from the same level of consciousness that created it.
+The only thing more dangerous than ignorance is arrogance.
+Black holes are where God divided by zero.
+As far as the laws of mathematics refer to reality, they are not certain, and as far as they are certain, they do not refer to reality.
+The distinction between past, present, and future is only a stubbornly persistent illusion.
+I must be willing to give up what I am in order to become what I will be.
+Time and space are modes by which we think, not conditions in which we live.
+The difference between a successful person and others is not a lack of strength, not a lack of knowledge, but rather a lack of will.
+The price of success is hard work, dedication to the job at hand, and the determination that whether we win or lose, we have applied the best of ourselves to the task at hand.
+If you love life, don't waste time, for time is what life is made up of.
+Defeat is not the worst of failures. Not to have tried is the true failure.
+The successful man is the one who finds out what is the matter with his business before his competitors do.
+In order to succeed you must fail, so that you know what not to do the next time.
+Frustration, although quite painful at times, is a very positive and essential part of success.
+Being realistic is the most commonly traveled road to mediocrity.
+It is impossible to live without failing at something, unless you live so cautiously that you might as well not have lived at all, in which case you fail by default.
+Rock bottom became the solid foundation on which I rebuilt my life.
+It matters not what someone is born, but what they grow to be.
+We do not need magic to transform our world. We carry all the power we need inside ourselves already.
+If you want to know what a man's like, take a good look at how he treats his inferiors, not his equals.
+It is our choices that show what we truly are, far more than our abilities.
+It does not do to dwell on dreams and forget to live.
+Understanding is the first step to acceptance, and only with acceptance can there be recovery.
+We are only as strong as we are united, as weak as we are divided.
+Numbing the pain for a while will make it worse when you finally feel it.
+Dark times lie ahead of us and there will be a time when we must choose between what is easy and what is right.
+It takes a great deal of bravery to stand up to our enemies, but just as much to stand up to our friends.
+The truth is a beautiful and terrible thing, and should therefore be treated with caution.
+Happiness can be found even in the darkest of times, if one only remembers to turn on the light.
+Words are, in my not-so-humble opinion, our most inexhaustible source of magic.
+Time will not slow down when something unpleasant lies ahead.
+The consequences of our actions are always so complicated, so diverse, that predicting the future is a very difficult business indeed.
+We must all face the choice between what is right and what is easy.
+Fear of a name increases fear of the thing itself.
+Indifference and neglect often do much more damage than outright dislike.
+You sort of start thinking anything is possible if you have got enough nerve.
+It is the unknown we fear when we look upon death and darkness, nothing more.
+Working hard is important, but there is something that matters even more: believing in yourself.
+Things we lose have a way of coming back to us in the end, if not always in the way we expect.
+Youth cannot know how age thinks and feels, but old men are guilty if they forget what it was to be young.
+To the well-organized mind, death is but the next great adventure.
+Do not pity the dead. Pity the living, and above all those who live without love.
+Every human life is worth the same and worth saving.
+There is no good and evil, there is only power and those too weak to seek it.
+You think the dead we loved truly ever leave us?
+People find it far easier to forgive others for being wrong than being right.
+It is not our abilities that show what we truly are. It is our choices.
+You are the one with the power. You always have been.
+There is an expiry date on blaming your parents for steering you in the wrong direction.
+Differences of habit and language are nothing at all if our aims are identical and our hearts are open.
+Let us step into the night and pursue that flighty temptress, adventure.
+There is no point in worrying about things you have no control over.
+Do not trust everything you read on the internet just because there is a picture with a quote next to it.
+A problem is a chance for you to do your best.
+Only those who dare to fail greatly can ever achieve greatly.
+Do not go where the path may lead, go instead where there is no path and leave a trail.
+What lies behind us and what lies before us are tiny matters compared to what lies within us.
+It is not length of life, but depth of life.
+For every minute you are angry you lose sixty seconds of happiness.
+To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.
+Finish each day and be done with it. You have done what you could.
+The only person you are destined to become is the person you decide to be.
+Nothing great was ever achieved without enthusiasm.
+Insist on yourself; never imitate.
+The earth laughs in flowers.
+There is no knowledge that is not power.
+Life is short. Do stuff that matters.
+Wherever you go, go with all your heart.
+It does not matter how many times you get knocked down, but how many times you get up.
+The only way to have a friend is to be one.
+Write it on your heart that every day is the best day in the year.
+Our greatest glory is not in never failing, but in rising up every time we fail.
+Nothing is at last sacred but the integrity of your own mind.
+Peace cannot be achieved through violence, it can only be attained through understanding.
+Shallow men believe in luck. Strong men believe in cause and effect.
+To be great is to be misunderstood.
+A friend may well be reckoned the masterpiece of nature.
+Do not be pushed by your problems. Be led by your dreams.
+What you do speaks so loudly that I cannot hear what you say.
+Trust yourself. You know more than you think you do.
+The greatest compliment that was ever paid me was when someone asked me what I thought, and attended to my answer.
+For every minute you remain angry, you give up sixty seconds of peace of mind.
+Happiness is a perfume you cannot pour on others without getting a few drops on yourself.
+Build your own dreams, or someone else will hire you to help build theirs.
+The chief function of the body is to carry the brain around.
+Unless you try to do something beyond what you have already mastered, you will never grow.
+He who is not courageous enough to take risks will accomplish nothing in life.
+If you can count your money, you do not have a billion dollars.
+I hated every minute of training, but I said: Do not quit. Suffer now and live the rest of your life as a champion.
+It is not the mountain we conquer but ourselves.
+Champions are made from something they have deep inside them: a desire, a dream, a vision.
+A champion is someone who gets up when he cannot.
+Gold medals are not really made of gold. They are made of sweat, determination, and a hard to find alloy called guts.
+I am building a fire, and every day I train, I add more fuel.
+Age is whatever you think it is. You are as old as you think you are.
+The fight is won or lost far away from witnesses, behind the lines, in the gym, and out there on the road, long before I dance under those lights.
+If my mind can conceive it, if my heart can believe it, then I can achieve it.
+I am the greatest; I said that even before I knew I was.
+Impossible is just a big word thrown around by small men who find it easier to live in the world they have been given than to explore the power they have to change it.
+Impossible is not a fact. It is an opinion. Impossible is not a declaration. It is a dare.
+Impossible is potential. Impossible is temporary. Impossible is nothing.
+I know where I am going and I know the truth, and I do not have to be what you want me to be.
+It is hard to beat a person who never gives up.
+I was not the best because I killed quickly. I was the best because the crowd loved me.
+It is not the size of the dog in the fight, but the size of the fight in the dog.
+The more I practice, the luckier I get.
+Winning is not everything, but wanting to win is.
+Pressure is something you feel when you do not know what you are doing.
+You find that you have peace of mind and can enjoy yourself, get more sleep, and rest when you know that it was a one hundred percent effort that you gave, win or lose.
+Success is not forever and failure is not fatal.
+Do not let what you cannot do interfere with what you can do.
+It is what it is. But it will become what you make of it.
+The only way to prove you are a good sport is to lose.
+The principle is competing against yourself. It is about self-improvement, about being better than you were the day before.
+If you want to find the secrets of the universe, think in terms of energy, frequency and vibration.
+The day science begins to study non-physical phenomena, it will make more progress in one decade than in all the previous centuries of its existence.
+I do not care that they stole my idea. I care that they do not have any of their own.
+If you only knew the magnificence of the three, six and nine, then you would have the key to the universe.
+The present is theirs; the future, for which I really worked, is mine.
+The scientists of today think deeply instead of clearly. One must be sane to think clearly, but one can think deeply and be quite insane.
+The spread of civilization may be likened to a fire; first, a feeble spark, next a flickering flame, then a mighty blaze, ever increasing in speed and power.
+Most persons are so absorbed in the contemplation of the outside world that they are wholly oblivious to what is passing on within themselves.
+Invention is the most important product of creative brain.
+Life is and will ever remain an equation incapable of solution, but it contains certain known factors.
+Let the future tell the truth, and evaluate each one according to his work and accomplishments.
+Our virtues and our failings are inseparable, like force and matter. When they separate, man is no more.
+Be alone, that is the secret of invention; be alone, that is when ideas are born.
+The mind is sharper and keener in seclusion and uninterrupted solitude. Originality thrives in seclusion.
+Instinct is something which transcends knowledge. We have, undoubtedly, certain finer fibers that enable us to perceive truths when logical deduction, or any other willful effort of the brain, is futile.
+What one man calls God, another calls the laws of physics.
+Today's scientists have substituted mathematics for experiments, and they wander off through equation after equation.
+All that was great in the past was ridiculed, condemned, combated, suppressed, only to emerge all the more powerfully, all the more triumphantly from the struggle.
+Every living being is an engine geared to the wheelwork of the universe.
+I do not think there is any thrill that can go through the human heart like that felt by the inventor as he sees some creation of the brain unfolding to success.
+My brain is only a receiver, in the Universe there is a core from which we obtain knowledge, strength and inspiration.
+Peace can only come as a natural consequence of universal enlightenment.
+The feeling is constantly growing on me that I had been the first to hear the greeting of one planet to another.
+Anti-social behavior is a trait of intelligence in a world full of conformists.
+In a crystal we have clear evidence of the existence of a formative life principle.
+We crave for new sensations but soon become indifferent to them. The wonders of yesterday are today common occurrences.
+Of all things, I liked books best.
+Ere many generations pass, our machinery will be driven by a power obtainable at any point of the universe.
+The desire that guides me in all I do is the desire to harness the forces of nature to the service of mankind.
+The progressive development of man is vitally dependent on invention.
+All peoples everywhere should have free energy sources.
+I do not think you can name many great inventions that have been made by married men.
+The gift of mental power comes from God, Divine Being, and if we concentrate our minds on that truth, we become in tune with this great power.
+Fights between individuals, as well as governments and nations, invariably result from misunderstandings in the broadest interpretation of this term.
+Modern scientists are thinking deeply instead of clearly.
+What the mind of man can conceive and believe, it can achieve.
+A goal is a dream with a deadline.
+You become what you think about.
+Whatever the mind can conceive and believe, the mind can achieve.
+It is not what you are going to do, but it is what you are doing now that counts.
+First we will be best, and then we will be first.
+If you do not have a competitive advantage, do not compete.
+The leader of the past was a person who knew how to tell. The leader of the future will be a person who knows how to ask.
+Management is doing things right; leadership is doing the right things.
+There is only one boss: the customer. And he can fire everybody in the company from the chairman on down, simply by spending his money somewhere else.
+A brand for a company is like a reputation for a person.
+Your brand is what other people say about you when you are not in the room.
+Life is too short to build something nobody wants.
+In the factory we make cosmetics; in the drugstore we sell hope.
+Earn your success based on service to others, not at the expense of others.
+The more you like yourself, the less you are like anyone else, which makes you unique.
+There is only one thing in life worse than being talked about, and that is not being talked about.
+Be yourself; everyone else is already taken.
+To live is the rarest thing in the world. Most people exist, that is all.
+Always forgive your enemies; nothing annoys them so much.
+The truth is rarely pure and never simple.
+Experience is simply the name we give our mistakes.
+A dreamer is one who can only find his way by moonlight.
+I can resist everything except temptation.
+Anyone who lives within their means suffers from a lack of imagination.
+The only way to get rid of temptation is to yield to it.
+Women are made to be loved, not understood.
+I have the simplest tastes. I am always satisfied with the best.
+Man is least himself when he talks in his own person. Give him a mask, and he will tell you the truth.
+We are all in the gutter, but some of us are looking at the stars.
+Consistency is the last refuge of the unimaginative.
+A man who does not think for himself does not think at all.
+Education is an admirable thing, but it is well to remember from time to time that nothing that is worth knowing can be taught.
+It is what you read when you do not have to that determines what you will be when you cannot help it.
+I am not young enough to know everything.
+Quotation is a serviceable substitute for wit.
+Memory is the diary that we all carry about with us.
+Keep love in your heart. A life without it is like a sunless garden when the flowers are dead.
+True friends stab you in the front.
+Life is far too important a thing ever to talk seriously about.
+To love oneself is the beginning of a lifelong romance.
+No good deed goes unpunished.
+Some cause happiness wherever they go; others whenever they go.
+Success is a science; if you have the conditions, you get the result.
+I like persons better than principles, and I like persons with no principles better than anything else in the world.
+Work is the curse of the drinking classes.
+Morality is simply the attitude we adopt towards people we personally dislike.
+There are only two tragedies in life: one is not getting what one wants, and the other is getting it.
+The world is a stage and the play is badly cast.
+Do not talk to me about other worlds, separate realities, lost continents, or invisible dimensions.
+A good novel tells us the truth about its hero, but a bad novel tells us the truth about its author.
+Wickedness is a myth invented by good people to account for the curious attractiveness of others.
+One should always play fairly when one has the winning cards.
+When I was young I thought that money was the most important thing in life; now that I am old I know that it is.
+There is no sin except stupidity.
+In this world there are only two tragedies. One is not getting what one wants, and the other is getting it.
+The public is wonderfully tolerant. It forgives everything except genius.
+Only dull people are brilliant at breakfast.
+Action is the foundational key to all success.
+When people talk, listen completely. Most people never listen.
+The world breaks everyone, and afterward, some are strong at the broken places.
+Courage is grace under pressure.
+There is nothing noble in being superior to your fellow man; true nobility is being superior to your former self.
+Every man's life ends the same way. It is only the details of how he lived and how he died that distinguish one man from another.
+The best way to find out if you can trust somebody is to trust them.
+I love sleep. My life has the tendency to fall apart when I am awake, you know?
+The first draft of anything is garbage.
+All you have to do is write one true sentence. Write the truest sentence that you know.
+Always do sober what you said you would do drunk. That will teach you to keep your mouth shut.
+Forget your personal tragedy. We are all bitched from the start.
+I like to listen. I have learned a great deal from listening carefully. Most people never listen.
+The only thing that could spoil a day was people. People were always the limiters of happiness.
+But man is not made for defeat. A man can be destroyed but not defeated.
+Never confuse movement with action.
+The world is a fine place and worth fighting for.
+We are all apprentices in a craft where no one ever becomes a master.
+There is nothing to writing. All you do is sit down at a typewriter and bleed.
+An intelligent man is sometimes forced to be drunk to spend time with his fools.
+The best people possess a feeling for beauty, the courage to take risks, the discipline to tell the truth, the capacity for sacrifice.
+You expected to be sad in the fall. Part of you died each year when the leaves fell from the trees.
+Write drunk, edit sober.
+Happiness in intelligent people is the rarest thing I know.
+The rain will stop, the night will end, the hurt will fade. Hope is never so lost that it cannot be found.
+Life is not a matter of holding good cards, but of playing a poor hand well.
+If people bring so much courage to this world the world has to kill them to break them.
+Courage is being scared to death and saddling up anyway.
+A man is not finished when he is defeated. He is finished when he quits.
+Tomorrow is the most important thing in life. Comes into us at midnight very clean. It is perfect when it arrives and it puts itself in our hands.
+When you stop doing things for fun you might as well be dead.
+Talk low, talk slow, and do not say too much.
+I would like to be remembered as a man who was as honest as he knew how to be.
+In my acting, I search for moments that make it real.
+Do the right thing, and do it with courage.
+There is a lot of wisdom in the old saying: when you have a hammer, everything looks like a nail.
+A goal without a plan is just a wish.
+One machine can do the work of fifty ordinary men.
+Progress is impossible without change, and those who cannot change their minds cannot change anything.
+Life is not about finding yourself. Life is about creating yourself.
+Do not wait for extraordinary opportunities. Seize common occasions and make them great.
+Both optimists and pessimists contribute to society. The optimist invents the aeroplane, the pessimist the parachute.
+People are always blaming circumstances for what they are. I do not believe in circumstances.
+A gentleman is one who puts more into the world than he takes out.
+A life spent making mistakes is not only more honorable, but more useful than a life spent doing nothing.
+Success does not consist in never making mistakes but in never making the same one a second time.
+You see things; and you say: Why? But I dream things that never were; and I say: Why not?
+Beware of false knowledge; it is more dangerous than ignorance.
+Those who cannot change their minds cannot change anything.
+Youth is wasted on the young.
+The single biggest problem in communication is the illusion that it has taken place.
+The reasonable man adapts himself to the world: the unreasonable one persists in trying to adapt the world to himself.
+We learn from experience that men never learn anything from experience.
+He who can, does; he who cannot, teaches.
+Few people think more than two or three times a year; I have made an international reputation for myself by thinking once or twice a week.
+There is no love sincerer than the love of food.
+A fashion is nothing but an induced epidemic.
+First love is only a little foolishness and a lot of curiosity.
+Science never solves a problem without creating ten more.
+Imagination is the beginning of creation. You imagine what you desire, you will what you imagine, and at last you create what you will.
+The power of accurate observation is commonly called cynicism by those who have not got it.
+Democracy is a device that ensures we shall be governed no better than we deserve.
+When a thing is funny, search it carefully for a hidden truth.
+Everything happens to everybody sooner or later if there is time enough.
+Animals are my friends, and I do not eat my friends.
+My way of joking is to tell the truth. It is the funniest joke in the world.
+Liberty means responsibility. That is why most men dread it.
+The possibilities are numerous once we decide to act and not react.
+Nothing ever becomes real till it is experienced.
+A thing of beauty is a joy forever: its loveliness increases; it will never pass into nothingness.
+Heard melodies are sweet, but those unheard are sweeter.
+I have been astonished that men could die martyrs for their religion.
+I love you the more in that I believe you had liked me for my own sake and for nothing else.
+I am certain of nothing but the holiness of the heart's affections and the truth of imagination.
+Do not be discouraged by a failure. It can be a positive experience.
+Poetry should surprise by a fine excess and not by singularity. It should strike the reader as a wording of his own highest thoughts.
+The poetry of the earth is never dead.
+I would sooner fail than not be among the greatest.
+There is nothing stable in the world; uproar's your only music.
+You speak of Lord Byron and me; there is this great difference between us. He describes what he sees; I describe what I imagine.
+The excellence of every art is its intensity, capable of making all disagreeables evaporate.
+Scenery is fine, but human nature is finer.
+If poetry comes not as naturally as the leaves to a tree it had better not come at all.
+I think we may class the lawyer in the natural history of monsters.
+I wish to believe in immortality; I wish to live with you forever.
+Give me books, French wine, fruit, fine weather and a little music played out of doors by somebody I do not know.
+What the imagination seizes as beauty must be truth.
+Failure is the condiment that gives success its flavor.
+My imagination is a monastery and I am its monk.
+Beauty is truth, truth beauty, that is all ye know on earth, and all ye need to know.
+There is a holiness to the heart's affections.
+Land and sea, weakness and decline are great separators, but death is the great divorcer forever.
+The roaring of the wind is my wife and the stars through the window pane are my children.
+With a great poet the sense of beauty overcomes every other consideration, or rather obliterates all consideration.
+O for a life of sensations rather than of thoughts!
+A man's life of any worth is a continual allegory.
+Nothing ever becomes real till it is experienced. Even a proverb is no proverb to you till your life has illustrated it.
+A thing of beauty is a joy forever.
+Talking about music is like dancing about architecture.
+Music is the literature of the heart; it commences where speech ends.
+When I hear music, I fear no danger. I am invulnerable. I see no foe. I am related to the earliest times, and to the latest.
+Music is a moral law. It gives soul to the universe, wings to the mind, and life to everything.
+Music expresses that which cannot be said and on which it is impossible to be silent.
+After silence, that which comes nearest to expressing the inexpressible is music.
+I think music in itself is healing. It's an explosive expression of humanity.
+Without music, life would be a mistake.
+Music is the movement of sound to reach the soul for the education of its virtue.
+There is geometry in the humming of the strings, there is music in the spacing of the spheres.
+Music gives a soul to the universe, wings to the mind, flight to the imagination and life to everything.
+Music is the art of the prophets and the gift of God.
+Where words fail, music speaks.
+Music, once admitted to the soul, becomes a sort of spirit, and never dies.
+Music is the universal language of mankind.
+A painter paints pictures on canvas. But musicians paint their pictures on silence.
+Music should strike fire from the heart of man, and bring tears from the eyes of woman.
+Without music, life would be a blank to me.
+The music is not in the notes, but in the silence between.
+I would rather write ten thousand notes than a single letter of the alphabet.
+Simplicity is the final achievement. After one has played a vast quantity of notes, it is simplicity that emerges.
+To send light into the darkness of men's hearts, such is the duty of the artist.
+Music is indeed the mediator between the spiritual and the sensual life.
+Love is composed of a single soul inhabiting two bodies.
+Music is the key to the female heart.
+Never give up, for that is just the place and time that the tide will turn.
+Whenever you find yourself on the side of the majority, it is time to reform.
+What we think, or what we know, or what we believe is, in the end, of little consequence. The only consequence is what we do.
+Experience is a hard teacher because she gives the test first, the lesson afterwards.
+In matters of style, swim with the current; in matters of principle, stand like a rock.
+Think wrongly if you please, but in all cases think for yourself.
+What you get by achieving your goals is not as important as what you become by achieving your goals.
+Things work out best for those who make the best of how things work out.
+The mind is not a vessel to be filled, but a fire to be kindled.
+The journey of a thousand miles begins with one step.
+Nature does not hurry, yet everything is accomplished.
+A leader is one who knows the way, goes the way, and shows the way.
+If your actions inspire others to dream more, learn more, do more and become more, you are a leader.
+In the middle of every difficulty lies opportunity.
+People who are crazy enough to think they can change the world are the ones who do.
+What we fear of doing most is usually what we most need to do.
+The only person who is educated is the one who has learned how to learn and change.
+Do not find fault, find a remedy.
+Whether you think you can, or you think you cannot, you are right.
+Obstacles are those frightful things you see when you take your eyes off your goal.
+Quality means doing it right when no one is looking.
+Coming together is a beginning. Keeping together is progress. Working together is success.
+Failure is simply the opportunity to begin again, this time more intelligently.
+It has been my observation that most people get ahead during the time that others waste.
+Thinking is the hardest work there is, which is probably the reason why so few engage in it.
+Vision without execution is just hallucination.
+Most people spend more time and energy going around problems than in trying to solve them.
+Do not find a fault, find a remedy; anybody can complain.
+When everything seems to be going against you, remember that the airplane takes off against the wind.
+Nothing is particularly hard if you divide it into small jobs.
+The competitor to be feared is one who never bothers about you at all, but goes on making his own business better all the time.
+Anyone who stops learning is old, whether at twenty or eighty.
+Chop your own wood and it will warm you twice.
+Even a mistake may turn out to be the one thing necessary to a worthwhile achievement.
+A business that makes nothing but money is a poor business.
+Before everything else, getting ready is the secret of success.
+My best friend is the one who brings out the best in me.
+You cannot build a reputation on what you are going to do.
+I believe God is managing affairs and that He does not need any advice from me.
+Exercise is bunk. If you are healthy, you do not need it; if you are sick, you should not take it.
+Givers have to set limits because takers rarely do.
+Life is a series of experiences, each one of which makes us bigger.
+The starting point of all achievement is desire.
+Patience, persistence and perspiration make an unbeatable combination for success.
+All our dreams can come true if we have the courage to pursue them.
+It is kind of fun to do the impossible.
+If you can dream it, you can do it.
+The way to get started is to quit talking and begin doing.
+First, think. Second, dream. Third, believe. And finally, dare.
+We keep moving forward, opening new doors and doing new things, because we are curious and curiosity keeps leading us down new paths.
+When you are curious, you find lots of interesting things to do.
+The more you like yourself, the less you are like anyone else, which makes you unique.
+Laughter is timeless. Imagination has no age. Dreams are forever.
+All the adversity I have had in my life, all my troubles and obstacles, have strengthened me.
+The flower that blooms in adversity is the most rare and beautiful of all.
+Our greatest natural resource is the minds of our children.
+Around here, however, we do not look backwards for very long.
+I only hope that we never lose sight of one thing: that it was all started by a mouse.
+Times and conditions change so rapidly that we must keep our aim constantly focused on the future.
+Adults are only kids grown up, anyway.
+You can design and create, and build the most wonderful place in the world.
+A dream is a wish your heart makes, when you are fast asleep.
+Whatever you do, do it well. Do it so well that when people see you do it, they will want to come back and see you do it again.
+The difference in winning and losing is most often not quitting.
+When we go into that voting booth, we know there are only two names on the ballot.
+I never look back, darling. It distracts from the now.
+Not everyone can become a great artist, but a great artist can come from anywhere.
+The past can hurt. But the way I see it, you can either run from it, or learn from it.
+Venture outside your comfort zone. The rewards are worth it.
+Remember, you are braver than you believe, stronger than you seem, and smarter than you think.
+Even miracles take a little time.
+Have courage and be kind.
+Think happy thoughts.
+Some people are worth melting for.
+Let it go. The cold never bothered me anyway.
+When will my reflection show who I am inside?
+I never knew I could feel like this. It is like I have never seen the sky before.
+Sometimes the right path is not the easiest one.
+Just because something works does not mean it cannot be improved.
+When life gets you down, do you wanna know what you have gotta do? Just keep swimming.
+A true hero is not measured by the size of his strength, but by the strength of his heart.
+The flower that blooms in adversity is the most rare and beautiful of all.
+If you focus on what you left behind, you will never see what lies ahead.
+Life will only change when you become more committed to your dreams than your comfort zone.
+We may encounter many defeats but we must not be defeated.
+I can accept failure. Everyone fails at something. But I cannot accept not trying.
+It is difficult to soar with eagles when you work with turkeys.
+Success and failure are both part of life. Both are not permanent.
+Successful and unsuccessful people do not vary greatly in their abilities.
+Success is not about your resources. It is about how resourceful you are with what you have.
+There are no traffic jams on the extra mile.
+Entrepreneur is someone who has a vision for something and a want to create.
+Logic will get you from A to B. Imagination will take you everywhere.
+The best revenge is massive success.
+I have no special talent. I am only passionately curious.
+Success is nothing more than a few simple disciplines, practiced every day.
+The only limit to our realization of tomorrow is our doubts of today.
+Do what you feel in your heart to be right, for you will be criticized anyway.
+It is during our darkest moments that we must focus to see the light.
+The best preparation for tomorrow is doing your best today.
+Keep your eyes on the stars and your feet on the ground.
+Believe in yourself and all that you are.
+The future starts today, not tomorrow.
+What you do today can improve all your tomorrows.
+You are never too old to set another goal or to dream a new dream.
+The secret of change is to focus all your energy not on fighting the old, but on building the new.
+Every moment is a fresh beginning.
+The best time for new beginnings is now.
+Small steps in the right direction can turn out to be the biggest step of your life.
+Your positive action combined with positive thinking results in success.
+The harder the conflict, the greater the triumph.
+Success is the sum of small efforts repeated day in and day out.
+Motivation is what gets you started. Habit is what keeps you going.
+The only way to achieve the impossible is to believe it is possible.
+You do not have to be great to start, but you have to start to be great.
+The journey is the reward.
+Happiness is not by chance, but by choice.
+The purpose of life is a life of purpose.
+What we achieve inwardly will change outer reality.
+Every accomplishment starts with the decision to try.
+Be the change that you wish to see in the world.
+In the middle of every difficulty lies opportunity.
+The mind is not a vessel to be filled but a fire to be kindled.
+Knowledge speaks, but wisdom listens.
+The roots of education are bitter, but the fruit is sweet.
+Learning is not attained by chance; it must be sought for with ardor.
+An investment in knowledge always pays the best interest.
+The beautiful thing about learning is that no one can take it away from you.
+Education is the passport to the future.
+The more that you read, the more things you will know.
+A reader lives a thousand lives before he dies.
+The only thing that you absolutely have to know is the location of the library.
+Reading is essential for those who seek to rise above the ordinary.
+Books are the quietest and most constant of friends.
+A book is a dream you hold in your hands.
+Reading is to the mind what exercise is to the body.
+The man who does not read has no advantage over the man who cannot read.
+Books are the mirrors of the soul.
+A house without books is like a room without windows.
+Reading furnishes the mind only with materials of knowledge.
+There is no friend as loyal as a book.
+Good books, like good friends, are few and chosen.
+Reading makes a full man, meditation a profound man, discourse a clear man.
+Books are the training weights of the mind.
+Reading is a discount ticket to everywhere.
+A book is a gift you can open again and again.
+The more you know, the more you realize you know nothing.
+Knowledge is power, but enthusiasm pulls the switch.
+Wisdom begins in wonder.
+The only source of knowledge is experience.
+Real knowledge is to know the extent of one's ignorance.
+Knowledge has to be improved, challenged, and increased constantly.
+The greatest enemy of knowledge is not ignorance; it is the illusion of knowledge.
+To know what you know and what you do not know, that is true knowledge.
+Knowledge is of no value unless you put it into practice.
+The beginning of knowledge is the discovery of something we do not understand.
+Information is not knowledge; knowledge is not wisdom; wisdom is not truth.
+Knowledge is like a garden; if it is not cultivated, it cannot be harvested.
+True knowledge exists in knowing that you know nothing.
+The desire of knowledge, like the thirst for riches, increases ever with the acquisition of it.
+Knowledge is the eye of desire and can become the pilot of the soul.
+The only good is knowledge, and the only evil is ignorance.
+Knowledge is the treasure of a wise man.
+Where there is shouting, there is no true knowledge.
+Knowledge comes, but wisdom lingers.
+The art of being wise is knowing what to overlook.
+Wisdom is not a product of schooling but of the lifelong attempt to acquire it.
+The wise man does at once what the fool does finally.
+A wise man can learn more from a foolish question than a fool can learn from a wise answer.
+The only true wisdom is in knowing you know nothing.
+Wisdom is the reward you get for a lifetime of listening when you would have preferred to talk.
+The beginning of wisdom is the definition of terms.
+Wisdom comes from experience, and experience comes from bad judgment.
+It is the mark of an educated mind to entertain a thought without accepting it.
+Patience is the companion of wisdom.
+The wise man knows he knows nothing; the fool thinks he knows all.
+Common sense is genius dressed in its working clothes.
+Science is organized common sense where many a beautiful theory was killed by an ugly fact.
+Common sense is the collection of prejudices acquired by age eighteen.
+Common sense is instinct, and enough of it is genius.
+The three great essentials to achieve anything worthwhile are hard work, stick-to-itiveness, and common sense.
+Common sense is not so common.
+Nothing is more fairly distributed than common sense.
+Common sense is the knack of seeing things as they are.
+Common sense is in spite of, not the result of, education.
+The best things in life are nearest: breath in your nostrils, light in your eyes, flowers at your feet.
+Simplicity is the ultimate sophistication.
+The greatest ideas are the simplest.
+Simplicity is the keynote of all true elegance.
+Less is more.
+Simplicity is the glory of expression.
+Life is really simple, but we insist on making it complicated.
+Nature is pleased with simplicity.
+The ability to simplify means to eliminate the unnecessary so that the necessary may speak.
+Simplicity is making the journey of this life with just baggage enough.
+The art of being wise is the art of knowing what to overlook.
+Simplicity is the final achievement.
+In character, in manner, in style, in all things, the supreme excellence is simplicity.
+Making the simple complicated is commonplace; making the complicated simple, that is creativity.
+Truth is ever to be found in simplicity, and not in the multiplicity and confusion of things.
+Complexity is your enemy; any fool can make something complicated.
+Simplicity is prerequisite for reliability.
+Order and simplification are the first steps toward mastery of a subject.
+The greatest truths are the simplest; so likewise are the greatest men.
+Out of clutter, find simplicity.
+Be content with what you have; rejoice in the way things are.
+Contentment is natural wealth; luxury is artificial poverty.
+The secret of contentment is knowing how to enjoy what you have.
+Health is the greatest possession; contentment is the greatest treasure.
+Happiness resides not in possessions and not in gold; happiness dwells in the soul.
+True happiness is to enjoy the present without anxious dependence upon the future.
+The happiness of your life depends upon the quality of your thoughts.
+Happiness is not something ready made; it comes from your own actions.
+Most people are about as happy as they make up their minds to be.
+Happiness is when what you think, what you say, and what you do are in harmony.
+The only joy in the world is to begin.
+Joy is not in things; it is in us.
+Find joy in everything you choose to do.
+The soul's joy lies in doing.
+Joy is the simplest form of gratitude.
+We cannot cure the world of sorrows, but we can choose to live in joy.
+Joy is a net of love by which you can catch souls.
+Sometimes your joy is the source of your smile, but sometimes your smile can be the source of your joy.
+The joy of life comes from our encounters with new experiences.
+True joy comes from operating with inner-Loss and determination.
+Let your joy be in your journey, not in some distant goal.
+Joy does not simply happen to us; we have to choose joy and keep choosing it every day.
+The present moment is filled with joy and happiness; if you are attentive, you will see it.
+Joy is increased by spreading it to others.
+We are shaped by our thoughts; we become what we think.
+What lies behind us and what lies ahead of us are tiny matters compared to what lives within us.
+The mind is everything; what you think, you become.
+Change your thoughts and you change your world.
+Your thoughts become your words, your words become your actions, your actions become your habits.
+A man is but the product of his thoughts; what he thinks, he becomes.
+The happiness of your life depends upon the quality of your thoughts.
+Think big thoughts, but relish small pleasures.
+You are today where your thoughts have brought you; you will be tomorrow where your thoughts take you.
+The soul becomes dyed with the color of its thoughts.
+Our life is what our thoughts make it.
+We are what we pretend to be, so we must be careful about what we pretend to be.
+Whatever we think about and thank about, we bring about.
+Watch your thoughts, for they become words.
+Every thought we think is creating our future.
+Thoughts become things; if you see it in your mind, you will hold it in your hand.
+The universe is change; our life is what our thoughts make it.
+You have power over your mind, not outside events; realize this, and you will find strength.
+All that we are is the result of what we have thought.
+The world as we have created it is a process of our thinking.
+The primary cause of unhappiness is never the situation but your thoughts about it.
+Attitude is a little thing that makes a big difference.
+Your attitude determines your direction.
+The only disability in life is a bad attitude.
+A positive attitude causes a chain reaction of positive thoughts, events, and outcomes.
+Weakness of attitude becomes weakness of character.
+The greatest discovery of all time is that a person can change their future by merely changing their attitude.
+Nothing can stop the man with the right mental attitude from achieving his goal.
+Your attitude is like a price tag; it shows how valuable you are.
+Attitude is more important than the past, than education, than money.
+If you do not like something, change it; if you cannot change it, change your attitude.
+People may hear your words, but they feel your attitude.
+A bad attitude is like a flat tire; you cannot go anywhere until you change it.
+Excellence is not a skill; it is an attitude.
+Adopting the right attitude can convert a negative stress into a positive one.
+Ability is what you are capable of doing; motivation determines what you do; attitude determines how well you do it.
+Life is ten percent what happens to you and ninety percent how you respond to it.
+Keep your face to the sunshine and you cannot see a shadow.
+Optimism is the faith that leads to achievement.
+A pessimist sees the difficulty in every opportunity; an optimist sees the opportunity in every difficulty.
+The optimist sees the rose and not its thorns; the pessimist stares at the thorns, oblivious to the rose.
+Choose to be optimistic; it feels better.
+Optimism is essential to achievement and it is also the foundation of courage and true progress.
+Perpetual optimism is a force multiplier.
+An optimist is someone who goes after Moby Dick in a rowboat and takes the tartar sauce with him.
+Even if I knew that tomorrow the world would go to pieces, I would still plant my apple tree.
+Write it on your heart that every day is the best day in the year.
+I am an optimist; it does not seem too much use being anything else.
+Optimism is the madness of insisting that all is well when we are miserable.
+Optimism is a happiness magnet; if you stay positive, good things and good people will be drawn to you.
+Both optimists and pessimists contribute to society; the optimist invents the aeroplane, the pessimist the parachute.
+Optimism is true moral courage.
+Hope is being able to see that there is light despite all of the darkness.
+Hope is the thing with feathers that perches in the soul.
+Where there is no vision, there is no hope.
+Hope is a waking dream.
+Learn from yesterday, live for today, hope for tomorrow.
+Once you choose hope, anything is possible.
+Hope is important because it can make the present moment less difficult to bear.
+He who has health has hope, and he who has hope has everything.
+Hope sees the invisible, feels the intangible, and achieves the impossible.
+In the middle of difficulty lies opportunity.
+Hope is patience with the lamp lit.
+Hope is like the sun, which, as we journey toward it, casts the shadow of our burden behind us.
+The very least you can do in your life is figure out what you hope for.
+You may say I am a dreamer, but I am not the only one.
+Hope springs eternal in the human breast.
+While there is life, there is hope.
+Everything that is done in this world is done by hope.
+Faith is the bird that feels the light and sings when the dawn is still dark.
+Faith is taking the first step even when you do not see the whole staircase.
+Faith is not something to grasp; it is a state to grow into.
+Faith consists in believing when it is beyond the power of reason to believe.
+Faith is the strength by which a shattered world shall emerge into the light.
+Without faith, nothing is possible; with it, nothing is impossible.
+Faith is to believe what you do not see; the reward of this faith is to see what you believe.
+Faith is the art of holding on to things your reason has once accepted.
+Faith is the substance of things hoped for, the evidence of things not seen.
+Faith and doubt cannot exist in the same mind at the same time.
+To one who has faith, no explanation is necessary; to one without faith, no explanation is possible.
+Faith is a knowledge within the heart, beyond the reach of proof.
+Faith sees the invisible, believes the unbelievable, and receives the impossible.
+A faith that cannot survive collision with the truth is not worth many regrets.
+Faith makes things possible, not easy.
+Courage is not the absence of fear, but rather the judgment that something else is more important than fear.
+Courage is resistance to fear, mastery of fear, not absence of fear.
+You gain strength, courage, and confidence by every experience in which you really stop to look fear in the face.
+It takes courage to grow up and become who you really are.
+Courage is what it takes to stand up and speak; courage is also what it takes to sit down and listen.
+Life shrinks or expands in proportion to one's courage.
+Courage is the most important of all virtues, because without courage you cannot practice any other virtue consistently.
+Have the courage to follow your heart and intuition.
+Courage is being scared to death but saddling up anyway.
+Success is not final, failure is not fatal; it is the courage to continue that counts.
+He who is not courageous enough to take risks will accomplish nothing in life.
+A man of courage is also full of faith.
+One man with courage makes a majority.
+Courage is found in unlikely places.
+Courage is grace under pressure.

@@ -24,28 +24,33 @@ class Display:
 
     def __init__(self, stdscr):
         self.stdscr = stdscr
+        self.large_mode = False
         self._setup_colors()
         self._setup_screen()
 
     def _setup_colors(self):
         """Initialize color pairs."""
-        curses.start_color()
-        curses.use_default_colors()
+        try:
+            curses.start_color()
+            curses.use_default_colors()
 
-        # White on black (normal)
-        curses.init_pair(Colors.NORMAL, curses.COLOR_WHITE, -1)
-        # Green for correct
-        curses.init_pair(Colors.CORRECT, curses.COLOR_GREEN, -1)
-        # Red background for incorrect
-        curses.init_pair(Colors.INCORRECT, curses.COLOR_WHITE, curses.COLOR_RED)
-        # Reverse video for current character
-        curses.init_pair(Colors.CURRENT, curses.COLOR_BLACK, curses.COLOR_WHITE)
-        # Dim for pending text
-        curses.init_pair(Colors.PENDING, curses.COLOR_WHITE, -1)
-        # Cyan for highlights
-        curses.init_pair(Colors.HIGHLIGHT, curses.COLOR_CYAN, -1)
-        # Dim gray
-        curses.init_pair(Colors.DIM, curses.COLOR_WHITE, -1)
+            # White on black (normal)
+            curses.init_pair(Colors.NORMAL, curses.COLOR_WHITE, -1)
+            # Green for correct
+            curses.init_pair(Colors.CORRECT, curses.COLOR_GREEN, -1)
+            # Red background for incorrect
+            curses.init_pair(Colors.INCORRECT, curses.COLOR_WHITE, curses.COLOR_RED)
+            # Reverse video for current character
+            curses.init_pair(Colors.CURRENT, curses.COLOR_BLACK, curses.COLOR_WHITE)
+            # Dim for pending text
+            curses.init_pair(Colors.PENDING, curses.COLOR_WHITE, -1)
+            # Cyan for highlights
+            curses.init_pair(Colors.HIGHLIGHT, curses.COLOR_CYAN, -1)
+            # Dim gray
+            curses.init_pair(Colors.DIM, curses.COLOR_WHITE, -1)
+        except curses.error:
+            # Terminal doesn't support colors - use defaults
+            pass
 
     def _setup_screen(self):
         """Configure screen settings."""
@@ -66,9 +71,54 @@ class Display:
         """Refresh the screen."""
         self.stdscr.refresh()
 
-    def get_key(self) -> int:
-        """Get a single keypress."""
-        return self.stdscr.getch()
+    # Keypad escape sequence mapping: ESC O <char> -> number
+    KEYPAD_MAP = {
+        ord('p'): ord('0'),  # keypad 0
+        ord('q'): ord('1'),  # keypad 1
+        ord('r'): ord('2'),  # keypad 2
+        ord('s'): ord('3'),  # keypad 3
+        ord('t'): ord('4'),  # keypad 4
+        ord('u'): ord('5'),  # keypad 5
+        ord('v'): ord('6'),  # keypad 6
+        ord('w'): ord('7'),  # keypad 7
+        ord('x'): ord('8'),  # keypad 8
+        ord('y'): ord('9'),  # keypad 9
+    }
+
+    def get_key(self, escape_delay: bool = True) -> int:
+        """Get a single keypress. Handles keypad escape sequences."""
+        key = self.stdscr.getch()
+
+        # If we got ESC, check if it's part of an escape sequence
+        if key == 27 and escape_delay:
+            self.stdscr.nodelay(True)
+            next_key = self.stdscr.getch()
+            self.stdscr.nodelay(False)
+
+            if next_key == -1:
+                # No more keys - it was just ESC
+                return 27
+            elif next_key == ord('O'):
+                # Keypad escape sequence: ESC O <char>
+                self.stdscr.nodelay(True)
+                third_key = self.stdscr.getch()
+                self.stdscr.nodelay(False)
+
+                if third_key in self.KEYPAD_MAP:
+                    return self.KEYPAD_MAP[third_key]
+                # Unknown sequence, return -1
+                return -1
+            else:
+                # Other escape sequence - discard remaining chars
+                while True:
+                    self.stdscr.nodelay(True)
+                    extra = self.stdscr.getch()
+                    self.stdscr.nodelay(False)
+                    if extra == -1:
+                        break
+                return -1  # Ignore unknown escape sequences
+
+        return key
 
     def draw_centered_text(self, y: int, text: str, color_pair: int = Colors.NORMAL, attr: int = 0):
         """Draw text centered on the screen."""
@@ -107,12 +157,14 @@ class Display:
             self.draw_centered_text(13, "Other:", Colors.NORMAL, curses.A_BOLD)
             self.draw_centered_text(15, "[5] View Progress", Colors.NORMAL)
             self.draw_centered_text(16, "[6] Manage Custom Texts", Colors.NORMAL)
-            self.draw_centered_text(17, "[q] Quit", Colors.NORMAL)
+            large_status = "ON" if self.large_mode else "OFF"
+            self.draw_centered_text(17, f"[7] Large Mode: {large_status}", Colors.HIGHLIGHT if self.large_mode else Colors.NORMAL)
+            self.draw_centered_text(18, "[q] Quit", Colors.NORMAL)
 
             self.refresh()
 
             key = self.get_key()
-            if key == ord("q") or key == ord("Q"):
+            if key == 27 or key == ord("Q") or key == ord("q"):  # Escape or Q/q
                 return "quit"
             elif key == ord("1"):
                 return "words"
@@ -126,6 +178,9 @@ class Display:
                 return "progress"
             elif key == ord("6"):
                 return "manage_custom"
+            elif key == ord("7"):
+                self.large_mode = not self.large_mode
+                # Stay in menu loop to redraw with updated status
 
     def draw_word_count_menu(self, mode: str) -> Optional[int]:
         """Draw the word count selection menu."""
@@ -168,12 +223,23 @@ class Display:
         progress_current, progress_total = session.progress
         mode_display = session.mode.replace("_", " ").title()
         header = f"{mode_display} - {progress_current}/{progress_total}"
+        if self.large_mode:
+            header += " [LARGE]"
         self.draw_text(1, 2, header, Colors.HIGHLIGHT)
 
-        # Calculate text display area
-        text_start_y = 4
-        text_width = width - 4
-        text_x = 2
+        # Calculate text display area based on mode
+        if self.large_mode:
+            # Large mode: centered, narrower text, more vertical space
+            max_text_width = min(50, width - 20)  # Max 50 chars or less on small screens
+            text_x = max(2, (width - max_text_width) // 2)
+            text_start_y = 5
+            line_spacing = 2  # Double spacing
+        else:
+            # Normal mode
+            max_text_width = width - 4
+            text_x = 2
+            text_start_y = 4
+            line_spacing = 1
 
         # Get character states and wrap text
         char_states = session.get_char_states()
@@ -185,8 +251,8 @@ class Display:
 
         for char, state in char_states:
             # Handle line wrapping
-            if char == "\n" or current_x >= width - 2:
-                current_y += 1
+            if char == "\n" or current_x >= text_x + max_text_width:
+                current_y += line_spacing
                 current_x = text_x
                 if char == "\n":
                     continue
@@ -264,8 +330,8 @@ class Display:
             elif key == ord("q") or key == ord("Q"):
                 return "quit"
 
-    def draw_progress_screen(self, stats_summary: dict, recent_sessions: list, problem_keys: list):
-        """Draw the progress viewing screen."""
+    def draw_progress_screen(self, stats_summary: dict, recent_sessions: list, problem_keys: list) -> str:
+        """Draw the progress viewing screen. Returns 'back' or 'reset'."""
         while True:
             self.clear()
             height, width = self.get_dimensions()
@@ -292,12 +358,15 @@ class Display:
                 line = f"{session['mode']}: {session['wpm']:.0f} WPM, {session['accuracy']:.0f}%"
                 self.draw_text(18 + i, 4, line, Colors.DIM)
 
-            self.draw_centered_text(height - 2, "[Any key] Back to menu", Colors.DIM)
+            self.draw_centered_text(height - 4, "[r] Reset Statistics", Colors.INCORRECT)
+            self.draw_centered_text(height - 2, "[Any other key] Back to menu", Colors.DIM)
 
             self.refresh()
 
-            self.get_key()
-            return
+            key = self.get_key()
+            if key == ord("r") or key == ord("R"):
+                return "reset"
+            return "back"
 
     def draw_custom_text_menu(self, texts: list) -> tuple[str, Optional[str]]:
         """Draw custom text selection or management menu."""
@@ -446,6 +515,27 @@ class Display:
         self.draw_centered_text(6, f"Delete '{name}'?", Colors.INCORRECT, curses.A_BOLD)
         self.draw_centered_text(9, "[y] Yes, delete", Colors.NORMAL)
         self.draw_centered_text(10, "[n] No, cancel", Colors.NORMAL)
+
+        self.refresh()
+
+        while True:
+            key = self.get_key()
+            if key == ord("y") or key == ord("Y"):
+                return True
+            elif key == ord("n") or key == ord("N") or key == 27:
+                return False
+
+    def draw_confirm_reset(self) -> bool:
+        """Confirm reset of all statistics."""
+        self.clear()
+        height, width = self.get_dimensions()
+
+        self.draw_centered_text(5, "Reset All Statistics?", Colors.INCORRECT, curses.A_BOLD)
+        self.draw_centered_text(7, "This will permanently delete:", Colors.NORMAL)
+        self.draw_centered_text(8, "- All session history", Colors.DIM)
+        self.draw_centered_text(9, "- All problem key data", Colors.DIM)
+        self.draw_centered_text(12, "[y] Yes, reset everything", Colors.INCORRECT)
+        self.draw_centered_text(13, "[n] No, cancel", Colors.NORMAL)
 
         self.refresh()
 
