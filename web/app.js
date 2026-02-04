@@ -132,6 +132,46 @@ class TypingSession {
         }
     }
 
+    handleTab() {
+        if (!this.startTime) {
+            this.start();
+        }
+
+        // Count consecutive spaces from current position (up to 4)
+        let spacesToSkip = 0;
+        for (let i = 0; i < 4 && this.position + i < this.text.length; i++) {
+            if (this.text[this.position + i] === ' ') {
+                spacesToSkip++;
+            } else {
+                break;
+            }
+        }
+
+        // If no spaces to skip, treat as incorrect (don't advance)
+        if (spacesToSkip === 0) {
+            this.totalTyped++;
+            const expected = this.text[this.position];
+            const displayKey = this.getDisplayKey(expected);
+            this.mistakes[displayKey] = (this.mistakes[displayKey] || 0) + 1;
+            return false;
+        }
+
+        // Skip all the spaces
+        for (let i = 0; i < spacesToSkip; i++) {
+            this.typedChars.push({ expected: ' ', typed: ' ', correct: true });
+            this.correctChars++;
+            this.position++;
+        }
+        this.totalTyped++;
+
+        if (this.position >= this.text.length) {
+            this.endTime = Date.now();
+            return true;
+        }
+
+        return false;
+    }
+
     getDisplayKey(char) {
         if (char === ' ') return 'Space';
         if (char === '\n') return 'Enter';
@@ -201,31 +241,49 @@ class TextGenerator {
         return shuffled.slice(0, count).join(' ');
     }
 
-    static getSentence() {
-        const index = Math.floor(Math.random() * SENTENCES.length);
-        return SENTENCES[index];
-    }
-
-    static getSentences(count = 3) {
+    static getSentences(targetWords = 25) {
+        // Pick sentences until we reach approximately targetWords
         const shuffled = [...SENTENCES].sort(() => Math.random() - 0.5);
-        return shuffled.slice(0, count).join(' ');
+        const selected = [];
+        let wordCount = 0;
+
+        for (const sentence of shuffled) {
+            selected.push(sentence);
+            wordCount += sentence.split(/\s+/).length;
+            if (wordCount >= targetWords) break;
+        }
+
+        return selected.join(' ');
     }
 
-    static getPythonSnippet() {
-        const index = Math.floor(Math.random() * PYTHON_SNIPPETS.length);
-        return PYTHON_SNIPPETS[index];
+    static getPythonSnippets(targetWords = 25) {
+        // Pick snippets until we reach approximately targetWords
+        // Filter out snippets that start with whitespace (they're continuations)
+        const validSnippets = PYTHON_SNIPPETS.filter(s => s.length > 0 && !/^\s/.test(s));
+        const shuffled = [...validSnippets].sort(() => Math.random() - 0.5);
+        const selected = [];
+        let wordCount = 0;
+
+        for (const snippet of shuffled) {
+            selected.push(snippet);
+            // Count words (split on whitespace)
+            wordCount += snippet.split(/\s+/).length;
+            if (wordCount >= targetWords) break;
+        }
+
+        return selected.join('\n\n');
     }
 
-    static getText(mode) {
+    static getText(mode, length = 25) {
         switch (mode) {
             case 'words':
-                return this.getWords(25);
+                return this.getWords(length);
             case 'sentences':
-                return this.getSentences(2);
+                return this.getSentences(length);
             case 'python':
-                return this.getPythonSnippet();
+                return this.getPythonSnippets(length);
             default:
-                return this.getWords(25);
+                return this.getWords(length);
         }
     }
 }
@@ -238,6 +296,7 @@ class App {
         this.storage = new StorageManager();
         this.session = null;
         this.currentMode = 'words';
+        this.exerciseLength = 25;
         this.updateInterval = null;
 
         this.initElements();
@@ -256,6 +315,7 @@ class App {
         this.fontSizeSlider = document.getElementById('font-size-slider');
         this.fontSizeValue = document.getElementById('font-size-value');
         this.modeBtns = document.querySelectorAll('.mode-btn');
+        this.lengthBtns = document.querySelectorAll('.length-btn');
         this.viewProgressBtn = document.getElementById('view-progress-btn');
 
         // Practice elements
@@ -297,6 +357,15 @@ class App {
             btn.addEventListener('click', () => {
                 this.currentMode = btn.dataset.mode;
                 this.startPractice();
+            });
+        });
+
+        // Length buttons
+        this.lengthBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.lengthBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.exerciseLength = parseInt(btn.dataset.length);
             });
         });
 
@@ -358,7 +427,7 @@ class App {
     }
 
     startPractice() {
-        const text = TextGenerator.getText(this.currentMode);
+        const text = TextGenerator.getText(this.currentMode, this.exerciseLength);
         this.session = new TypingSession(text);
         this.renderText();
         this.updateLiveStats();
@@ -448,10 +517,10 @@ class App {
             return;
         }
 
-        // Handle Tab
+        // Handle Tab - skip up to 4 spaces
         if (e.key === 'Tab') {
             e.preventDefault();
-            const complete = this.session.handleKey('\t');
+            const complete = this.session.handleTab();
             this.renderText();
             if (complete) {
                 this.endSession();

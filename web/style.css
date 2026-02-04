@@ -95,6 +95,33 @@ body {
     border-color: var(--accent-color);
 }
 
+.length-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.length-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-family: inherit;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.length-btn:hover {
+    border-color: var(--accent-color);
+}
+
+.length-btn.active {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
 .font-size-control {
     display: flex;
     align-items: center;
@@ -203,6 +230,7 @@ body {
 #practice-screen {
     display: none;
     flex-direction: column;
+    justify-content: center;
     height: 100vh;
     max-height: 100vh;
     padding: 1rem 0;
