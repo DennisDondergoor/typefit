@@ -47,6 +47,7 @@ body {
 /* Menu Screen */
 #menu-screen {
     text-align: center;
+    position: relative;
 }
 
 #menu-screen h1 {
@@ -58,6 +59,15 @@ body {
 .subtitle {
     color: var(--text-muted);
     margin-bottom: 3rem;
+}
+
+.timer-display {
+    position: absolute;
+    left: 50%;
+    margin-left: 16rem;
+    top: 2.5rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
 }
 
 .mode-buttons {

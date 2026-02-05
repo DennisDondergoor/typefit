@@ -484,6 +484,7 @@ class App {
         this.initElements();
         this.initEventListeners();
         this.loadSettings();
+        this.updateTimerDisplay();
         this.initFirebase();
     }
 
@@ -515,6 +516,7 @@ class App {
         this.openSettingsBtn = document.getElementById('open-settings-btn');
         this.authBtn = document.getElementById('auth-btn');
         this.syncStatus = document.getElementById('sync-status');
+        this.timerDisplay = document.getElementById('timer-display');
 
         // Length modal elements
         this.lengthModal = document.getElementById('length-modal');
@@ -811,6 +813,33 @@ class App {
                 localStorage.setItem(this.storage.KEYS.FONT_FAMILY, data.settings.fontFamily);
             }
         }
+
+        this.updateTimerDisplay();
+    }
+
+    updateTimerDisplay() {
+        const sessions = this.storage.getSessions();
+        const today = new Date().toISOString().slice(0, 10);
+        let todaySeconds = 0;
+        let totalSeconds = 0;
+        for (const s of sessions) {
+            const secs = s.time || 0;
+            totalSeconds += secs;
+            if (s.date && s.date.slice(0, 10) === today) {
+                todaySeconds += secs;
+            }
+        }
+        const parts = [];
+        if (todaySeconds > 0) {
+            parts.push(`Today: ${Math.round(todaySeconds / 60)}m`);
+        }
+        if (totalSeconds >= 60) {
+            const totalMin = Math.round(totalSeconds / 60);
+            const h = Math.floor(totalMin / 60);
+            const m = totalMin % 60;
+            parts.push(`Total: ${h > 0 ? h + 'h ' : ''}${m}m`);
+        }
+        this.timerDisplay.textContent = parts.join(' · ');
     }
 
     loadSettings() {
@@ -850,6 +879,7 @@ class App {
     showMenu() {
         this.stopUpdateInterval();
         this.session = null;
+        this.updateTimerDisplay();
         this.showScreen(this.menuScreen);
     }
 
