@@ -120,7 +120,7 @@ class StorageManager {
     }
 
     getFontFamily() {
-        return localStorage.getItem(this.KEYS.FONT_FAMILY) || 'JetBrains Mono';
+        return localStorage.getItem(this.KEYS.FONT_FAMILY) || 'Source Code Pro';
     }
 
     setFontFamily(font) {
