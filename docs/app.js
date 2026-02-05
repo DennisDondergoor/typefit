@@ -432,21 +432,38 @@ class TextGenerator {
         }
 
         // Score each word by sum of weights of its problem characters
-        const scored = WORDS.map(word => {
+        const scoreWord = (word) => {
             let score = 0;
             for (const ch of word.toLowerCase()) {
                 if (weights[ch]) score += weights[ch];
             }
-            return { word, score };
-        });
+            return score;
+        };
 
-        // Sort by score descending, take top pool (3x count for variety)
-        scored.sort((a, b) => b.score - a.score);
-        const pool = scored.slice(0, Math.max(count * 3, 50));
+        // Filter to real words (2+ chars) and use same length distribution as getWords
+        const realWords = WORDS.filter(w => w.length >= 2);
+        const short = realWords.filter(w => w.length <= 4).map(w => ({ word: w, score: scoreWord(w) }));
+        const medium = realWords.filter(w => w.length >= 5 && w.length <= 7).map(w => ({ word: w, score: scoreWord(w) }));
+        const long = realWords.filter(w => w.length >= 8).map(w => ({ word: w, score: scoreWord(w) }));
 
-        // Shuffle the pool and pick count words
-        const shuffled = pool.sort(() => Math.random() - 0.5);
-        return shuffled.slice(0, count).map(s => s.word).join(' ');
+        const shortCount = Math.round(count * 0.4);
+        const mediumCount = Math.round(count * 0.4);
+        const longCount = count - shortCount - mediumCount;
+
+        // Pick top-scored words from each bucket with randomization
+        const pickFromPool = (scored, n) => {
+            scored.sort((a, b) => b.score - a.score);
+            const pool = scored.slice(0, Math.max(n * 3, 20));
+            return pool.sort(() => Math.random() - 0.5).slice(0, n);
+        };
+
+        const selected = [
+            ...pickFromPool(short, shortCount),
+            ...pickFromPool(medium, mediumCount),
+            ...pickFromPool(long, longCount)
+        ];
+
+        return selected.sort(() => Math.random() - 0.5).map(s => s.word).join(' ');
     }
 
     static getText(mode, length = 25, problemKeys = {}) {
