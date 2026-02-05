@@ -439,6 +439,7 @@ class TextGenerator {
 class App {
     constructor() {
         this.storage = new StorageManager();
+        this.firebase = new FirebaseSync();
         this.session = null;
         this.currentMode = 'words';
         this.exerciseLength = 10;
@@ -450,6 +451,7 @@ class App {
         this.initElements();
         this.initEventListeners();
         this.loadSettings();
+        this.initFirebase();
     }
 
     initElements() {
@@ -478,6 +480,8 @@ class App {
         this.modeBtns = document.querySelectorAll('.mode-btn');
         this.viewProgressBtn = document.getElementById('view-progress-btn');
         this.openSettingsBtn = document.getElementById('open-settings-btn');
+        this.authBtn = document.getElementById('auth-btn');
+        this.syncStatus = document.getElementById('sync-status');
 
         // Length modal elements
         this.lengthModal = document.getElementById('length-modal');
@@ -634,12 +638,81 @@ class App {
         this.clearDataBtn.addEventListener('click', () => {
             if (confirm('Clear all typing stats (sessions and problem keys)? Book progress will be kept.')) {
                 this.storage.clearTypingStats();
+                this.syncToCloud();
                 this.showProgress();
+            }
+        });
+
+        // Auth button
+        this.authBtn.addEventListener('click', () => {
+            if (this.firebase.isSignedIn()) {
+                this.firebase.signOut();
+            } else {
+                this.firebase.signIn();
             }
         });
 
         // Keyboard handling
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
+    }
+
+    initFirebase() {
+        this.firebase.init();
+        this.firebase.onAuthChange(async (user) => {
+            if (user) {
+                this.authBtn.textContent = 'Sign out';
+                this.syncStatus.textContent = 'Loading from cloud...';
+                await this.loadFromCloud();
+                this.loadSettings();
+                this.syncStatus.textContent = `Signed in as ${this.firebase.getUserName()}`;
+            } else {
+                this.authBtn.textContent = 'Sign in';
+                this.syncStatus.textContent = '';
+            }
+        });
+    }
+
+    getAllData() {
+        return {
+            sessions: this.storage.getSessions(),
+            problemKeys: this.storage.getProblemKeys(),
+            bookProgress: JSON.parse(localStorage.getItem(this.storage.KEYS.BOOK_PROGRESS) || '{}'),
+            settings: {
+                fontSize: this.storage.getFontSize(),
+                fontFamily: this.storage.getFontFamily(),
+                colors: this.storage.getColors()
+            }
+        };
+    }
+
+    syncToCloud() {
+        this.firebase.scheduleSave(this.getAllData());
+    }
+
+    async loadFromCloud() {
+        const data = await this.firebase.loadFromCloud();
+        if (!data) return;
+
+        if (data.sessions) {
+            localStorage.setItem(this.storage.KEYS.SESSIONS, JSON.stringify(data.sessions));
+        }
+        if (data.problemKeys) {
+            localStorage.setItem(this.storage.KEYS.PROBLEM_KEYS, JSON.stringify(data.problemKeys));
+        }
+        if (data.bookProgress) {
+            localStorage.setItem(this.storage.KEYS.BOOK_PROGRESS, JSON.stringify(data.bookProgress));
+        }
+        if (data.settings) {
+            if (data.settings.fontSize) {
+                localStorage.setItem(this.storage.KEYS.FONT_SIZE, data.settings.fontSize.toString());
+            }
+            if (data.settings.fontFamily) {
+                localStorage.setItem(this.storage.KEYS.FONT_FAMILY, data.settings.fontFamily);
+            }
+            if (data.settings.colors) {
+                localStorage.setItem(this.storage.KEYS.COLORS, JSON.stringify(data.settings.colors));
+            }
+        }
     }
 
     loadSettings() {
@@ -667,17 +740,20 @@ class App {
         document.documentElement.style.setProperty('--font-size', `${size}px`);
         this.fontSizeValue.textContent = `${size}px`;
         this.storage.setFontSize(size);
+        this.syncToCloud();
     }
 
     setFontFamily(font) {
         document.documentElement.style.setProperty('--font-family', `'${font}', monospace`);
         this.storage.setFontFamily(font);
+        this.syncToCloud();
     }
 
     setColor(key, value) {
         this.storage.setColor(key, value);
         const colors = this.storage.getColors();
         this.applyColors(colors);
+        this.syncToCloud();
     }
 
     applyColors(colors) {
@@ -757,6 +833,7 @@ class App {
                 this.bookChapter = 0;
                 this.bookParagraph = 0;
                 this.storage.setBookProgress(this.currentBook.id, 0, 0);
+                this.syncToCloud();
             }
 
             // Get current paragraph
@@ -999,6 +1076,7 @@ class App {
         this.bookChapter = newChapter;
         this.bookParagraph = newParagraph;
         this.storage.setBookProgress(this.currentBook.id, newChapter, newParagraph);
+        this.syncToCloud();
 
         // Restart with new paragraph
         const newChapterData = this.currentBook.chapters[newChapter];
@@ -1037,6 +1115,8 @@ class App {
             this.bookParagraph = next.paragraph;
             this.storage.setBookProgress(this.currentBook.id, this.bookChapter, this.bookParagraph);
         }
+
+        this.syncToCloud();
 
         // Show summary
         this.showSummary(stats);
@@ -1200,6 +1280,7 @@ class App {
         // Find first uncompleted paragraph in this chapter
         const next = this.findNextUncompleted(chapterIndex, -1);
         this.storage.setBookProgress(this.currentBook.id, next.chapter, next.paragraph);
+        this.syncToCloud();
         this.startPractice();
     }
 

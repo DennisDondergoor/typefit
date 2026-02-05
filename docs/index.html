@@ -26,7 +26,9 @@
             <div class="menu-footer">
                 <button id="view-progress-btn" class="text-btn">Progress</button>
                 <button id="open-settings-btn" class="text-btn">Settings</button>
+                <button id="auth-btn" class="text-btn">Sign in</button>
             </div>
+            <div id="sync-status" class="sync-status"></div>
         </div>
 
         <!-- Length Selection Modal -->
@@ -222,8 +224,12 @@
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
     <script src="data.js"></script>
     <script src="books.js"></script>
+    <script src="firebase.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
