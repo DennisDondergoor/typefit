@@ -1114,6 +1114,13 @@ class App {
             this.bookChapter = next.chapter;
             this.bookParagraph = next.paragraph;
             this.storage.setBookProgress(this.currentBook.id, this.bookChapter, this.bookParagraph);
+            this.syncToCloud();
+
+            // Auto-advance to next paragraph, or show summary if book is done
+            if (this.bookChapter < this.currentBook.chapters.length) {
+                this.startPractice();
+                return;
+            }
         }
 
         this.syncToCloud();
