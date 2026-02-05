@@ -3,7 +3,7 @@
     --font-family: 'JetBrains Mono', monospace;
     --bg-color: #000;
     --text-color: #fff;
-    --text-muted: #888;
+    --text-muted: #bbb;
     --accent-color: #4a9eff;
     --success-color: #4ade80;
     --error-color: #f87171;
@@ -96,7 +96,7 @@ body {
     border: none;
     color: var(--text-muted);
     font-family: inherit;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     cursor: pointer;
     padding: 0.5rem;
     transition: color 0.2s;
@@ -109,7 +109,7 @@ body {
 .sync-status {
     text-align: center;
     color: var(--text-muted);
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     margin-top: 1rem;
     min-height: 1.2em;
 }
@@ -163,7 +163,7 @@ body {
 }
 
 .settings-section h3 {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--text-muted);
     margin-bottom: 0.75rem;
     text-transform: uppercase;
@@ -210,7 +210,7 @@ body {
 
 .font-btn {
     padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-family: inherit;
     background-color: var(--card-bg);
     color: var(--text-color);
@@ -238,7 +238,7 @@ body {
 
 .font-label {
     color: var(--text-muted);
-    font-size: 0.875rem;
+    font-size: 0.9rem;
 }
 
 .font-label.large {
@@ -294,7 +294,7 @@ body {
 
 .color-control label {
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
 }
 
 .color-control input[type="color"] {
@@ -398,7 +398,7 @@ body {
 }
 
 .stats-bar span {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
 }
 
 .text-display {
@@ -448,7 +448,7 @@ body {
 
 .hint {
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     margin-bottom: 0.5rem;
 }
 
@@ -525,7 +525,7 @@ body {
 .stat-label {
     display: block;
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     margin-top: 0.5rem;
 }
 
@@ -555,7 +555,7 @@ body {
     color: var(--error-color);
     padding: 0.5rem 1rem;
     border-radius: 4px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
 }
 
 .summary-actions {
@@ -633,7 +633,7 @@ body {
 
 .session-date {
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
 }
 
 .session-mode {
@@ -689,7 +689,7 @@ body {
 
 .book-author {
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     margin-bottom: 0.5rem;
 }
 
@@ -697,7 +697,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--text-muted);
 }
 
@@ -721,7 +721,7 @@ body {
 
 .book-stats .chapters {
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
 }
 
 /* Chapter Selection Screen */
@@ -768,7 +768,7 @@ body {
 
 .chapter-number {
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     min-width: 3rem;
 }
 
@@ -779,7 +779,7 @@ body {
 
 .chapter-status {
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
 }
 
 .chapter-status.in-progress {
@@ -790,7 +790,7 @@ body {
 .chapter-title {
     text-align: center;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     margin-bottom: 1rem;
     padding: 0.5rem;
 }
