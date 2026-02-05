@@ -21,14 +21,46 @@ class StorageManager {
     getBookProgress(bookId) {
         const data = localStorage.getItem(this.KEYS.BOOK_PROGRESS);
         const allProgress = data ? JSON.parse(data) : {};
-        return allProgress[bookId] || { chapter: 0, paragraph: 0 };
+        const progress = allProgress[bookId] || { chapter: 0, paragraph: 0 };
+        if (!progress.completed) {
+            progress.completed = {};
+        }
+        return progress;
     }
 
     setBookProgress(bookId, chapter, paragraph) {
         const data = localStorage.getItem(this.KEYS.BOOK_PROGRESS);
         const allProgress = data ? JSON.parse(data) : {};
-        allProgress[bookId] = { chapter, paragraph };
+        const existing = allProgress[bookId] || { completed: {} };
+        existing.chapter = chapter;
+        existing.paragraph = paragraph;
+        allProgress[bookId] = existing;
         localStorage.setItem(this.KEYS.BOOK_PROGRESS, JSON.stringify(allProgress));
+    }
+
+    markParagraphCompleted(bookId, chapter, paragraph) {
+        const data = localStorage.getItem(this.KEYS.BOOK_PROGRESS);
+        const allProgress = data ? JSON.parse(data) : {};
+        const existing = allProgress[bookId] || { chapter: 0, paragraph: 0, completed: {} };
+        if (!existing.completed[chapter]) {
+            existing.completed[chapter] = [];
+        }
+        if (!existing.completed[chapter].includes(paragraph)) {
+            existing.completed[chapter].push(paragraph);
+        }
+        allProgress[bookId] = existing;
+        localStorage.setItem(this.KEYS.BOOK_PROGRESS, JSON.stringify(allProgress));
+    }
+
+    isParagraphCompleted(bookId, chapter, paragraph) {
+        const progress = this.getBookProgress(bookId);
+        return progress.completed[chapter] && progress.completed[chapter].includes(paragraph);
+    }
+
+    getChapterCompletedCount(bookId, chapterIndex, totalParagraphs) {
+        const progress = this.getBookProgress(bookId);
+        const completed = progress.completed[chapterIndex];
+        return completed ? completed.length : 0;
     }
 
     getBookStats(book) {
@@ -38,10 +70,11 @@ class StorageManager {
 
         for (let i = 0; i < book.chapters.length; i++) {
             const chapter = book.chapters[i];
+            const completedParagraphs = progress.completed[i] || [];
             for (let j = 0; j < chapter.paragraphs.length; j++) {
                 const paragraphLength = chapter.paragraphs[j].length;
                 totalChars += paragraphLength;
-                if (i < progress.chapter || (i === progress.chapter && j < progress.paragraph)) {
+                if (completedParagraphs.includes(j)) {
                     completedChars += paragraphLength;
                 }
             }
@@ -111,10 +144,9 @@ class StorageManager {
         localStorage.setItem(this.KEYS.COLORS, JSON.stringify(colors));
     }
 
-    clearAll() {
+    clearTypingStats() {
         localStorage.removeItem(this.KEYS.SESSIONS);
         localStorage.removeItem(this.KEYS.PROBLEM_KEYS);
-        localStorage.removeItem(this.KEYS.BOOK_PROGRESS);
     }
 
     getStats() {
@@ -600,8 +632,8 @@ class App {
 
         // Clear data
         this.clearDataBtn.addEventListener('click', () => {
-            if (confirm('Are you sure you want to clear all your progress data?')) {
-                this.storage.clearAll();
+            if (confirm('Clear all typing stats (sessions and problem keys)? Book progress will be kept.')) {
+                this.storage.clearTypingStats();
                 this.showProgress();
             }
         });
@@ -682,6 +714,14 @@ class App {
         this.settingsModal.classList.add('hidden');
     }
 
+    updateChapterTitle(chapter, chapterIndex, paragraphIndex) {
+        const total = chapter.paragraphs.length;
+        const isCompleted = this.storage.isParagraphCompleted(this.currentBook.id, chapterIndex, paragraphIndex);
+        const completedMark = isCompleted ? ' (completed)' : '';
+        this.chapterTitle.textContent = `Chapter ${chapter.number}: ${chapter.title} — ${paragraphIndex + 1}/${total}${completedMark}`;
+        this.textDisplay.classList.toggle('already-completed', isCompleted);
+    }
+
     pausePractice() {
         if (this.session) {
             this.session.pause();
@@ -723,8 +763,8 @@ class App {
             const chapter = this.currentBook.chapters[this.bookChapter];
             text = chapter.paragraphs[this.bookParagraph];
 
-            // Show chapter title
-            this.chapterTitle.textContent = `Chapter ${chapter.number}: ${chapter.title}`;
+            // Show chapter title with paragraph info
+            this.updateChapterTitle(chapter, this.bookChapter, this.bookParagraph);
             this.chapterTitle.classList.remove('hidden');
             this.bookHint.classList.remove('hidden');
         } else {
@@ -965,7 +1005,7 @@ class App {
         const text = newChapterData.paragraphs[newParagraph];
 
         this.session = new TypingSession(text);
-        this.chapterTitle.textContent = `Chapter ${newChapterData.number}: ${newChapterData.title}`;
+        this.updateChapterTitle(newChapterData, newChapter, newParagraph);
         this.renderText();
         this.updateLiveStats();
     }
@@ -988,15 +1028,13 @@ class App {
 
         // Advance book progress if in books mode
         if (this.currentMode === 'books' && this.currentBook) {
-            this.bookParagraph++;
-            const chapter = this.currentBook.chapters[this.bookChapter];
+            // Mark current paragraph as completed
+            this.storage.markParagraphCompleted(this.currentBook.id, this.bookChapter, this.bookParagraph);
 
-            if (this.bookParagraph >= chapter.paragraphs.length) {
-                // Move to next chapter
-                this.bookChapter++;
-                this.bookParagraph = 0;
-            }
-
+            // Find next uncompleted paragraph
+            const next = this.findNextUncompleted(this.bookChapter, this.bookParagraph);
+            this.bookChapter = next.chapter;
+            this.bookParagraph = next.paragraph;
             this.storage.setBookProgress(this.currentBook.id, this.bookChapter, this.bookParagraph);
         }
 
@@ -1116,23 +1154,23 @@ class App {
         const progress = this.storage.getBookProgress(this.currentBook.id);
 
         this.chapterList.innerHTML = this.currentBook.chapters.map((chapter, index) => {
-            const isCurrent = index === progress.chapter;
-            const isCompleted = index < progress.chapter;
             const paragraphCount = chapter.paragraphs.length;
-            const currentParagraph = isCurrent ? progress.paragraph : (isCompleted ? paragraphCount : 0);
+            const completedCount = this.storage.getChapterCompletedCount(this.currentBook.id, index, paragraphCount);
+            const isCurrent = index === progress.chapter;
+            const isCompleted = completedCount === paragraphCount;
 
             let statusText;
             let statusClass = '';
             if (isCompleted) {
                 statusText = 'Completed';
-            } else if (isCurrent) {
-                statusText = `${currentParagraph}/${paragraphCount} paragraphs`;
+            } else if (completedCount > 0 || isCurrent) {
+                statusText = `${completedCount}/${paragraphCount} paragraphs`;
                 statusClass = 'in-progress';
             } else {
                 statusText = `${paragraphCount} paragraphs`;
             }
 
-            const cardClass = isCurrent ? 'current' : (isCompleted ? 'completed' : '');
+            const cardClass = isCompleted ? 'completed' : ((completedCount > 0 || isCurrent) ? 'current' : '');
 
             return `
                 <div class="chapter-card ${cardClass}" data-chapter-index="${index}">
@@ -1159,9 +1197,25 @@ class App {
     selectChapter(chapterIndex) {
         if (!this.currentBook) return;
 
-        // Update progress to start of selected chapter
-        this.storage.setBookProgress(this.currentBook.id, chapterIndex, 0);
+        // Find first uncompleted paragraph in this chapter
+        const next = this.findNextUncompleted(chapterIndex, -1);
+        this.storage.setBookProgress(this.currentBook.id, next.chapter, next.paragraph);
         this.startPractice();
+    }
+
+    findNextUncompleted(fromChapter, fromParagraph) {
+        // Search from the given position forward
+        for (let c = fromChapter; c < this.currentBook.chapters.length; c++) {
+            const startP = (c === fromChapter) ? fromParagraph + 1 : 0;
+            const chapter = this.currentBook.chapters[c];
+            for (let p = startP; p < chapter.paragraphs.length; p++) {
+                if (!this.storage.isParagraphCompleted(this.currentBook.id, c, p)) {
+                    return { chapter: c, paragraph: p };
+                }
+            }
+        }
+        // All done — return end position
+        return { chapter: this.currentBook.chapters.length, paragraph: 0 };
     }
 
     formatTime(seconds) {

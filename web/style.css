@@ -415,6 +415,10 @@ body {
     color: #fff;
 }
 
+.text-display.already-completed .char.pending {
+    color: #555;
+}
+
 .text-display .char.current {
     background-color: var(--highlight-bg);
     color: var(--highlight-text);
