@@ -189,7 +189,9 @@ class TypingSession {
         const expected = this.text[this.position];
         // Normalize accented characters (ü→u, î→i, ô→o, etc.)
         const normalizedExpected = expected.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        const isCorrect = key === expected || key === normalizedExpected;
+        // Accept hyphen for em dash/en dash
+        const dashMatch = (key === '-' && (expected === '\u2014' || expected === '\u2013'));
+        const isCorrect = key === expected || key === normalizedExpected || dashMatch;
 
         this.totalTyped++;
 
