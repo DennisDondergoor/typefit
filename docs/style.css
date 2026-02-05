@@ -571,12 +571,13 @@ body {
 .progress-header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    max-width: 750px;
+    margin: 0 auto 2rem;
 }
 
 .progress-header h1 {
+    flex: 1;
+    text-align: center;
     font-size: 1.5rem;
 }
 
