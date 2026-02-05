@@ -531,7 +531,7 @@ body {
 
 .summary-section {
     margin: 2rem 0;
-    text-align: left;
+    text-align: center;
 }
 
 .summary-section h2 {
@@ -546,6 +546,7 @@ body {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .problem-key {

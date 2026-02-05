@@ -419,7 +419,37 @@ class TextGenerator {
         return selected.join('\n\n');
     }
 
-    static getText(mode, length = 25) {
+    static getAdaptiveWords(count = 25, problemKeys = {}) {
+        const entries = Object.entries(problemKeys).sort((a, b) => b[1] - a[1]).slice(0, 10);
+        if (entries.length === 0) {
+            return this.getWords(count);
+        }
+
+        // Build a weight map: character -> error count
+        const weights = {};
+        for (const [key, cnt] of entries) {
+            weights[key.toLowerCase()] = cnt;
+        }
+
+        // Score each word by sum of weights of its problem characters
+        const scored = WORDS.map(word => {
+            let score = 0;
+            for (const ch of word.toLowerCase()) {
+                if (weights[ch]) score += weights[ch];
+            }
+            return { word, score };
+        });
+
+        // Sort by score descending, take top pool (3x count for variety)
+        scored.sort((a, b) => b.score - a.score);
+        const pool = scored.slice(0, Math.max(count * 3, 50));
+
+        // Shuffle the pool and pick count words
+        const shuffled = pool.sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, count).map(s => s.word).join(' ');
+    }
+
+    static getText(mode, length = 25, problemKeys = {}) {
         switch (mode) {
             case 'words':
                 return this.getWords(length);
@@ -427,6 +457,8 @@ class TextGenerator {
                 return this.getSentences(length);
             case 'python':
                 return this.getPythonSnippets(length);
+            case 'adaptive':
+                return this.getAdaptiveWords(length, problemKeys);
             default:
                 return this.getWords(length);
         }
@@ -563,6 +595,13 @@ class App {
         this.modeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 this.currentMode = btn.dataset.mode;
+                if (this.currentMode === 'adaptive') {
+                    const keys = this.storage.getProblemKeys();
+                    if (Object.keys(keys).length === 0) {
+                        alert('No problem keys recorded yet. Complete some practice sessions first!');
+                        return;
+                    }
+                }
                 if (this.currentMode === 'books') {
                     this.showBookSelection();
                 } else {
@@ -909,7 +948,7 @@ class App {
             this.chapterTitle.classList.remove('hidden');
             this.bookHint.classList.remove('hidden');
         } else {
-            text = TextGenerator.getText(this.currentMode, this.exerciseLength);
+            text = TextGenerator.getText(this.currentMode, this.exerciseLength, this.storage.getProblemKeys());
             this.chapterTitle.classList.add('hidden');
             this.bookHint.classList.add('hidden');
         }
