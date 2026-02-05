@@ -612,7 +612,11 @@ class App {
 
         // Back to menu buttons
         this.backToMenuBtn.addEventListener('click', () => {
-            this.showMenu();
+            if (this.currentMode === 'books') {
+                this.showChapterSelection();
+            } else {
+                this.showMenu();
+            }
         });
         this.backToMenuSummaryBtn.addEventListener('click', () => {
             this.showMenu();
@@ -850,7 +854,6 @@ class App {
         const isCompleted = this.storage.isParagraphCompleted(this.currentBook.id, chapterIndex, paragraphIndex);
         const completedMark = isCompleted ? ' (completed)' : '';
         this.chapterTitle.textContent = `Chapter ${chapter.number}: ${chapter.title} — ${paragraphIndex + 1}/${total}${completedMark}`;
-        this.textDisplay.classList.toggle('already-completed', isCompleted);
     }
 
     pausePractice() {
