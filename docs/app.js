@@ -54,7 +54,7 @@ class StorageManager {
 
     isParagraphCompleted(bookId, chapter, paragraph) {
         const progress = this.getBookProgress(bookId);
-        return progress.completed[chapter] && progress.completed[chapter].includes(paragraph);
+        return !!(progress.completed[chapter] && progress.completed[chapter].includes(paragraph));
     }
 
     getChapterCompletedCount(bookId, chapterIndex) {
@@ -926,8 +926,9 @@ class App {
     updateChapterTitle(chapter, chapterIndex, paragraphIndex) {
         const total = chapter.paragraphs.length;
         const isCompleted = this.storage.isParagraphCompleted(this.currentBook.id, chapterIndex, paragraphIndex);
-        const completedMark = isCompleted ? ' (completed)' : '';
-        this.chapterTitle.textContent = `Chapter ${chapter.number}: ${chapter.title} — ${paragraphIndex + 1}/${total}${completedMark}`;
+        const completedHtml = isCompleted ? ' <span class="completed-mark">(COMPLETED)</span>' : '';
+        this.chapterTitle.innerHTML = `Chapter ${chapter.number}: ${this.escapeHtml(chapter.title)} — ${paragraphIndex + 1}/${total}${completedHtml}`;
+        this.textDisplay.classList.toggle('already-completed', isCompleted);
     }
 
     pausePractice() {

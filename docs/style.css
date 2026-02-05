@@ -792,6 +792,14 @@ body {
     padding: 0.5rem;
 }
 
+.completed-mark {
+    color: var(--accent-color);
+}
+
+.text-display.already-completed {
+    border-left: 4px solid var(--accent-color);
+}
+
 .chapter-title.hidden {
     display: none;
 }
