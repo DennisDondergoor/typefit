@@ -57,7 +57,7 @@ class StorageManager {
         return progress.completed[chapter] && progress.completed[chapter].includes(paragraph);
     }
 
-    getChapterCompletedCount(bookId, chapterIndex, totalParagraphs) {
+    getChapterCompletedCount(bookId, chapterIndex) {
         const progress = this.getBookProgress(bookId);
         const completed = progress.completed[chapterIndex];
         return completed ? completed.length : 0;
@@ -447,6 +447,7 @@ class App {
         this.currentBook = null;
         this.bookChapter = 0;
         this.bookParagraph = 0;
+        this._suppressSync = false;
 
         this.initElements();
         this.initEventListeners();
@@ -654,16 +655,32 @@ class App {
 
         // Keyboard handling
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
+
+        // Flush pending cloud sync before page unload
+        window.addEventListener('beforeunload', () => {
+            if (this.firebase.syncTimeout) {
+                clearTimeout(this.firebase.syncTimeout);
+                this.firebase.saveToCloud(this.getAllData());
+            }
+        });
     }
 
     initFirebase() {
-        this.firebase.init();
+        try {
+            this.firebase.init();
+        } catch (e) {
+            console.error('Firebase init failed:', e);
+            return;
+        }
         this.firebase.onAuthChange(async (user) => {
             if (user) {
                 this.authBtn.textContent = 'Sign out';
                 this.syncStatus.textContent = 'Loading from cloud...';
                 await this.loadFromCloud();
+                this._suppressSync = true;
                 this.loadSettings();
+                this._suppressSync = false;
+                this.syncToCloud();
                 this.syncStatus.textContent = `Signed in as ${this.firebase.getUserName()}`;
             } else {
                 this.authBtn.textContent = 'Sign in';
@@ -686,6 +703,7 @@ class App {
     }
 
     syncToCloud() {
+        if (this._suppressSync) return;
         this.firebase.scheduleSave(this.getAllData());
     }
 
@@ -693,15 +711,52 @@ class App {
         const data = await this.firebase.loadFromCloud();
         if (!data) return;
 
+        // Merge sessions: combine and deduplicate by date, keep newest 100
         if (data.sessions) {
-            localStorage.setItem(this.storage.KEYS.SESSIONS, JSON.stringify(data.sessions));
+            const local = this.storage.getSessions();
+            const dates = new Set(local.map(s => s.date));
+            for (const s of data.sessions) {
+                if (!dates.has(s.date)) {
+                    local.push(s);
+                    dates.add(s.date);
+                }
+            }
+            local.sort((a, b) => new Date(b.date) - new Date(a.date));
+            localStorage.setItem(this.storage.KEYS.SESSIONS, JSON.stringify(local.slice(0, 100)));
         }
+
+        // Merge problem keys: take max count for each key
         if (data.problemKeys) {
-            localStorage.setItem(this.storage.KEYS.PROBLEM_KEYS, JSON.stringify(data.problemKeys));
+            const local = this.storage.getProblemKeys();
+            for (const [key, count] of Object.entries(data.problemKeys)) {
+                local[key] = Math.max(local[key] || 0, count);
+            }
+            localStorage.setItem(this.storage.KEYS.PROBLEM_KEYS, JSON.stringify(local));
         }
+
+        // Merge book progress: union of completed paragraphs
         if (data.bookProgress) {
-            localStorage.setItem(this.storage.KEYS.BOOK_PROGRESS, JSON.stringify(data.bookProgress));
+            const localData = JSON.parse(localStorage.getItem(this.storage.KEYS.BOOK_PROGRESS) || '{}');
+            for (const [bookId, cloudProgress] of Object.entries(data.bookProgress)) {
+                const local = localData[bookId] || { chapter: 0, paragraph: 0, completed: {} };
+                const cloud = cloudProgress || { chapter: 0, paragraph: 0, completed: {} };
+                // Merge completed maps (union)
+                const mergedCompleted = { ...local.completed };
+                for (const [ch, paragraphs] of Object.entries(cloud.completed || {})) {
+                    const existing = new Set(mergedCompleted[ch] || []);
+                    for (const p of paragraphs) existing.add(p);
+                    mergedCompleted[ch] = [...existing];
+                }
+                localData[bookId] = {
+                    chapter: Math.max(local.chapter || 0, cloud.chapter || 0),
+                    paragraph: Math.max(local.paragraph || 0, cloud.paragraph || 0),
+                    completed: mergedCompleted
+                };
+            }
+            localStorage.setItem(this.storage.KEYS.BOOK_PROGRESS, JSON.stringify(localData));
         }
+
+        // Settings: cloud wins
         if (data.settings) {
             if (data.settings.fontSize) {
                 localStorage.setItem(this.storage.KEYS.FONT_SIZE, data.settings.fontSize.toString());
@@ -829,10 +884,15 @@ class App {
 
             // Check if book is complete
             if (this.bookChapter >= this.currentBook.chapters.length) {
-                alert('Congratulations! You have completed the entire book!');
-                this.bookChapter = 0;
-                this.bookParagraph = 0;
-                this.storage.setBookProgress(this.currentBook.id, 0, 0);
+                const next = this.findNextUncompleted(0, -1);
+                if (next.chapter >= this.currentBook.chapters.length) {
+                    alert('Congratulations! You have completed the entire book!');
+                    this.showBookSelection();
+                    return;
+                }
+                this.bookChapter = next.chapter;
+                this.bookParagraph = next.paragraph;
+                this.storage.setBookProgress(this.currentBook.id, next.chapter, next.paragraph);
                 this.syncToCloud();
             }
 
@@ -1114,10 +1174,10 @@ class App {
             this.bookChapter = next.chapter;
             this.bookParagraph = next.paragraph;
             this.storage.setBookProgress(this.currentBook.id, this.bookChapter, this.bookParagraph);
-            this.syncToCloud();
 
             // Auto-advance to next paragraph, or show summary if book is done
             if (this.bookChapter < this.currentBook.chapters.length) {
+                this.syncToCloud();
                 this.startPractice();
                 return;
             }
@@ -1242,7 +1302,7 @@ class App {
 
         this.chapterList.innerHTML = this.currentBook.chapters.map((chapter, index) => {
             const paragraphCount = chapter.paragraphs.length;
-            const completedCount = this.storage.getChapterCompletedCount(this.currentBook.id, index, paragraphCount);
+            const completedCount = this.storage.getChapterCompletedCount(this.currentBook.id, index);
             const isCurrent = index === progress.chapter;
             const isCompleted = completedCount === paragraphCount;
 
