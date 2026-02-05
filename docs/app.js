@@ -8,13 +8,7 @@ class StorageManager {
             PROBLEM_KEYS: 'typefit_problem_keys',
             FONT_SIZE: 'typefit_font_size',
             FONT_FAMILY: 'typefit_font_family',
-            BOOK_PROGRESS: 'typefit_book_progress',
-            COLORS: 'typefit_colors'
-        };
-        this.DEFAULT_COLORS = {
-            correct: '#4ade80',
-            incorrect: '#dc2626',
-            cursor: '#ffffff'
+            BOOK_PROGRESS: 'typefit_book_progress'
         };
     }
 
@@ -131,17 +125,6 @@ class StorageManager {
 
     setFontFamily(font) {
         localStorage.setItem(this.KEYS.FONT_FAMILY, font);
-    }
-
-    getColors() {
-        const data = localStorage.getItem(this.KEYS.COLORS);
-        return data ? JSON.parse(data) : { ...this.DEFAULT_COLORS };
-    }
-
-    setColor(key, value) {
-        const colors = this.getColors();
-        colors[key] = value;
-        localStorage.setItem(this.KEYS.COLORS, JSON.stringify(colors));
     }
 
     clearTypingStats() {
@@ -545,9 +528,6 @@ class App {
         this.fontBtns = document.querySelectorAll('.font-btn');
         this.fontSizeSlider = document.getElementById('font-size-slider');
         this.fontSizeValue = document.getElementById('font-size-value');
-        this.colorCorrect = document.getElementById('color-correct');
-        this.colorIncorrect = document.getElementById('color-incorrect');
-        this.colorCursor = document.getElementById('color-cursor');
 
         // Practice elements
         this.backToMenuBtn = document.getElementById('back-to-menu');
@@ -596,17 +576,6 @@ class App {
         this.fontSizeSlider.addEventListener('input', () => {
             const size = this.fontSizeSlider.value;
             this.setFontSize(size);
-        });
-
-        // Color inputs
-        this.colorCorrect.addEventListener('input', () => {
-            this.setColor('correct', this.colorCorrect.value);
-        });
-        this.colorIncorrect.addEventListener('input', () => {
-            this.setColor('incorrect', this.colorIncorrect.value);
-        });
-        this.colorCursor.addEventListener('input', () => {
-            this.setColor('cursor', this.colorCursor.value);
         });
 
         // Mode buttons
@@ -775,7 +744,6 @@ class App {
             settings: {
                 fontSize: this.storage.getFontSize(),
                 fontFamily: this.storage.getFontFamily(),
-                colors: this.storage.getColors()
             }
         };
     }
@@ -842,9 +810,6 @@ class App {
             if (data.settings.fontFamily) {
                 localStorage.setItem(this.storage.KEYS.FONT_FAMILY, data.settings.fontFamily);
             }
-            if (data.settings.colors) {
-                localStorage.setItem(this.storage.KEYS.COLORS, JSON.stringify(data.settings.colors));
-            }
         }
     }
 
@@ -861,12 +826,6 @@ class App {
         this.fontSizeSlider.value = fontSize;
         this.setFontSize(fontSize);
 
-        // Load colors
-        const colors = this.storage.getColors();
-        this.colorCorrect.value = colors.correct;
-        this.colorIncorrect.value = colors.incorrect;
-        this.colorCursor.value = colors.cursor;
-        this.applyColors(colors);
     }
 
     setFontSize(size) {
@@ -880,19 +839,6 @@ class App {
         document.documentElement.style.setProperty('--font-family', `'${font}', monospace`);
         this.storage.setFontFamily(font);
         this.syncToCloud();
-    }
-
-    setColor(key, value) {
-        this.storage.setColor(key, value);
-        const colors = this.storage.getColors();
-        this.applyColors(colors);
-        this.syncToCloud();
-    }
-
-    applyColors(colors) {
-        document.documentElement.style.setProperty('--success-color', colors.correct);
-        document.documentElement.style.setProperty('--error-bg', colors.incorrect);
-        document.documentElement.style.setProperty('--highlight-bg', colors.cursor);
     }
 
     showScreen(screen) {
