@@ -85,6 +85,18 @@ class FirebaseSync {
         }
     }
 
+    async deleteField(fieldName) {
+        if (!this.user) return;
+
+        try {
+            await this.db.collection('users').doc(this.user.uid).update({
+                [fieldName]: firebase.firestore.FieldValue.delete()
+            });
+        } catch (error) {
+            console.error('Cloud field delete failed:', error);
+        }
+    }
+
     // Debounced sync - waits 2 seconds after last change before syncing
     scheduleSave(data) {
         if (!this.user) return;

@@ -579,6 +579,7 @@ class App {
         this.topProblemKeys = document.getElementById('top-problem-keys');
         this.sessionHistory = document.getElementById('session-history');
         this.clearDataBtn = document.getElementById('clear-data');
+        this.clearBookProgressBtn = document.getElementById('clear-book-progress');
     }
 
     initEventListeners() {
@@ -699,7 +700,24 @@ class App {
         this.clearDataBtn.addEventListener('click', () => {
             if (confirm('Clear all typing stats (sessions and problem keys)? Book progress will be kept.')) {
                 this.storage.clearTypingStats();
-                this.syncToCloud();
+                if (this.firebase.syncTimeout) {
+                    clearTimeout(this.firebase.syncTimeout);
+                    this.firebase.syncTimeout = null;
+                }
+                this.firebase.deleteField('sessions');
+                this.firebase.deleteField('problemKeys');
+                this.showProgress();
+            }
+        });
+        this.clearBookProgressBtn.addEventListener('click', () => {
+            if (confirm('Clear all book progress? This cannot be undone.')) {
+                localStorage.removeItem(this.storage.KEYS.BOOK_PROGRESS);
+                // Cancel any pending debounced sync that would restore old data
+                if (this.firebase.syncTimeout) {
+                    clearTimeout(this.firebase.syncTimeout);
+                    this.firebase.syncTimeout = null;
+                }
+                this.firebase.deleteField('bookProgress');
                 this.showProgress();
             }
         });
@@ -910,7 +928,6 @@ class App {
         const isCompleted = this.storage.isParagraphCompleted(this.currentBook.id, chapterIndex, paragraphIndex);
         const completedMark = isCompleted ? ' (completed)' : '';
         this.chapterTitle.textContent = `Chapter ${chapter.number}: ${chapter.title} — ${paragraphIndex + 1}/${total}${completedMark}`;
-        this.textDisplay.classList.toggle('already-completed', isCompleted);
     }
 
     pausePractice() {
