@@ -854,6 +854,7 @@ class App {
         const isCompleted = this.storage.isParagraphCompleted(this.currentBook.id, chapterIndex, paragraphIndex);
         const completedMark = isCompleted ? ' (completed)' : '';
         this.chapterTitle.textContent = `Chapter ${chapter.number}: ${chapter.title} — ${paragraphIndex + 1}/${total}${completedMark}`;
+        this.textDisplay.classList.toggle('already-completed', isCompleted);
     }
 
     pausePractice() {
