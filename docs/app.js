@@ -819,17 +819,23 @@ class App {
                 todaySeconds += secs;
             }
         }
+        const fmt = (secs) => {
+            const h = Math.floor(secs / 3600);
+            const m = Math.floor((secs % 3600) / 60);
+            const s = secs % 60;
+            if (h > 0) return `${h}h ${m}m ${s}s`;
+            if (m > 0) return `${m}m ${s}s`;
+            return `${s}s`;
+        };
         const parts = [];
         if (todaySeconds > 0) {
-            parts.push(`Today: ${Math.ceil(todaySeconds / 60)}m`);
+            const todayClass = todaySeconds > 600 ? ' class="timer-accent"' : '';
+            parts.push(`<span class="timer-label">Today:</span> <span${todayClass}>${fmt(todaySeconds)}</span>`);
         }
-        if (totalSeconds >= 60) {
-            const totalMin = Math.round(totalSeconds / 60);
-            const h = Math.floor(totalMin / 60);
-            const m = totalMin % 60;
-            parts.push(`Total: ${h > 0 ? h + 'h ' : ''}${m}m`);
+        if (totalSeconds > 0) {
+            parts.push(`<span class="timer-label">Total:</span> ${fmt(totalSeconds)}`);
         }
-        this.timerDisplay.textContent = parts.join(' · ');
+        this.timerDisplay.innerHTML = parts.join('<br>');
     }
 
     loadSettings() {

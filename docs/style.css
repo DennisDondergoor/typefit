@@ -66,8 +66,16 @@ body {
     left: 50%;
     margin-left: 16rem;
     top: 2.5rem;
+    color: var(--text-color);
+    font-size: 1.25rem;
+}
+
+.timer-label {
     color: var(--text-muted);
-    font-size: 0.85rem;
+}
+
+.timer-accent {
+    color: var(--accent-color);
 }
 
 .mode-buttons {
