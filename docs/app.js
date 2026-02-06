@@ -75,7 +75,7 @@ class StorageManager {
         }
 
         return {
-            currentChapter: progress.chapter + 1,
+            currentChapter: Math.min(progress.chapter + 1, book.chapters.length),
             totalChapters: book.chapters.length,
             completedChars,
             totalChars,
@@ -264,6 +264,7 @@ class TypingSession {
             this.position++;
         }
         this.totalTyped += spacesToSkip;
+        this.lastKeyIncorrect = false;
 
         if (this.position >= this.text.length) {
             this.endTime = Date.now();
@@ -956,6 +957,7 @@ class App {
             text = TextGenerator.getText(this.currentMode, this.exerciseLength, this.storage.getProblemKeys());
             this.chapterTitle.classList.add('hidden');
             this.bookHint.classList.add('hidden');
+            this.textDisplay.classList.remove('already-completed');
         }
 
         this.session = new TypingSession(text);
@@ -1394,18 +1396,26 @@ class App {
 
         // Find first uncompleted paragraph in this chapter
         const next = this.findNextUncompleted(chapterIndex, -1);
-        this.storage.setBookProgress(this.currentBook.id, next.chapter, next.paragraph);
+        // If all paragraphs in this chapter are done, start at paragraph 0 anyway
+        if (next.chapter !== chapterIndex) {
+            this.storage.setBookProgress(this.currentBook.id, chapterIndex, 0);
+        } else {
+            this.storage.setBookProgress(this.currentBook.id, next.chapter, next.paragraph);
+        }
         this.syncToCloud();
         this.startPractice();
     }
 
     findNextUncompleted(fromChapter, fromParagraph) {
+        // Read progress once to avoid repeated localStorage reads
+        const progress = this.storage.getBookProgress(this.currentBook.id);
         // Search from the given position forward
         for (let c = fromChapter; c < this.currentBook.chapters.length; c++) {
             const startP = (c === fromChapter) ? fromParagraph + 1 : 0;
             const chapter = this.currentBook.chapters[c];
+            const completedInChapter = progress.completed[c] || [];
             for (let p = startP; p < chapter.paragraphs.length; p++) {
-                if (!this.storage.isParagraphCompleted(this.currentBook.id, c, p)) {
+                if (!completedInChapter.includes(p)) {
                     return { chapter: c, paragraph: p };
                 }
             }
