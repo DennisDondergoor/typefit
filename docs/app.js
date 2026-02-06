@@ -285,25 +285,6 @@ class TypingSession {
         return char;
     }
 
-    getCharStates() {
-        const states = [];
-        for (let i = 0; i < this.text.length; i++) {
-            const char = this.text[i];
-            let state;
-
-            if (i < this.position) {
-                state = 'correct';
-            } else if (i === this.position) {
-                state = this.lastKeyIncorrect ? 'incorrect' : 'current';
-            } else {
-                state = 'pending';
-            }
-
-            states.push({ char, state });
-        }
-        return states;
-    }
-
     getStats() {
         const endTime = this.endTime || Date.now();
         const totalElapsedMs = endTime - (this.startTime || endTime);
@@ -345,9 +326,10 @@ class TypingSession {
 class TextGenerator {
     static getWords(count = 25) {
         // Categorize words by length for better variety
-        const short = WORDS.filter(w => w.length <= 4);
-        const medium = WORDS.filter(w => w.length >= 5 && w.length <= 7);
-        const long = WORDS.filter(w => w.length >= 8);
+        const realWords = WORDS.filter(w => w.length >= 2);
+        const short = realWords.filter(w => w.length <= 4);
+        const medium = realWords.filter(w => w.length >= 5 && w.length <= 7);
+        const long = realWords.filter(w => w.length >= 8);
 
         // Target distribution: 40% short, 40% medium, 20% long
         const shortCount = Math.round(count * 0.4);
@@ -473,7 +455,7 @@ class App {
         this.storage = new StorageManager();
         this.firebase = new FirebaseSync();
         this.session = null;
-        this.currentMode = 'words';
+        this.currentMode = 'sentences';
         this.exerciseLength = 10;
         this.updateInterval = null;
         this.currentBook = null;
@@ -483,7 +465,9 @@ class App {
 
         this.initElements();
         this.initEventListeners();
+        this._suppressSync = true;
         this.loadSettings();
+        this._suppressSync = false;
         this.updateTimerDisplay();
         this.initFirebase();
     }
@@ -562,6 +546,7 @@ class App {
         this.sessionHistory = document.getElementById('session-history');
         this.clearDataBtn = document.getElementById('clear-data');
         this.clearBookProgressBtn = document.getElementById('clear-book-progress');
+        this.problemKeysSection = document.getElementById('problem-keys-section');
     }
 
     initEventListeners() {
@@ -705,13 +690,18 @@ class App {
         // Keyboard handling
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
 
-        // Flush pending cloud sync before page unload
-        window.addEventListener('beforeunload', () => {
+        // Flush pending cloud sync when page is hidden or unloading
+        const flushSync = () => {
             if (this.firebase.syncTimeout) {
                 clearTimeout(this.firebase.syncTimeout);
+                this.firebase.syncTimeout = null;
                 this.firebase.saveToCloud(this.getAllData());
             }
+        };
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') flushSync();
         });
+        window.addEventListener('beforeunload', flushSync);
     }
 
     initFirebase() {
@@ -831,7 +821,7 @@ class App {
         }
         const parts = [];
         if (todaySeconds > 0) {
-            parts.push(`Today: ${Math.round(todaySeconds / 60)}m`);
+            parts.push(`Today: ${Math.ceil(todaySeconds / 60)}m`);
         }
         if (totalSeconds >= 60) {
             const totalMin = Math.round(totalSeconds / 60);
@@ -904,7 +894,6 @@ class App {
         const isCompleted = this.storage.isParagraphCompleted(this.currentBook.id, chapterIndex, paragraphIndex);
         const completedHtml = isCompleted ? ' <span class="completed-mark">(COMPLETED)</span>' : '';
         this.chapterTitle.innerHTML = `${this.escapeHtml(this.currentBook.title)} — Chapter ${chapter.number}: ${this.escapeHtml(chapter.title)} — ${paragraphIndex + 1}/${total}${completedHtml}`;
-        this.textDisplay.classList.toggle('already-completed', isCompleted);
     }
 
     pausePractice() {
@@ -1258,9 +1247,9 @@ class App {
             this.problemKeysDisplay.innerHTML = mistakeEntries
                 .map(([key, count]) => `<span class="problem-key">${this.escapeHtml(key)} (${count})</span>`)
                 .join('');
-            document.getElementById('problem-keys-section').style.display = 'block';
+            this.problemKeysSection.style.display = 'block';
         } else {
-            document.getElementById('problem-keys-section').style.display = 'none';
+            this.problemKeysSection.style.display = 'none';
         }
 
         this.showScreen(this.summaryScreen);
@@ -1291,7 +1280,7 @@ class App {
             this.sessionHistory.innerHTML = sessions.slice(0, 20).map(session => `
                 <div class="session-item">
                     <div>
-                        <span class="session-mode">${session.mode}</span>
+                        <span class="session-mode">${this.escapeHtml(session.mode)}</span>
                         <span class="session-date">${this.formatDate(session.date)}</span>
                     </div>
                     <div class="session-stats">
