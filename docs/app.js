@@ -1078,14 +1078,16 @@ class App {
             }
         }
 
-        // Scroll current character into view within the text-display container
+        // Scroll current character into view within the text-display container only
         const span = this.charSpans[pos];
         if (span) {
             const container = this.textDisplay;
             const spanTop = span.offsetTop - container.offsetTop;
             const spanBottom = spanTop + span.offsetHeight;
-            if (spanTop < container.scrollTop || spanBottom > container.scrollTop + container.clientHeight) {
-                span.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+            if (spanTop < container.scrollTop) {
+                container.scrollTop = spanTop;
+            } else if (spanBottom > container.scrollTop + container.clientHeight) {
+                container.scrollTop = spanBottom - container.clientHeight;
             }
         }
     }

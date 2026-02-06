@@ -682,7 +682,8 @@ body {
 }
 
 .book-progress-bar {
-    width: 100px;
+    width: 300px;
+    max-width: 50vw;
     height: 6px;
     background-color: var(--border-color);
     border-radius: 3px;
