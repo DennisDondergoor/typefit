@@ -201,8 +201,9 @@ class TypingSession {
         }
 
         const expected = this.text[this.position];
-        // Normalize accented characters (ü→u, î→i, ô→o, etc.)
-        const normalizedExpected = expected.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        // Normalize accented characters (ü→u, î→i, ô→o, etc.) and curly quotes
+        const normalizedExpected = expected.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/[\u201C\u201D]/g, '"').replace(/[\u2018\u2019]/g, "'");
         // Accept hyphen for em dash/en dash
         const dashMatch = (key === '-' && (expected === '\u2014' || expected === '\u2013'));
         const isCorrect = key === expected || key === normalizedExpected || dashMatch;
@@ -949,6 +950,9 @@ class App {
             const chapter = this.currentBook.chapters[this.bookChapter];
             text = chapter.paragraphs[this.bookParagraph];
 
+            // Cache book stats for live display (avoids repeated localStorage reads)
+            this._cachedBookStats = this.storage.getBookStats(this.currentBook);
+
             // Show chapter title with paragraph info
             this.updateChapterTitle(chapter, this.bookChapter, this.bookParagraph);
             this.chapterTitle.classList.remove('hidden');
@@ -958,6 +962,7 @@ class App {
             this.chapterTitle.classList.add('hidden');
             this.bookHint.classList.add('hidden');
             this.textDisplay.classList.remove('already-completed');
+            this._cachedBookStats = null;
         }
 
         this.session = new TypingSession(text);
@@ -1012,7 +1017,7 @@ class App {
 
         // Scroll current character into view
         if (this.charSpans[pos]) {
-            this.charSpans[pos].scrollIntoView({ block: 'center', behavior: 'smooth' });
+            this.charSpans[pos].scrollIntoView({ block: 'center', behavior: 'auto' });
         }
     }
 
@@ -1029,9 +1034,9 @@ class App {
         this.liveWpm.textContent = `WPM: ${stats.wpm}`;
         this.liveAccuracy.textContent = `Accuracy: ${stats.accuracy}%`;
 
-        if (this.currentMode === 'books' && this.currentBook) {
-            const bookStats = this.storage.getBookStats(this.currentBook);
-            this.liveProgress.textContent = `Chapter ${bookStats.currentChapter}/${bookStats.totalChapters} (${bookStats.percentComplete}% complete)`;
+        if (this.currentMode === 'books' && this.currentBook && this._cachedBookStats) {
+            const bs = this._cachedBookStats;
+            this.liveProgress.textContent = `Chapter ${bs.currentChapter}/${bs.totalChapters} (${bs.percentComplete}% complete)`;
         } else {
             this.liveProgress.textContent = `Progress: ${stats.progress}%`;
         }
@@ -1218,6 +1223,7 @@ class App {
         if (this.currentMode === 'books' && this.currentBook) {
             // Mark current paragraph as completed
             this.storage.markParagraphCompleted(this.currentBook.id, this.bookChapter, this.bookParagraph);
+            this._cachedBookStats = this.storage.getBookStats(this.currentBook);
 
             // Find next uncompleted paragraph
             const next = this.findNextUncompleted(this.bookChapter, this.bookParagraph);
@@ -1352,7 +1358,8 @@ class App {
 
         this.chapterList.innerHTML = this.currentBook.chapters.map((chapter, index) => {
             const paragraphCount = chapter.paragraphs.length;
-            const completedCount = this.storage.getChapterCompletedCount(this.currentBook.id, index);
+            const completedInChapter = progress.completed[index] || [];
+            const completedCount = completedInChapter.length;
             const isCurrent = index === progress.chapter;
             const isCompleted = completedCount === paragraphCount;
 
