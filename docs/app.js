@@ -8,7 +8,9 @@ class StorageManager {
             PROBLEM_KEYS: 'typefit_problem_keys',
             FONT_SIZE: 'typefit_font_size',
             FONT_FAMILY: 'typefit_font_family',
-            BOOK_PROGRESS: 'typefit_book_progress'
+            BOOK_PROGRESS: 'typefit_book_progress',
+            TOTAL_TIME: 'typefit_total_time',
+            DAILY_TIME: 'typefit_daily_time'
         };
     }
 
@@ -96,6 +98,49 @@ class StorageManager {
             sessions.pop();
         }
         localStorage.setItem(this.KEYS.SESSIONS, JSON.stringify(sessions));
+        // Accumulate time (never reset by clearing stats)
+        const secs = session.time || 0;
+        const total = this.getTotalTime() + secs;
+        localStorage.setItem(this.KEYS.TOTAL_TIME, String(total));
+        const daily = this.getDailyTime();
+        localStorage.setItem(this.KEYS.DAILY_TIME, JSON.stringify({
+            date: daily.date,
+            seconds: daily.seconds + secs
+        }));
+    }
+
+    _todayStr() {
+        const now = new Date();
+        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    }
+
+    getDailyTime() {
+        const today = this._todayStr();
+        const stored = localStorage.getItem(this.KEYS.DAILY_TIME);
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (parsed.date === today) return parsed;
+        }
+        // Migration or new day: compute from existing sessions
+        const sessions = this.getSessions();
+        let seconds = 0;
+        for (const s of sessions) {
+            const d = new Date(s.date);
+            const sLocal = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            if (sLocal === today) seconds += s.time || 0;
+        }
+        const result = { date: today, seconds };
+        localStorage.setItem(this.KEYS.DAILY_TIME, JSON.stringify(result));
+        return result;
+    }
+
+    getTotalTime() {
+        const stored = localStorage.getItem(this.KEYS.TOTAL_TIME);
+        if (stored !== null) return parseInt(stored, 10);
+        // Migration: compute from existing sessions
+        const total = this.getSessions().reduce((sum, s) => sum + (s.time || 0), 0);
+        localStorage.setItem(this.KEYS.TOTAL_TIME, String(total));
+        return total;
     }
 
     getProblemKeys() {
@@ -725,6 +770,8 @@ class App {
             sessions: this.storage.getSessions(),
             problemKeys: this.storage.getProblemKeys(),
             bookProgress: JSON.parse(localStorage.getItem(this.storage.KEYS.BOOK_PROGRESS) || '{}'),
+            totalTime: this.storage.getTotalTime(),
+            dailyTime: this.storage.getDailyTime(),
             settings: {
                 fontSize: this.storage.getFontSize(),
                 fontFamily: this.storage.getFontFamily(),
@@ -799,6 +846,24 @@ class App {
             localStorage.setItem(this.storage.KEYS.BOOK_PROGRESS, JSON.stringify(localData));
         }
 
+        // Merge total time: take max (never decrease)
+        if (data.totalTime) {
+            const local = this.storage.getTotalTime();
+            const merged = Math.max(local, data.totalTime);
+            localStorage.setItem(this.storage.KEYS.TOTAL_TIME, String(merged));
+        }
+
+        // Merge daily time: take max for same day
+        if (data.dailyTime) {
+            const local = this.storage.getDailyTime();
+            if (data.dailyTime.date === local.date) {
+                const merged = Math.max(local.seconds, data.dailyTime.seconds);
+                localStorage.setItem(this.storage.KEYS.DAILY_TIME, JSON.stringify({
+                    date: local.date, seconds: merged
+                }));
+            }
+        }
+
         // Settings: cloud wins
         if (data.settings) {
             if (data.settings.fontSize) {
@@ -813,20 +878,8 @@ class App {
     }
 
     updateTimerDisplay() {
-        const sessions = this.storage.getSessions();
-        const now = new Date();
-        const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-        let todaySeconds = 0;
-        let totalSeconds = 0;
-        for (const s of sessions) {
-            const secs = s.time || 0;
-            totalSeconds += secs;
-            const sDate = new Date(s.date);
-            const sLocal = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
-            if (sLocal === today) {
-                todaySeconds += secs;
-            }
-        }
+        const todaySeconds = this.storage.getDailyTime().seconds;
+        const totalSeconds = this.storage.getTotalTime();
         const parts = [];
         if (todaySeconds > 0) {
             const todayClass = todaySeconds > 600 ? ' class="timer-accent"' : '';
