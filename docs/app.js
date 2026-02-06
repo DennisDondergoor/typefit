@@ -265,7 +265,7 @@ class TypingSession {
             this.correctChars++;
             this.position++;
         }
-        this.totalTyped++;
+        this.totalTyped += spacesToSkip;
 
         if (this.position >= this.text.length) {
             this.endTime = Date.now();
