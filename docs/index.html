@@ -33,9 +33,9 @@
         </div>
 
         <!-- Length Selection Modal -->
-        <div id="length-modal" class="modal hidden">
+        <div id="length-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="length-modal-title">
             <div class="modal-content">
-                <h2>Exercise Length</h2>
+                <h2 id="length-modal-title">Exercise Length</h2>
                 <div class="length-buttons">
                     <button class="length-btn active" data-length="10">10</button>
                     <button class="length-btn" data-length="25">25</button>
@@ -47,9 +47,9 @@
         </div>
 
         <!-- Settings Modal -->
-        <div id="settings-modal" class="modal hidden">
+        <div id="settings-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
             <div class="modal-content">
-                <h2>Settings</h2>
+                <h2 id="settings-modal-title">Settings</h2>
 
                 <div class="settings-section">
                     <h3>Font</h3>
@@ -63,7 +63,7 @@
                     <h3>Font Size</h3>
                     <div class="font-size-control">
                         <span class="font-label">A</span>
-                        <input type="range" id="font-size-slider" min="32" max="40" value="36">
+                        <input type="range" id="font-size-slider" min="32" max="40" value="36" aria-label="Font size">
                         <span class="font-label large">A</span>
                         <span id="font-size-value">36px</span>
                     </div>
@@ -89,9 +89,9 @@
                 <!-- Characters will be rendered here -->
             </div>
 
-            <div id="pause-overlay" class="pause-overlay hidden">
+            <div id="pause-overlay" class="pause-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="pause-title">
                 <div class="pause-content">
-                    <h2>Paused</h2>
+                    <h2 id="pause-title">Paused</h2>
                     <p>Press any key to resume</p>
                     <button id="resume-btn" class="primary-btn">Resume</button>
                     <button id="quit-btn" class="secondary-btn">Quit to Menu</button>
@@ -208,7 +208,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
     <script src="data.js"></script>
-    <script src="books.js"></script>
     <script src="firebase.js"></script>
     <script src="app.js"></script>
 </body>

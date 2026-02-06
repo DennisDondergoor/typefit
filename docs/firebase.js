@@ -64,12 +64,14 @@ class FirebaseSync {
     }
 
     async saveToCloud(data) {
-        if (!this.user) return;
+        if (!this.user) return false;
 
         try {
             await this.db.collection('users').doc(this.user.uid).set(data, { merge: true });
+            return true;
         } catch (error) {
             console.error('Cloud save failed:', error);
+            return false;
         }
     }
 
@@ -105,10 +107,11 @@ class FirebaseSync {
         if (this.syncTimeout) {
             clearTimeout(this.syncTimeout);
         }
-        this.syncTimeout = setTimeout(() => {
+        this.syncTimeout = setTimeout(async () => {
             this.syncTimeout = null;
             this._pendingGetData = null;
-            this.saveToCloud(getDataFn());
+            const ok = await this.saveToCloud(getDataFn());
+            if (this.onSyncResult) this.onSyncResult(ok);
         }, 2000);
     }
 

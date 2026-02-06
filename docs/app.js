@@ -744,12 +744,18 @@ class App {
             console.error('Firebase init failed:', e);
             return;
         }
+        this.firebase.onSyncResult = (ok) => {
+            if (!this.firebase.isSignedIn()) return;
+            this.syncStatus.textContent = ok
+                ? `Signed in as ${this.firebase.getUserName()}`
+                : 'Sync failed — will retry';
+        };
         this.firebase.onAuthChange(async (user) => {
             if (user) {
                 this.authBtn.textContent = 'Sign out';
                 this.syncStatus.textContent = 'Loading from cloud...';
-                await this.loadFromCloud();
                 this._suppressSync = true;
+                await this.loadFromCloud();
                 this.loadSettings();
                 this._suppressSync = false;
                 this.syncToCloud();
@@ -1028,6 +1034,11 @@ class App {
             this._cachedBookStats = null;
         }
 
+        // Strip Gutenberg _italic_ markers from book text
+        if (this.currentMode === 'books') {
+            text = text.replace(/(?<![_])_([^_]+)_(?![_])/g, '$1');
+        }
+
         this.session = new TypingSession(text);
         this.renderText();
         this.updateLiveStats();
@@ -1269,6 +1280,7 @@ class App {
         const text = newChapterData.paragraphs[newParagraph];
 
         this.session = new TypingSession(text);
+        this._cachedBookStats = this.storage.getBookStats(this.currentBook);
         this.updateChapterTitle(newChapterData, newChapter, newParagraph);
         this.renderText();
         this.updateLiveStats();
@@ -1380,7 +1392,25 @@ class App {
         this.showScreen(this.progressScreen);
     }
 
-    showBookSelection() {
+    async loadBooks() {
+        if (typeof BOOKS !== 'undefined') return;
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'books.js';
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+    }
+
+    async showBookSelection() {
+        try {
+            await this.loadBooks();
+        } catch {
+            this.bookList.innerHTML = '<p>Failed to load books.</p>';
+            this.showScreen(this.bookSelectionScreen);
+            return;
+        }
         // Render book cards
         this.bookList.innerHTML = BOOKS.map(book => {
             const stats = this.storage.getBookStats(book);

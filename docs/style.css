@@ -357,7 +357,9 @@ body {
     flex-direction: column;
     justify-content: center;
     height: 100vh;
+    height: 100dvh;
     max-height: 100vh;
+    max-height: 100dvh;
     padding: 1rem 0;
 }
 
@@ -397,7 +399,7 @@ body {
 
 .text-display .char {
     display: inline;
-    transition: all 0.05s;
+    transition: color 0.05s, background-color 0.05s;
 }
 
 .text-display .char.pending {
