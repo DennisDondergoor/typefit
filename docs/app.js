@@ -611,7 +611,7 @@ class App {
                 if (this.currentMode === 'adaptive') {
                     const keys = this.storage.getProblemKeys();
                     if (Object.keys(keys).length === 0) {
-                        alert('No problem keys recorded yet. Complete some practice sessions first!');
+                        this.showToast('No problem keys recorded yet. Complete some practice sessions first!');
                         return;
                     }
                 }
@@ -991,7 +991,7 @@ class App {
             if (this.bookChapter >= this.currentBook.chapters.length) {
                 const next = this.findNextUncompleted(0, -1);
                 if (next.chapter >= this.currentBook.chapters.length) {
-                    alert('Congratulations! You have completed the entire book!');
+                    this.showToast('Congratulations! You have completed the entire book!', 5000);
                     this.showBookSelection();
                     return;
                 }
@@ -1008,7 +1008,7 @@ class App {
                 this.storage.markParagraphCompleted(this.currentBook.id, this.bookChapter, this.bookParagraph);
                 const next = this.findNextUncompleted(this.bookChapter, this.bookParagraph);
                 if (next.chapter >= this.currentBook.chapters.length) {
-                    alert('Congratulations! You have completed the entire book!');
+                    this.showToast('Congratulations! You have completed the entire book!', 5000);
                     this.showBookSelection();
                     return;
                 }
@@ -1107,6 +1107,17 @@ class App {
         this._escapeDiv ??= document.createElement('div');
         this._escapeDiv.textContent = text;
         return this._escapeDiv.innerHTML;
+    }
+
+    showToast(message, duration = 3000) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.remove('hidden', 'fade-out');
+        clearTimeout(this._toastTimeout);
+        this._toastTimeout = setTimeout(() => {
+            toast.classList.add('fade-out');
+            setTimeout(() => toast.classList.add('hidden'), 300);
+        }, duration);
     }
 
     updateLiveStats() {

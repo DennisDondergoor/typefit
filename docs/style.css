@@ -103,6 +103,10 @@ body {
     border-color: var(--accent-color);
 }
 
+.mode-btn:active {
+    transform: scale(0.97);
+}
+
 .menu-footer {
     display: flex;
     justify-content: center;
@@ -314,6 +318,12 @@ body {
 
 .primary-btn:hover {
     filter: brightness(1.1);
+}
+
+.primary-btn:active,
+.secondary-btn:active,
+.danger-btn:active {
+    transform: scale(0.97);
 }
 
 .secondary-btn {
@@ -790,6 +800,30 @@ body {
 .chapter-title.hidden,
 .book-hint.hidden {
     display: none;
+}
+
+.toast {
+    position: fixed;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
+.toast.hidden {
+    display: none;
+}
+
+.toast.fade-out {
+    opacity: 0;
 }
 
 /* Responsive */
