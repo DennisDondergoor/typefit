@@ -387,6 +387,7 @@ body {
     line-height: 1.8;
     background-color: var(--card-bg);
     padding: 2rem;
+    border-left: 4px solid transparent;
     border-radius: 8px;
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -625,7 +626,9 @@ body {
 
 .progress-actions {
     margin-top: 2rem;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
 }
 
 .empty-state {

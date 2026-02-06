@@ -254,9 +254,7 @@ class TypingSession {
         // If no spaces to skip, treat as incorrect (don't advance)
         if (spacesToSkip === 0) {
             this.totalTyped++;
-            const expected = this.text[this.position];
-            const displayKey = this.getDisplayKey(expected);
-            this.mistakes[displayKey] = (this.mistakes[displayKey] || 0) + 1;
+            this.mistakes['Tab'] = (this.mistakes['Tab'] || 0) + 1;
             return false;
         }
 
@@ -777,9 +775,22 @@ class App {
                     for (const p of paragraphs) existing.add(p);
                     mergedCompleted[ch] = [...existing];
                 }
+                // Take whichever position is further in the book
+                const localCh = local.chapter || 0;
+                const localP = local.paragraph || 0;
+                const cloudCh = cloud.chapter || 0;
+                const cloudP = cloud.paragraph || 0;
+                let mergedCh, mergedP;
+                if (cloudCh > localCh || (cloudCh === localCh && cloudP > localP)) {
+                    mergedCh = cloudCh;
+                    mergedP = cloudP;
+                } else {
+                    mergedCh = localCh;
+                    mergedP = localP;
+                }
                 localData[bookId] = {
-                    chapter: Math.max(local.chapter || 0, cloud.chapter || 0),
-                    paragraph: Math.max(local.paragraph || 0, cloud.paragraph || 0),
+                    chapter: mergedCh,
+                    paragraph: mergedP,
                     completed: mergedCompleted
                 };
             }
@@ -1004,9 +1015,9 @@ class App {
     }
 
     escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+        this._escapeDiv ??= document.createElement('div');
+        this._escapeDiv.textContent = text;
+        return this._escapeDiv.innerHTML;
     }
 
     updateLiveStats() {
