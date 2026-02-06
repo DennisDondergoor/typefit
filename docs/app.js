@@ -344,7 +344,9 @@ class TypingSession {
             ? Math.round((this.correctChars / this.totalTyped) * 100)
             : 100;
 
-        const progress = Math.round((this.position / this.text.length) * 100);
+        const progress = this.text.length > 0
+            ? Math.round((this.position / this.text.length) * 100)
+            : 100;
 
         return {
             wpm,
@@ -728,13 +730,7 @@ class App {
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
 
         // Flush pending cloud sync when page is hidden or unloading
-        const flushSync = () => {
-            if (this.firebase.syncTimeout) {
-                clearTimeout(this.firebase.syncTimeout);
-                this.firebase.syncTimeout = null;
-                this.firebase.saveToCloud(this.getAllData());
-            }
-        };
+        const flushSync = () => this.firebase.flushPendingSync();
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'hidden') flushSync();
         });
@@ -781,7 +777,7 @@ class App {
 
     syncToCloud() {
         if (this._suppressSync) return;
-        this.firebase.scheduleSave(this.getAllData());
+        this.firebase.scheduleSave(() => this.getAllData());
     }
 
     async loadFromCloud() {
@@ -999,9 +995,23 @@ class App {
                 this.syncToCloud();
             }
 
-            // Get current paragraph
-            const chapter = this.currentBook.chapters[this.bookChapter];
+            // Get current paragraph (skip empty ones)
+            let chapter = this.currentBook.chapters[this.bookChapter];
             text = chapter.paragraphs[this.bookParagraph];
+            while (!text || text.trim() === '') {
+                this.storage.markParagraphCompleted(this.currentBook.id, this.bookChapter, this.bookParagraph);
+                const next = this.findNextUncompleted(this.bookChapter, this.bookParagraph);
+                if (next.chapter >= this.currentBook.chapters.length) {
+                    alert('Congratulations! You have completed the entire book!');
+                    this.showBookSelection();
+                    return;
+                }
+                this.bookChapter = next.chapter;
+                this.bookParagraph = next.paragraph;
+                this.storage.setBookProgress(this.currentBook.id, next.chapter, next.paragraph);
+                chapter = this.currentBook.chapters[this.bookChapter];
+                text = chapter.paragraphs[this.bookParagraph];
+            }
 
             // Cache book stats for live display (avoids repeated localStorage reads)
             this._cachedBookStats = this.storage.getBookStats(this.currentBook);
@@ -1068,9 +1078,15 @@ class App {
             }
         }
 
-        // Scroll current character into view
-        if (this.charSpans[pos]) {
-            this.charSpans[pos].scrollIntoView({ block: 'center', behavior: 'auto' });
+        // Scroll current character into view within the text-display container
+        const span = this.charSpans[pos];
+        if (span) {
+            const container = this.textDisplay;
+            const spanTop = span.offsetTop - container.offsetTop;
+            const spanBottom = spanTop + span.offsetHeight;
+            if (spanTop < container.scrollTop || spanBottom > container.scrollTop + container.clientHeight) {
+                span.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+            }
         }
     }
 

@@ -98,15 +98,64 @@ class FirebaseSync {
     }
 
     // Debounced sync - waits 2 seconds after last change before syncing
-    scheduleSave(data) {
+    scheduleSave(getDataFn) {
         if (!this.user) return;
 
+        this._pendingGetData = getDataFn;
         if (this.syncTimeout) {
             clearTimeout(this.syncTimeout);
         }
         this.syncTimeout = setTimeout(() => {
             this.syncTimeout = null;
-            this.saveToCloud(data);
+            this._pendingGetData = null;
+            this.saveToCloud(getDataFn());
         }, 2000);
+    }
+
+    // Flush pending save immediately (for page unload)
+    flushPendingSync() {
+        if (!this.syncTimeout || !this._pendingGetData) return;
+        clearTimeout(this.syncTimeout);
+        this.syncTimeout = null;
+        const data = this._pendingGetData();
+        this._pendingGetData = null;
+        // Use fetch with keepalive for reliability during page unload
+        if (this.user && this.db) {
+            const projectId = this.db.app.options.projectId;
+            const uid = this.user.uid;
+            const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${uid}?updateMask.fieldPaths=sessions&updateMask.fieldPaths=problemKeys&updateMask.fieldPaths=bookProgress&updateMask.fieldPaths=totalTime&updateMask.fieldPaths=dailyTime&updateMask.fieldPaths=settings`;
+            // Convert to Firestore REST format
+            const fields = {};
+            for (const [key, value] of Object.entries(data)) {
+                fields[key] = this._toFirestoreValue(value);
+            }
+            this.user.getIdToken().then(token => {
+                fetch(url, {
+                    method: 'PATCH',
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fields }),
+                    keepalive: true
+                }).catch(() => {});
+            }).catch(() => {
+                // Token fetch failed, fall back to regular save
+                this.saveToCloud(data);
+            });
+        }
+    }
+
+    _toFirestoreValue(value) {
+        if (value === null || value === undefined) return { nullValue: null };
+        if (typeof value === 'string') return { stringValue: value };
+        if (typeof value === 'number') return Number.isInteger(value) ? { integerValue: String(value) } : { doubleValue: value };
+        if (typeof value === 'boolean') return { booleanValue: value };
+        if (Array.isArray(value)) return { arrayValue: { values: value.map(v => this._toFirestoreValue(v)) } };
+        if (typeof value === 'object') {
+            const fields = {};
+            for (const [k, v] of Object.entries(value)) {
+                fields[k] = this._toFirestoreValue(v);
+            }
+            return { mapValue: { fields } };
+        }
+        return { stringValue: String(value) };
     }
 }
