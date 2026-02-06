@@ -37,7 +37,7 @@ const BOOKS = [
           "\"Easier, far easier down than up.\"",
           "\"And you cannot move at all in Time, you cannot get away from the present moment.\"",
           "\"My dear sir, that is just where you are wrong. That is just where the whole world has gone wrong. We are always getting away from the present moment. Our mental existences, which are immaterial and have no dimensions, are passing along the Time-Dimension with a uniform velocity from the cradle to the grave. Just as we should travel _down_ if we began our existence fifty miles above the earth's surface.\"",
-          "\"But the great difficulty is this,\" interrupted the Psychologist. 'You _can_ move about in all directions of Space, but you cannot move about in Time.\"",
+          "\"But the great difficulty is this,\" interrupted the Psychologist. \"You _can_ move about in all directions of Space, but you cannot move about in Time.\"",
           "\"That is the germ of my great discovery. But you are wrong to say that we cannot move about in Time. For instance, if I am recalling an incident very vividly I go back to the instant of its occurrence: I become absent-minded, as you say. I jump back for a moment. Of course we have no means of staying back for any length of Time, any more than a savage or an animal has of staying six feet above the ground. But a civilised man is better off than the savage in this respect. He can go up against gravitation in a balloon, and why should he not hope that ultimately he may be able to stop or accelerate his drift along the Time-Dimension, or even turn about and travel the other way?\"",
           "\"Oh, _this_,\" began Filby, \"is all—\"",
           "\"Why not?\" said the Time Traveller.",
