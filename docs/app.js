@@ -887,6 +887,7 @@ class App {
         const isCompleted = this.storage.isParagraphCompleted(this.currentBook.id, chapterIndex, paragraphIndex);
         const completedHtml = isCompleted ? ' <span class="completed-mark">(COMPLETED)</span>' : '';
         this.chapterTitle.innerHTML = `${this.escapeHtml(this.currentBook.title)} — Chapter ${chapter.number}: ${this.escapeHtml(chapter.title)} — ${paragraphIndex + 1}/${total}${completedHtml}`;
+        this.textDisplay.classList.toggle('already-completed', isCompleted);
     }
 
     pausePractice() {
