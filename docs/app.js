@@ -161,7 +161,6 @@ class TypingSession {
     constructor(text) {
         this.text = text;
         this.position = 0;
-        this.typedChars = [];
         this.mistakes = {};
         this.startTime = null;
         this.endTime = null;
@@ -211,7 +210,6 @@ class TypingSession {
         this.totalTyped++;
 
         if (isCorrect) {
-            this.typedChars.push({ expected, typed: key, correct: true });
             this.correctChars++;
             this.position++;
             this.lastKeyIncorrect = false;
@@ -233,8 +231,8 @@ class TypingSession {
     handleBackspace() {
         if (this.position > 0) {
             this.position--;
-            this.typedChars.pop();
             this.correctChars--;
+            this.lastKeyIncorrect = false;
         }
     }
 
@@ -264,7 +262,6 @@ class TypingSession {
 
         // Skip all the spaces
         for (let i = 0; i < spacesToSkip; i++) {
-            this.typedChars.push({ expected: ' ', typed: ' ', correct: true });
             this.correctChars++;
             this.position++;
         }
@@ -315,9 +312,6 @@ class TypingSession {
         };
     }
 
-    isComplete() {
-        return this.position >= this.text.length;
-    }
 }
 
 // ============================================
@@ -433,8 +427,6 @@ class TextGenerator {
 
     static getText(mode, length = 25, problemKeys = {}) {
         switch (mode) {
-            case 'words':
-                return this.getWords(length);
             case 'sentences':
                 return this.getSentences(length);
             case 'python':
@@ -683,7 +675,7 @@ class App {
             if (this.firebase.isSignedIn()) {
                 this.firebase.signOut();
             } else {
-                this.firebase.signIn();
+                this.firebase.signIn().catch(() => {});
             }
         });
 
@@ -809,31 +801,26 @@ class App {
 
     updateTimerDisplay() {
         const sessions = this.storage.getSessions();
-        const today = new Date().toISOString().slice(0, 10);
+        const now = new Date();
+        const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
         let todaySeconds = 0;
         let totalSeconds = 0;
         for (const s of sessions) {
             const secs = s.time || 0;
             totalSeconds += secs;
-            if (s.date && s.date.slice(0, 10) === today) {
+            const sDate = new Date(s.date);
+            const sLocal = `${sDate.getFullYear()}-${String(sDate.getMonth() + 1).padStart(2, '0')}-${String(sDate.getDate()).padStart(2, '0')}`;
+            if (sLocal === today) {
                 todaySeconds += secs;
             }
         }
-        const fmt = (secs) => {
-            const h = Math.floor(secs / 3600);
-            const m = Math.floor((secs % 3600) / 60);
-            const s = secs % 60;
-            if (h > 0) return `${h}h ${m}m ${s}s`;
-            if (m > 0) return `${m}m ${s}s`;
-            return `${s}s`;
-        };
         const parts = [];
         if (todaySeconds > 0) {
             const todayClass = todaySeconds > 600 ? ' class="timer-accent"' : '';
-            parts.push(`<span class="timer-label">Today:</span> <span${todayClass}>${fmt(todaySeconds)}</span>`);
+            parts.push(`<span class="timer-label">Today:</span> <span${todayClass}>${this.formatTime(todaySeconds)}</span>`);
         }
         if (totalSeconds > 0) {
-            parts.push(`<span class="timer-label">Total:</span> ${fmt(totalSeconds)}`);
+            parts.push(`<span class="timer-label">Total:</span> ${this.formatTime(totalSeconds)}`);
         }
         this.timerDisplay.innerHTML = parts.join('<br>');
     }
@@ -1309,8 +1296,8 @@ class App {
             return `
                 <div class="book-card" data-book-id="${book.id}">
                     <div class="book-info">
-                        <h3>${book.title}</h3>
-                        <p class="book-author">${book.author}</p>
+                        <h3>${this.escapeHtml(book.title)}</h3>
+                        <p class="book-author">${this.escapeHtml(book.author)}</p>
                         <div class="book-progress">
                             <div class="book-progress-bar">
                                 <div class="book-progress-fill" style="width: ${stats.percentComplete}%"></div>
@@ -1372,7 +1359,7 @@ class App {
                 <div class="chapter-card ${cardClass}" data-chapter-index="${index}">
                     <div class="chapter-info">
                         <span class="chapter-number">Ch. ${chapter.number}</span>
-                        <h4>${chapter.title}</h4>
+                        <h4>${this.escapeHtml(chapter.title)}</h4>
                     </div>
                     <span class="chapter-status ${statusClass}">${statusText}</span>
                 </div>
@@ -1416,12 +1403,12 @@ class App {
     }
 
     formatTime(seconds) {
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        if (mins > 0) {
-            return `${mins}m ${secs}s`;
-        }
-        return `${secs}s`;
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+        if (h > 0) return `${h}h ${m}m ${s}s`;
+        if (m > 0) return `${m}m ${s}s`;
+        return `${s}s`;
     }
 
     formatDate(isoString) {

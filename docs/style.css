@@ -401,9 +401,8 @@ body {
 }
 
 .text-display .char.pending {
-    color: #fff;
+    color: var(--text-color);
 }
-
 
 .text-display .char.current {
     background-color: var(--highlight-bg);
@@ -820,5 +819,12 @@ body {
     .text-display {
         font-size: calc(var(--font-size) * 0.85);
         padding: 1rem;
+    }
+
+    .timer-display {
+        position: static;
+        margin-left: 0;
+        text-align: center;
+        margin-bottom: 1.5rem;
     }
 }

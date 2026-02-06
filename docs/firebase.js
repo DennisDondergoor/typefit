@@ -105,6 +105,7 @@ class FirebaseSync {
             clearTimeout(this.syncTimeout);
         }
         this.syncTimeout = setTimeout(() => {
+            this.syncTimeout = null;
             this.saveToCloud(data);
         }, 2000);
     }
