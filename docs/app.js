@@ -5,7 +5,6 @@ class StorageManager {
     constructor() {
         this.KEYS = {
             SESSIONS: 'typefit_sessions',
-            PROBLEM_KEYS: 'typefit_problem_keys',
             FONT_SIZE: 'typefit_font_size',
             FONT_FAMILY: 'typefit_font_family',
             BOOK_PROGRESS: 'typefit_book_progress',
@@ -143,19 +142,6 @@ class StorageManager {
         return total;
     }
 
-    getProblemKeys() {
-        const data = localStorage.getItem(this.KEYS.PROBLEM_KEYS);
-        return data ? JSON.parse(data) : {};
-    }
-
-    updateProblemKeys(mistakes) {
-        const problemKeys = this.getProblemKeys();
-        for (const [key, count] of Object.entries(mistakes)) {
-            problemKeys[key] = (problemKeys[key] || 0) + count;
-        }
-        localStorage.setItem(this.KEYS.PROBLEM_KEYS, JSON.stringify(problemKeys));
-    }
-
     getFontSize() {
         return parseInt(localStorage.getItem(this.KEYS.FONT_SIZE)) || 36;
     }
@@ -174,7 +160,6 @@ class StorageManager {
 
     clearTypingStats() {
         localStorage.removeItem(this.KEYS.SESSIONS);
-        localStorage.removeItem(this.KEYS.PROBLEM_KEYS);
     }
 
     getStats() {
@@ -191,12 +176,6 @@ class StorageManager {
         return { totalSessions, avgWpm, avgAccuracy, bestWpm };
     }
 
-    getTopProblemKeys(limit = 10) {
-        const problemKeys = this.getProblemKeys();
-        return Object.entries(problemKeys)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, limit);
-    }
 }
 
 // ============================================
@@ -425,61 +404,12 @@ class TextGenerator {
         return selected.join('\n\n');
     }
 
-    static getAdaptiveWords(count = 25, problemKeys = {}) {
-        const entries = Object.entries(problemKeys).sort((a, b) => b[1] - a[1]).slice(0, 10);
-        if (entries.length === 0) {
-            return this.getWords(count);
-        }
-
-        // Build a weight map: character -> error count
-        const weights = {};
-        for (const [key, cnt] of entries) {
-            weights[key.toLowerCase()] = cnt;
-        }
-
-        // Score each word by sum of weights of its problem characters
-        const scoreWord = (word) => {
-            let score = 0;
-            for (const ch of word.toLowerCase()) {
-                if (weights[ch]) score += weights[ch];
-            }
-            return score;
-        };
-
-        // Filter to real words (2+ chars) and use same length distribution as getWords
-        const realWords = WORDS.filter(w => w.length >= 2);
-        const short = realWords.filter(w => w.length <= 4).map(w => ({ word: w, score: scoreWord(w) }));
-        const medium = realWords.filter(w => w.length >= 5 && w.length <= 7).map(w => ({ word: w, score: scoreWord(w) }));
-        const long = realWords.filter(w => w.length >= 8).map(w => ({ word: w, score: scoreWord(w) }));
-
-        const shortCount = Math.round(count * 0.4);
-        const mediumCount = Math.round(count * 0.4);
-        const longCount = count - shortCount - mediumCount;
-
-        // Pick top-scored words from each bucket with randomization
-        const pickFromPool = (scored, n) => {
-            scored.sort((a, b) => b.score - a.score);
-            const pool = scored.slice(0, Math.max(n * 3, 20));
-            return pool.sort(() => Math.random() - 0.5).slice(0, n);
-        };
-
-        const selected = [
-            ...pickFromPool(short, shortCount),
-            ...pickFromPool(medium, mediumCount),
-            ...pickFromPool(long, longCount)
-        ];
-
-        return selected.sort(() => Math.random() - 0.5).map(s => s.word).join(' ');
-    }
-
-    static getText(mode, length = 25, problemKeys = {}) {
+    static getText(mode, length = 25) {
         switch (mode) {
             case 'sentences':
                 return this.getSentences(length);
             case 'python':
                 return this.getPythonSnippets(length);
-            case 'adaptive':
-                return this.getAdaptiveWords(length, problemKeys);
             default:
                 return this.getWords(length);
         }
@@ -571,7 +501,6 @@ class App {
         this.summaryAccuracy = document.getElementById('summary-accuracy');
         this.summaryTime = document.getElementById('summary-time');
         this.summaryChars = document.getElementById('summary-chars');
-        this.problemKeysDisplay = document.getElementById('problem-keys-display');
         this.practiceAgainBtn = document.getElementById('practice-again');
         this.backToMenuSummaryBtn = document.getElementById('back-to-menu-summary');
 
@@ -581,11 +510,9 @@ class App {
         this.avgWpm = document.getElementById('avg-wpm');
         this.avgAccuracy = document.getElementById('avg-accuracy');
         this.bestWpm = document.getElementById('best-wpm');
-        this.topProblemKeys = document.getElementById('top-problem-keys');
         this.sessionHistory = document.getElementById('session-history');
         this.clearDataBtn = document.getElementById('clear-data');
         this.clearBookProgressBtn = document.getElementById('clear-book-progress');
-        this.problemKeysSection = document.getElementById('problem-keys-section');
     }
 
     initEventListeners() {
@@ -608,13 +535,6 @@ class App {
         this.modeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 this.currentMode = btn.dataset.mode;
-                if (this.currentMode === 'adaptive') {
-                    const keys = this.storage.getProblemKeys();
-                    if (Object.keys(keys).length === 0) {
-                        this.showToast('No problem keys recorded yet. Complete some practice sessions first!');
-                        return;
-                    }
-                }
                 if (this.currentMode === 'books') {
                     this.showBookSelection();
                 } else {
@@ -693,14 +613,13 @@ class App {
 
         // Clear data
         this.clearDataBtn.addEventListener('click', () => {
-            if (confirm('Clear all typing stats (sessions and problem keys)? Book progress will be kept.')) {
+            if (confirm('Clear all typing stats? Book progress will be kept.')) {
                 this.storage.clearTypingStats();
                 if (this.firebase.syncTimeout) {
                     clearTimeout(this.firebase.syncTimeout);
                     this.firebase.syncTimeout = null;
                 }
                 this.firebase.deleteField('sessions');
-                this.firebase.deleteField('problemKeys');
                 this.showProgress();
             }
         });
@@ -770,7 +689,6 @@ class App {
     getAllData() {
         return {
             sessions: this.storage.getSessions(),
-            problemKeys: this.storage.getProblemKeys(),
             bookProgress: JSON.parse(localStorage.getItem(this.storage.KEYS.BOOK_PROGRESS) || '{}'),
             totalTime: this.storage.getTotalTime(),
             dailyTime: this.storage.getDailyTime(),
@@ -802,15 +720,6 @@ class App {
             }
             local.sort((a, b) => new Date(b.date) - new Date(a.date));
             localStorage.setItem(this.storage.KEYS.SESSIONS, JSON.stringify(local.slice(0, 100)));
-        }
-
-        // Merge problem keys: take max count for each key
-        if (data.problemKeys) {
-            const local = this.storage.getProblemKeys();
-            for (const [key, count] of Object.entries(data.problemKeys)) {
-                local[key] = Math.max(local[key] || 0, count);
-            }
-            localStorage.setItem(this.storage.KEYS.PROBLEM_KEYS, JSON.stringify(local));
         }
 
         // Merge book progress: union of completed paragraphs
@@ -1027,7 +936,7 @@ class App {
             this.chapterTitle.classList.remove('hidden');
             this.bookHint.classList.remove('hidden');
         } else {
-            text = TextGenerator.getText(this.currentMode, this.exerciseLength, this.storage.getProblemKeys());
+            text = TextGenerator.getText(this.currentMode, this.exerciseLength);
             this.chapterTitle.classList.add('hidden');
             this.bookHint.classList.add('hidden');
             this.textDisplay.classList.remove('already-completed');
@@ -1311,7 +1220,6 @@ class App {
             date: new Date().toISOString()
         };
         this.storage.saveSession(sessionData);
-        this.storage.updateProblemKeys(stats.mistakes);
 
         // Advance book progress if in books mode
         if (this.currentMode === 'books' && this.currentBook) {
@@ -1345,42 +1253,18 @@ class App {
         this.summaryTime.textContent = this.formatTime(stats.elapsedSeconds);
         this.summaryChars.textContent = stats.totalChars;
 
-        // Show problem keys from this session
-        const mistakeEntries = Object.entries(stats.mistakes)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 5);
-
-        if (mistakeEntries.length > 0) {
-            this.problemKeysDisplay.innerHTML = mistakeEntries
-                .map(([key, count]) => `<span class="problem-key">${this.escapeHtml(key)} (${count})</span>`)
-                .join('');
-            this.problemKeysSection.style.display = 'block';
-        } else {
-            this.problemKeysSection.style.display = 'none';
-        }
-
         this.showScreen(this.summaryScreen);
     }
 
     showProgress() {
         const stats = this.storage.getStats();
         const sessions = this.storage.getSessions();
-        const topKeys = this.storage.getTopProblemKeys(10);
 
         // Overview stats
         this.totalSessions.textContent = stats.totalSessions;
         this.avgWpm.textContent = stats.avgWpm || '--';
         this.avgAccuracy.textContent = stats.avgAccuracy ? `${stats.avgAccuracy}%` : '--';
         this.bestWpm.textContent = stats.bestWpm || '--';
-
-        // Top problem keys
-        if (topKeys.length > 0) {
-            this.topProblemKeys.innerHTML = topKeys
-                .map(([key, count]) => `<span class="problem-key">${this.escapeHtml(key)} (${count})</span>`)
-                .join('');
-        } else {
-            this.topProblemKeys.innerHTML = '<p class="empty-state">No problem keys yet</p>';
-        }
 
         // Session history
         if (sessions.length > 0) {

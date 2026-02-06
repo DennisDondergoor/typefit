@@ -518,35 +518,6 @@ body {
     margin-top: 0.5rem;
 }
 
-.summary-section {
-    margin: 2rem 0;
-    text-align: center;
-}
-
-.summary-section h2 {
-    font-size: 1rem;
-    color: var(--text-muted);
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-}
-
-#problem-keys-display {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.problem-key {
-    background-color: var(--card-bg);
-    border: 1px solid var(--error-color);
-    color: var(--error-color);
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    font-size: 0.95rem;
-}
-
 .summary-actions {
     display: flex;
     gap: 1rem;
@@ -592,13 +563,6 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.1em;
     text-align: center;
-}
-
-#top-problem-keys {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
 }
 
 #session-history {
