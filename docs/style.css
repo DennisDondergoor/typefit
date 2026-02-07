@@ -67,6 +67,7 @@ body {
     margin-left: 16rem;
     top: 2.5rem;
     color: var(--text-color);
+    font-family: var(--font-family);
     font-size: 1.25rem;
 }
 
@@ -103,7 +104,11 @@ body {
     border-color: var(--accent-color);
 }
 
-.mode-btn:active {
+.mode-btn:active,
+.length-btn:active,
+.font-btn:active,
+.book-card:active,
+.chapter-card:active {
     transform: scale(0.97);
 }
 
@@ -187,8 +192,6 @@ body {
     font-size: 0.9rem;
     color: var(--text-muted);
     margin-bottom: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
 }
 
 .settings-section .font-buttons {
@@ -208,7 +211,7 @@ body {
     background-color: var(--card-bg);
     color: var(--text-color);
     border: 2px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -224,7 +227,7 @@ body {
 
 .font-buttons {
     display: flex;
-    gap: 0.5rem;
+    gap: 1rem;
     justify-content: center;
     flex-wrap: wrap;
 }
@@ -236,7 +239,7 @@ body {
     background-color: var(--card-bg);
     color: var(--text-color);
     border: 2px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -305,7 +308,7 @@ body {
     font-size: 1rem;
     font-family: inherit;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -546,7 +549,7 @@ body {
 .progress-overview {
     display: flex;
     justify-content: center;
-    gap: 1.5rem;
+    gap: 2rem;
     margin-bottom: 2rem;
     flex-wrap: wrap;
 }
