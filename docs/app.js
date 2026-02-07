@@ -975,8 +975,23 @@ class App {
         // Store span references for fast updates
         this.charSpans = this.textDisplay.querySelectorAll('.char');
 
+        // Create cursor element
+        if (!this.cursorEl) {
+            this.cursorEl = document.createElement('div');
+            this.cursorEl.className = 'typing-cursor';
+        }
+        // Disable transition so cursor snaps to initial position
+        this.cursorEl.style.transition = 'none';
+        this.textDisplay.appendChild(this.cursorEl);
+
         // Reset scroll to top for new text
         this.textDisplay.scrollTop = 0;
+
+        // Position cursor on first character, then restore transition
+        this.updateCursorPosition();
+        // Force reflow before restoring transition
+        this.cursorEl.offsetHeight;
+        this.cursorEl.style.transition = '';
     }
 
     updateCharDisplay(fromPos = null) {
@@ -1002,6 +1017,9 @@ class App {
             }
         }
 
+        // Update cursor position
+        this.updateCursorPosition();
+
         // Scroll current character into view within the text-display container only
         const span = this.charSpans[pos];
         if (span) {
@@ -1014,6 +1032,19 @@ class App {
                 container.scrollTop = spanBottom - container.clientHeight;
             }
         }
+    }
+
+    updateCursorPosition() {
+        if (!this.cursorEl || !this.charSpans) return;
+        const pos = this.session ? this.session.position : 0;
+        const span = this.charSpans[Math.min(pos, this.charSpans.length - 1)];
+        if (!span) return;
+        const container = this.textDisplay;
+        const spanRect = span.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        this.cursorEl.style.left = (spanRect.left - containerRect.left + container.scrollLeft) + 'px';
+        this.cursorEl.style.top = (spanRect.top - containerRect.top + container.scrollTop + spanRect.height) + 'px';
+        this.cursorEl.style.width = spanRect.width + 'px';
     }
 
     escapeHtml(text) {

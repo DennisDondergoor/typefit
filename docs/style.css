@@ -407,6 +407,16 @@ body {
     word-wrap: break-word;
     overflow-y: auto;
     max-height: 60vh;
+    position: relative;
+}
+
+.typing-cursor {
+    position: absolute;
+    height: 3px;
+    background-color: var(--accent-color);
+    transition: left 0.08s ease-out, top 0.08s ease-out, width 0.08s ease-out;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .text-display .char {
@@ -419,8 +429,7 @@ body {
 }
 
 .text-display .char.current {
-    background-color: var(--highlight-bg);
-    color: var(--highlight-text);
+    color: var(--text-color);
 }
 
 .text-display .char.correct {
