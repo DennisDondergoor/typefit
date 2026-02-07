@@ -190,6 +190,7 @@ class TypingSession {
         this.endTime = null;
         this.correctChars = 0;
         this.totalTyped = 0;
+        this.maxPosition = 0;
         this.lastKeyIncorrect = false;
         this.isPaused = false;
         this.pauseStartTime = null;
@@ -232,11 +233,17 @@ class TypingSession {
         const dashMatch = (key === '-' && (expected === '\u2014' || expected === '\u2013'));
         const isCorrect = key === expected || key === normalizedExpected || dashMatch;
 
-        this.totalTyped++;
+        // Only count toward totalTyped at new positions (not retyping after backspace)
+        if (this.position >= this.maxPosition) {
+            this.totalTyped++;
+        }
 
         if (isCorrect) {
             this.correctChars++;
             this.position++;
+            if (this.position > this.maxPosition) {
+                this.maxPosition = this.position;
+            }
             this.lastKeyIncorrect = false;
 
             if (this.position >= this.text.length) {
@@ -256,7 +263,9 @@ class TypingSession {
     handleBackspace() {
         if (this.position > 0) {
             this.position--;
-            this.correctChars--;
+            if (this.correctChars > 0) {
+                this.correctChars--;
+            }
             this.lastKeyIncorrect = false;
         }
     }
@@ -278,17 +287,23 @@ class TypingSession {
 
         // If no spaces to skip, treat as incorrect (don't advance)
         if (spacesToSkip === 0) {
-            this.totalTyped++;
+            if (this.position >= this.maxPosition) {
+                this.totalTyped++;
+            }
             this.mistakes['Tab'] = (this.mistakes['Tab'] || 0) + 1;
             return false;
         }
 
-        // Skip all the spaces
+        // Skip all the spaces — only count new positions toward totalTyped
+        const newChars = Math.max(0, this.position + spacesToSkip - this.maxPosition);
         for (let i = 0; i < spacesToSkip; i++) {
             this.correctChars++;
             this.position++;
         }
-        this.totalTyped += spacesToSkip;
+        if (this.position > this.maxPosition) {
+            this.maxPosition = this.position;
+        }
+        this.totalTyped += newChars;
         this.lastKeyIncorrect = false;
 
         if (this.position >= this.text.length) {
@@ -613,7 +628,7 @@ class App {
 
         // Clear data
         this.clearDataBtn.addEventListener('click', () => {
-            if (confirm('Clear all typing stats? Book progress will be kept.')) {
+            this.showConfirm('Clear all typing stats? Book progress will be kept.', () => {
                 this.storage.clearTypingStats();
                 if (this.firebase.syncTimeout) {
                     clearTimeout(this.firebase.syncTimeout);
@@ -621,10 +636,10 @@ class App {
                 }
                 this.firebase.deleteField('sessions');
                 this.showProgress();
-            }
+            });
         });
         this.clearBookProgressBtn.addEventListener('click', () => {
-            if (confirm('Clear all book progress? This cannot be undone.')) {
+            this.showConfirm('Clear all book progress? This cannot be undone.', () => {
                 localStorage.removeItem(this.storage.KEYS.BOOK_PROGRESS);
                 // Cancel any pending debounced sync that would restore old data
                 if (this.firebase.syncTimeout) {
@@ -633,7 +648,7 @@ class App {
                 }
                 this.firebase.deleteField('bookProgress');
                 this.showProgress();
-            }
+            });
         });
 
         // Auth button
@@ -1018,6 +1033,24 @@ class App {
         return this._escapeDiv.innerHTML;
     }
 
+    showConfirm(message, onConfirm) {
+        const modal = document.getElementById('confirm-modal');
+        const title = document.getElementById('confirm-modal-title');
+        const yesBtn = document.getElementById('confirm-yes-btn');
+        const noBtn = document.getElementById('confirm-no-btn');
+        title.textContent = message;
+        modal.classList.remove('hidden');
+
+        const cleanup = () => {
+            modal.classList.add('hidden');
+            yesBtn.replaceWith(yesBtn.cloneNode(true));
+            noBtn.replaceWith(noBtn.cloneNode(true));
+        };
+
+        yesBtn.addEventListener('click', () => { cleanup(); onConfirm(); }, { once: true });
+        noBtn.addEventListener('click', () => { cleanup(); }, { once: true });
+    }
+
     showToast(message, duration = 3000) {
         const toast = document.getElementById('toast');
         toast.textContent = message;
@@ -1197,7 +1230,18 @@ class App {
 
         // Restart with new paragraph
         const newChapterData = this.currentBook.chapters[newChapter];
-        const text = newChapterData.paragraphs[newParagraph];
+        let text = newChapterData.paragraphs[newParagraph];
+
+        // Skip empty paragraphs
+        if (!text || text.trim() === '') {
+            this.storage.markParagraphCompleted(this.currentBook.id, newChapter, newParagraph);
+            this.storage.setBookProgress(this.currentBook.id, newChapter, newParagraph);
+            this.skipParagraph(direction > 0 ? 1 : -1);
+            return;
+        }
+
+        // Strip Gutenberg _italic_ markers
+        text = text.replace(/(?<![_])_([^_]+)_(?![_])/g, '$1');
 
         this.session = new TypingSession(text);
         this._cachedBookStats = this.storage.getBookStats(this.currentBook);

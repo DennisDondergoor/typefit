@@ -766,6 +766,17 @@ body {
     display: none;
 }
 
+.confirm-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.confirm-actions button {
+    min-width: 100px;
+}
+
 .toast {
     position: fixed;
     top: 2rem;

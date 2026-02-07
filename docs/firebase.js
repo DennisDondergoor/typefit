@@ -8,6 +8,7 @@ class FirebaseSync {
         this.user = null;
         this.onAuthChangeCallback = null;
         this.syncTimeout = null;
+        this._cachedToken = null;
     }
 
     init() {
@@ -27,6 +28,12 @@ class FirebaseSync {
         // Listen for auth state changes
         this.auth.onAuthStateChanged((user) => {
             this.user = user;
+            // Pre-cache token for reliable page-unload sync
+            if (user) {
+                user.getIdToken().then(t => { this._cachedToken = t; }).catch(() => {});
+            } else {
+                this._cachedToken = null;
+            }
             if (this.onAuthChangeCallback) {
                 this.onAuthChangeCallback(user);
             }
@@ -111,6 +118,10 @@ class FirebaseSync {
             this.syncTimeout = null;
             this._pendingGetData = null;
             const ok = await this.saveToCloud(getDataFn());
+            // Refresh cached token for reliable page-unload sync
+            if (this.user) {
+                this.user.getIdToken().then(t => { this._cachedToken = t; }).catch(() => {});
+            }
             if (this.onSyncResult) this.onSyncResult(ok);
         }, 2000);
     }
@@ -123,7 +134,7 @@ class FirebaseSync {
         const data = this._pendingGetData();
         this._pendingGetData = null;
         // Use fetch with keepalive for reliability during page unload
-        if (this.user && this.db) {
+        if (this.user && this.db && this._cachedToken) {
             const projectId = this.db.app.options.projectId;
             const uid = this.user.uid;
             const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${uid}?updateMask.fieldPaths=sessions&updateMask.fieldPaths=bookProgress&updateMask.fieldPaths=totalTime&updateMask.fieldPaths=dailyTime&updateMask.fieldPaths=settings`;
@@ -132,17 +143,13 @@ class FirebaseSync {
             for (const [key, value] of Object.entries(data)) {
                 fields[key] = this._toFirestoreValue(value);
             }
-            this.user.getIdToken().then(token => {
-                fetch(url, {
-                    method: 'PATCH',
-                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ fields }),
-                    keepalive: true
-                }).catch(() => {});
-            }).catch(() => {
-                // Token fetch failed, fall back to regular save
-                this.saveToCloud(data);
-            });
+            // Use cached token synchronously — no async await during unload
+            fetch(url, {
+                method: 'PATCH',
+                headers: { 'Authorization': `Bearer ${this._cachedToken}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fields }),
+                keepalive: true
+            }).catch(() => {});
         }
     }
 
