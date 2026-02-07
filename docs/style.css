@@ -527,6 +527,10 @@ body {
     margin-top: 2rem;
 }
 
+.summary-hint {
+    margin-top: 1.5rem;
+}
+
 /* Progress Screen */
 #progress-screen {
     max-width: 800px;

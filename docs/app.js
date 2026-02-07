@@ -1287,6 +1287,7 @@ class App {
         this.summaryChars.textContent = stats.totalChars;
 
         this.showScreen(this.summaryScreen);
+        this.practiceAgainBtn.focus();
     }
 
     showProgress() {
