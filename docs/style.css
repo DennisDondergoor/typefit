@@ -604,11 +604,11 @@ body {
 }
 
 .progress-overview {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    max-width: 400px;
+    margin: 0 auto 2rem;
 }
 
 .progress-section {
@@ -877,7 +877,7 @@ body {
         width: 100%;
     }
 
-    .summary-stats, .progress-overview {
+    .summary-stats {
         flex-direction: column;
         align-items: center;
     }
