@@ -527,7 +527,6 @@ class App {
         this.bestWpm = document.getElementById('best-wpm');
         this.sessionHistory = document.getElementById('session-history');
         this.clearDataBtn = document.getElementById('clear-data');
-        this.clearBookProgressBtn = document.getElementById('clear-book-progress');
     }
 
     initEventListeners() {
@@ -638,19 +637,6 @@ class App {
                 this.showProgress();
             });
         });
-        this.clearBookProgressBtn.addEventListener('click', () => {
-            this.showConfirm('Clear all book progress? This cannot be undone.', () => {
-                localStorage.removeItem(this.storage.KEYS.BOOK_PROGRESS);
-                // Cancel any pending debounced sync that would restore old data
-                if (this.firebase.syncTimeout) {
-                    clearTimeout(this.firebase.syncTimeout);
-                    this.firebase.syncTimeout = null;
-                }
-                this.firebase.deleteField('bookProgress');
-                this.showProgress();
-            });
-        });
-
         // Auth button
         this.authBtn.addEventListener('click', () => {
             if (this.firebase.isSignedIn()) {
