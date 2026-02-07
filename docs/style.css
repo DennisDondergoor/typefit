@@ -406,7 +406,47 @@ body {
     word-wrap: break-word;
     overflow-y: auto;
     max-height: 65vh;
+    scrollbar-width: none;
     position: relative;
+}
+
+.text-display::-webkit-scrollbar {
+    display: none;
+}
+
+/* Custom scroll indicator — always visible */
+.scroll-indicator {
+    position: absolute;
+    top: 2rem;
+    right: 4px;
+    bottom: 2rem;
+    width: 4px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.scroll-indicator-track {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    background: var(--border-color);
+    border-radius: 2px;
+}
+
+.scroll-indicator-thumb {
+    position: absolute;
+    right: 0;
+    width: 100%;
+    background: var(--accent-color);
+    border-radius: 2px;
+    min-height: 12px;
+    transition: top 0.08s ease-out, height 0.08s ease-out;
+}
+
+.scroll-indicator.hidden {
+    display: none;
 }
 
 .typing-cursor {

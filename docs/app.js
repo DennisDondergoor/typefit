@@ -954,8 +954,9 @@ class App {
         this.updateLiveStats();
         this.startUpdateInterval();
         this.showScreen(this.practiceScreen);
-        // Position cursor after screen is visible (getBoundingClientRect needs layout)
+        // Position cursor and scroll indicator after screen is visible (getBoundingClientRect needs layout)
         this.updateCursorPosition();
+        this.updateScrollIndicator();
     }
 
     renderText() {
@@ -985,6 +986,16 @@ class App {
         // Disable transition so cursor snaps to initial position
         this.cursorEl.style.transition = 'none';
         this.textDisplay.appendChild(this.cursorEl);
+
+        // Create scroll indicator
+        if (!this.scrollIndicator) {
+            this.scrollIndicator = document.createElement('div');
+            this.scrollIndicator.className = 'scroll-indicator hidden';
+            this.scrollIndicator.innerHTML = '<div class="scroll-indicator-track"></div><div class="scroll-indicator-thumb"></div>';
+            this.scrollThumb = this.scrollIndicator.querySelector('.scroll-indicator-thumb');
+            this.textDisplay.addEventListener('scroll', () => this.updateScrollIndicator());
+        }
+        this.textDisplay.appendChild(this.scrollIndicator);
 
         // Reset scroll to top for new text
         this.textDisplay.scrollTop = 0;
@@ -1047,6 +1058,21 @@ class App {
         this.cursorEl.style.left = (spanRect.left - containerRect.left + container.scrollLeft) + 'px';
         this.cursorEl.style.top = (spanRect.top - containerRect.top + container.scrollTop + spanRect.height) + 'px';
         this.cursorEl.style.width = spanRect.width + 'px';
+    }
+
+    updateScrollIndicator() {
+        if (!this.scrollIndicator) return;
+        const el = this.textDisplay;
+        const hasOverflow = el.scrollHeight > el.clientHeight;
+        this.scrollIndicator.classList.toggle('hidden', !hasOverflow);
+        if (!hasOverflow) return;
+        const trackHeight = this.scrollIndicator.clientHeight;
+        const thumbRatio = el.clientHeight / el.scrollHeight;
+        const thumbHeight = Math.max(12, trackHeight * thumbRatio);
+        const scrollRatio = el.scrollTop / (el.scrollHeight - el.clientHeight);
+        const thumbTop = scrollRatio * (trackHeight - thumbHeight);
+        this.scrollThumb.style.height = thumbHeight + 'px';
+        this.scrollThumb.style.top = thumbTop + 'px';
     }
 
     escapeHtml(text) {
