@@ -954,6 +954,8 @@ class App {
         this.updateLiveStats();
         this.startUpdateInterval();
         this.showScreen(this.practiceScreen);
+        // Position cursor after screen is visible (getBoundingClientRect needs layout)
+        this.updateCursorPosition();
     }
 
     renderText() {
