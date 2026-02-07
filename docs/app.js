@@ -1141,7 +1141,7 @@ class App {
     }
 
     handleKeyDown(e) {
-        // Handle Escape for modals
+        // Handle Escape for modals and navigation screens
         if (e.key === 'Escape') {
             if (!this.lengthModal.classList.contains('hidden')) {
                 this.hideLengthModal();
@@ -1149,6 +1149,18 @@ class App {
             }
             if (!this.settingsModal.classList.contains('hidden')) {
                 this.hideSettingsModal();
+                return;
+            }
+            if (this.progressScreen.classList.contains('active')) {
+                this.showMenu();
+                return;
+            }
+            if (this.chapterSelectionScreen.classList.contains('active')) {
+                this.showBookSelection();
+                return;
+            }
+            if (this.bookSelectionScreen.classList.contains('active')) {
+                this.showMenu();
                 return;
             }
         }
