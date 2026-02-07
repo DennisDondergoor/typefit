@@ -627,7 +627,7 @@ class App {
 
         // Clear data
         this.clearDataBtn.addEventListener('click', () => {
-            this.showConfirm('Clear all typing stats? Book progress will be kept.', () => {
+            this.showConfirm('Clear all typing stats?', 'Book progress will be kept.', () => {
                 this.storage.clearTypingStats();
                 if (this.firebase.syncTimeout) {
                     clearTimeout(this.firebase.syncTimeout);
@@ -1082,12 +1082,15 @@ class App {
         return this._escapeDiv.innerHTML;
     }
 
-    showConfirm(message, onConfirm) {
+    showConfirm(message, subtitle, onConfirm) {
         const modal = document.getElementById('confirm-modal');
         const title = document.getElementById('confirm-modal-title');
+        const sub = document.getElementById('confirm-modal-subtitle');
         const yesBtn = document.getElementById('confirm-yes-btn');
         const noBtn = document.getElementById('confirm-no-btn');
         title.textContent = message;
+        sub.textContent = subtitle || '';
+        sub.style.display = subtitle ? '' : 'none';
         modal.classList.remove('hidden');
 
         const cleanup = () => {
@@ -1143,6 +1146,11 @@ class App {
     handleKeyDown(e) {
         // Handle Escape for modals and navigation screens
         if (e.key === 'Escape') {
+            const confirmModal = document.getElementById('confirm-modal');
+            if (!confirmModal.classList.contains('hidden')) {
+                document.getElementById('confirm-no-btn').click();
+                return;
+            }
             if (!this.lengthModal.classList.contains('hidden')) {
                 this.hideLengthModal();
                 return;
@@ -1308,6 +1316,7 @@ class App {
         this._cachedBookStats = this.storage.getBookStats(this.currentBook);
         this.updateChapterTitle(newChapterData, newChapter, newParagraph);
         this.renderText();
+        this.updateScrollIndicator();
         this.updateLiveStats();
     }
 
