@@ -1033,16 +1033,17 @@ class App {
         // Update cursor position
         this.updateCursorPosition();
 
-        // Scroll current character into view within the text-display container only
+        // Scroll current character + cursor underline into view
         const span = this.charSpans[pos];
         if (span) {
             const container = this.textDisplay;
-            const spanTop = span.offsetTop - container.offsetTop;
-            const spanBottom = spanTop + span.offsetHeight;
-            if (spanTop < container.scrollTop) {
-                container.scrollTop = spanTop;
-            } else if (spanBottom > container.scrollTop + container.clientHeight) {
-                container.scrollTop = spanBottom - container.clientHeight;
+            const containerRect = container.getBoundingClientRect();
+            const spanRect = span.getBoundingClientRect();
+            const cursorBottom = spanRect.bottom + 3; // 3px cursor underline
+            if (spanRect.top < containerRect.top) {
+                container.scrollTop += spanRect.top - containerRect.top;
+            } else if (cursorBottom > containerRect.bottom) {
+                container.scrollTop += cursorBottom - containerRect.bottom;
             }
         }
     }
