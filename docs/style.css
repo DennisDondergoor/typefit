@@ -807,12 +807,12 @@ body {
 }
 
 .completed-mark {
-    color: var(--accent-color);
-    font-weight: bold;
+    color: #2d8a4e;
 }
 
-.text-display.already-completed {
-    border-left: 4px solid var(--accent-color);
+.text-display.already-completed .char.pending,
+.text-display.already-completed .char.current {
+    color: #2d8a4e;
 }
 
 .chapter-title.hidden,
