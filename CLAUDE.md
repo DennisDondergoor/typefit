@@ -20,7 +20,7 @@ Single-page app with screen toggling (add/remove `active` class). All source is 
 - **app.js** — Main application (~1,500 lines). Contains: `StorageManager` (localStorage wrapper), `TypingSession` (single session state/logic), `TextGenerator` (practice text generation), `App` (controller that wires everything together)
 - **style.css** — All styles. Uses CSS variables in `:root` for theming — changing a variable updates everywhere
 - **data.js** — `WORDS`, `SENTENCES`, `PYTHON_SNIPPETS` arrays (~333KB)
-- **books.js** — `BOOKS` array with chapters/paragraphs (~500KB, 3 classic novels)
+- **books.js** — `BOOKS` array with chapters/paragraphs (~735KB, 3 classic novels)
 - **firebase.js** — `FirebaseSync` class (Firestore compat SDK v10, GitHub OAuth)
 
 ### Typing Engine
@@ -30,6 +30,7 @@ Single-page app with screen toggling (add/remove `active` class). All source is 
 - Dash matching (`-` accepted for em/en dash)
 - Tab skips up to 4 consecutive spaces (Python indentation)
 - WPM = `(correctChars / 5) / minutes`, paused time excluded
+- `maxPosition` high-water mark ensures retyping after backspace doesn't inflate `totalTyped` or penalize accuracy
 
 `renderText()` creates all character spans once; `updateCharDisplay(fromPos)` incrementally updates only 2-3 spans around the cursor for performance.
 
@@ -42,7 +43,8 @@ Auto-advances to next uncompleted paragraph after each completion (no summary sh
 - Single Firestore document per user at `users/{uid}`, saved with `{ merge: true }`
 - `scheduleSave()` debounces 2 seconds; pending save flushed on page unload
 - Cloud data loads only on auth state change, not on navigation
-- Merge strategy: sessions unioned by date, problem keys take max count, book progress unions completed sets, settings cloud-wins
+- Auth token pre-cached and refreshed after each save for reliable `flushPendingSync()` during page unload
+- Merge strategy: sessions unioned by date, book progress unions completed sets, total/daily time take max, settings cloud-wins
 
 ## Key Gotchas
 
@@ -50,13 +52,11 @@ Auto-advances to next uncompleted paragraph after each completion (no summary sh
 
 **WORDS array includes non-words.** Single letters (a-z), abbreviations, web jargon. Filter with `w.length >= 2` when real words are needed.
 
-**Word scoring biases toward long words.** When selecting words by character score (adaptive/weak keys mode), split into length buckets first (short ≤4, medium 5-7, long ≥8 at 40/40/20 distribution), then score within each bucket.
-
 **`_suppressSync` flag.** Set during cloud load to prevent the loaded data from immediately triggering a cloud save cycle.
 
 ## Commit Style
 
 Short imperative subject, blank line, explanation of why. End with:
 ```
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 ```
