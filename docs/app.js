@@ -974,6 +974,9 @@ class App {
 
         // Store span references for fast updates
         this.charSpans = this.textDisplay.querySelectorAll('.char');
+
+        // Reset scroll to top for new text
+        this.textDisplay.scrollTop = 0;
     }
 
     updateCharDisplay(fromPos = null) {
