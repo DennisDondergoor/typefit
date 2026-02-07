@@ -367,12 +367,11 @@ body {
 #practice-screen {
     display: none;
     flex-direction: column;
-    justify-content: center;
     height: 100vh;
     height: 100dvh;
     max-height: 100vh;
     max-height: 100dvh;
-    padding: 1rem 0;
+    padding: 1rem 0 2rem;
 }
 
 #practice-screen.active {
@@ -406,7 +405,7 @@ body {
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow-y: auto;
-    max-height: 60vh;
+    max-height: 65vh;
     position: relative;
 }
 
