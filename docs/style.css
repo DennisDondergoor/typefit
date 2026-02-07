@@ -647,12 +647,14 @@ body {
 
 .session-mode {
     color: var(--accent-color);
+    font-size: 1.4rem;
     text-transform: capitalize;
 }
 
 .session-stats {
     display: flex;
     gap: 1.5rem;
+    font-size: 1.4rem;
 }
 
 .progress-actions {
@@ -694,7 +696,7 @@ body {
 }
 
 .book-info h3 {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     margin-bottom: 0.25rem;
 }
 
