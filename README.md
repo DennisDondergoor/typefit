@@ -14,7 +14,7 @@ A web-based typing practice app with adjustable font size and book reading mode.
 
 ## Usage
 
-Open `web/index.html` directly in your browser (no server required).
+Open `docs/index.html` directly in your browser (no server required).
 
 ## Controls
 
