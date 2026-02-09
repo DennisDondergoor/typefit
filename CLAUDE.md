@@ -17,10 +17,10 @@ No build step, no package manager, no tests. The app is a static site served fro
 Single-page app with screen toggling (add/remove `active` class). All source is in `docs/`:
 
 - **index.html** — All screens: menu, practice, summary, progress, book/chapter selection
-- **app.js** — Main application (~1,500 lines). Contains: `StorageManager` (localStorage wrapper), `TypingSession` (single session state/logic), `TextGenerator` (practice text generation), `App` (controller that wires everything together)
+- **app.js** — Main application (~1,600 lines). Contains: `StorageManager` (localStorage wrapper with `_safeParseJSON` for corrupted data), `TypingSession` (single session state/logic), `TextGenerator` (practice text generation with Fisher-Yates shuffle), `App` (controller that wires everything together)
 - **style.css** — All styles. Uses CSS variables in `:root` for theming — changing a variable updates everywhere
-- **data.js** — `WORDS`, `SENTENCES`, `PYTHON_SNIPPETS` arrays (~333KB)
-- **books.js** — `BOOKS` array with chapters/paragraphs (~735KB, 3 classic novels)
+- **data.js** — `WORDS` (~8,000), `SENTENCES` (~3,500), `PYTHON_SNIPPETS` (~1,000) arrays (~333KB)
+- **books.js** — `BOOKS` array with ~1,500 paragraphs across 3 classic novels (~735KB)
 - **firebase.js** — `FirebaseSync` class (Firestore compat SDK v10, GitHub OAuth)
 
 ### Typing Engine
