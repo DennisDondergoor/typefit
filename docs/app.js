@@ -1386,6 +1386,7 @@ class App {
         this.summaryTime.textContent = this.formatTime(stats.elapsedSeconds);
         this.summaryChars.textContent = stats.totalChars;
 
+        this.backToMenuSummaryBtn.textContent = (this.currentMode === 'books' && this.currentBook) ? 'Back to Chapters' : 'Back to Menu';
         this.showScreen(this.summaryScreen);
         this.practiceAgainBtn.focus();
     }
