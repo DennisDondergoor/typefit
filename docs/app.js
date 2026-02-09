@@ -359,6 +359,15 @@ class TypingSession {
 // Text Generator
 // ============================================
 class TextGenerator {
+    static shuffle(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
     static getWords(count = 25) {
         // Categorize words by length for better variety
         const realWords = WORDS.filter(w => w.length >= 2);
@@ -371,10 +380,7 @@ class TextGenerator {
         const mediumCount = Math.round(count * 0.4);
         const longCount = count - shortCount - mediumCount;
 
-        const pick = (arr, n) => {
-            const shuffled = [...arr].sort(() => Math.random() - 0.5);
-            return shuffled.slice(0, n);
-        };
+        const pick = (arr, n) => this.shuffle(arr).slice(0, n);
 
         const selected = [
             ...pick(short, shortCount),
@@ -382,13 +388,12 @@ class TextGenerator {
             ...pick(long, longCount)
         ];
 
-        // Shuffle the final selection
-        return selected.sort(() => Math.random() - 0.5).join(' ');
+        return this.shuffle(selected).join(' ');
     }
 
     static getSentences(targetWords = 25) {
         // Pick sentences until we reach approximately targetWords
-        const shuffled = [...SENTENCES].sort(() => Math.random() - 0.5);
+        const shuffled = this.shuffle(SENTENCES);
         const selected = [];
         let wordCount = 0;
 
@@ -405,7 +410,7 @@ class TextGenerator {
         // Pick snippets until we reach approximately targetWords
         // Filter out snippets that start with whitespace (they're continuations)
         const validSnippets = PYTHON_SNIPPETS.filter(s => s.length > 0 && !/^\s/.test(s));
-        const shuffled = [...validSnippets].sort(() => Math.random() - 0.5);
+        const shuffled = this.shuffle(validSnippets);
         const selected = [];
         let wordCount = 0;
 
@@ -598,6 +603,8 @@ class App {
 
         // Back to menu buttons
         this.backToMenuBtn.addEventListener('click', () => {
+            this.stopUpdateInterval();
+            this.session = null;
             if (this.currentMode === 'books') {
                 this.showChapterSelection();
             } else {
@@ -605,7 +612,11 @@ class App {
             }
         });
         this.backToMenuSummaryBtn.addEventListener('click', () => {
-            this.showMenu();
+            if (this.currentMode === 'books' && this.currentBook) {
+                this.showChapterSelection();
+            } else {
+                this.showMenu();
+            }
         });
         this.backFromProgressBtn.addEventListener('click', () => {
             this.showMenu();
@@ -1169,6 +1180,14 @@ class App {
             }
             if (this.bookSelectionScreen.classList.contains('active')) {
                 this.showMenu();
+                return;
+            }
+            if (this.summaryScreen.classList.contains('active')) {
+                if (this.currentMode === 'books' && this.currentBook) {
+                    this.showChapterSelection();
+                } else {
+                    this.showMenu();
+                }
                 return;
             }
         }
