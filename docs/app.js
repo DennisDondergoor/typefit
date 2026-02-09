@@ -13,9 +13,17 @@ class StorageManager {
         };
     }
 
+    _safeParseJSON(str, fallback) {
+        try {
+            return JSON.parse(str);
+        } catch {
+            return fallback;
+        }
+    }
+
     getBookProgress(bookId) {
         const data = localStorage.getItem(this.KEYS.BOOK_PROGRESS);
-        const allProgress = data ? JSON.parse(data) : {};
+        const allProgress = data ? this._safeParseJSON(data, {}) : {};
         const progress = allProgress[bookId] || { chapter: 0, paragraph: 0 };
         if (!progress.completed) {
             progress.completed = {};
@@ -25,7 +33,7 @@ class StorageManager {
 
     setBookProgress(bookId, chapter, paragraph) {
         const data = localStorage.getItem(this.KEYS.BOOK_PROGRESS);
-        const allProgress = data ? JSON.parse(data) : {};
+        const allProgress = data ? this._safeParseJSON(data, {}) : {};
         const existing = allProgress[bookId] || { completed: {} };
         existing.chapter = chapter;
         existing.paragraph = paragraph;
@@ -35,7 +43,7 @@ class StorageManager {
 
     markParagraphCompleted(bookId, chapter, paragraph) {
         const data = localStorage.getItem(this.KEYS.BOOK_PROGRESS);
-        const allProgress = data ? JSON.parse(data) : {};
+        const allProgress = data ? this._safeParseJSON(data, {}) : {};
         const existing = allProgress[bookId] || { chapter: 0, paragraph: 0, completed: {} };
         if (!existing.completed[chapter]) {
             existing.completed[chapter] = [];
@@ -86,7 +94,7 @@ class StorageManager {
 
     getSessions() {
         const data = localStorage.getItem(this.KEYS.SESSIONS);
-        return data ? JSON.parse(data) : [];
+        return data ? this._safeParseJSON(data, []) : [];
     }
 
     saveSession(session) {
@@ -117,7 +125,8 @@ class StorageManager {
         const today = this._todayStr();
         const stored = localStorage.getItem(this.KEYS.DAILY_TIME);
         if (stored) {
-            const parsed = JSON.parse(stored);
+            const parsed = this._safeParseJSON(stored, null);
+            if (!parsed) return { date: today, seconds: 0 };
             if (parsed.date === today) return parsed;
         }
         // Migration or new day: compute from existing sessions
@@ -701,7 +710,7 @@ class App {
     getAllData() {
         return {
             sessions: this.storage.getSessions(),
-            bookProgress: JSON.parse(localStorage.getItem(this.storage.KEYS.BOOK_PROGRESS) || '{}'),
+            bookProgress: this.storage._safeParseJSON(localStorage.getItem(this.storage.KEYS.BOOK_PROGRESS) || '{}', {}),
             totalTime: this.storage.getTotalTime(),
             dailyTime: this.storage.getDailyTime(),
             settings: {
@@ -736,7 +745,7 @@ class App {
 
         // Merge book progress: union of completed paragraphs
         if (data.bookProgress) {
-            const localData = JSON.parse(localStorage.getItem(this.storage.KEYS.BOOK_PROGRESS) || '{}');
+            const localData = this.storage._safeParseJSON(localStorage.getItem(this.storage.KEYS.BOOK_PROGRESS) || '{}', {});
             for (const [bookId, cloudProgress] of Object.entries(data.bookProgress)) {
                 const local = localData[bookId] || { chapter: 0, paragraph: 0, completed: {} };
                 const cloud = cloudProgress || { chapter: 0, paragraph: 0, completed: {} };
@@ -903,10 +912,13 @@ class App {
         let text;
 
         if (this.currentMode === 'books' && this.currentBook) {
-            // Load book progress
+            // Load book progress (clamp to valid bounds in case of corrupted data)
             const progress = this.storage.getBookProgress(this.currentBook.id);
-            this.bookChapter = progress.chapter;
-            this.bookParagraph = progress.paragraph;
+            this.bookChapter = Math.max(0, Math.min(progress.chapter || 0, this.currentBook.chapters.length));
+            this.bookParagraph = Math.max(0, progress.paragraph || 0);
+            if (this.bookChapter < this.currentBook.chapters.length) {
+                this.bookParagraph = Math.min(this.bookParagraph, this.currentBook.chapters[this.bookChapter].paragraphs.length - 1);
+            }
 
             // Check if book is complete
             if (this.bookChapter >= this.currentBook.chapters.length) {
