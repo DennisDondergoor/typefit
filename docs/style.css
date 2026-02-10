@@ -770,7 +770,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    max-width: 750px;
+    width: max-content;
+    max-width: 90vw;
     margin: 0 auto;
     scrollbar-width: thin;
     scrollbar-color: var(--accent-color) var(--border-color);
@@ -788,6 +789,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 2rem;
 }
 
 .chapter-card:hover {
@@ -825,6 +827,7 @@ body {
 .chapter-card h4 {
     font-size: 1.4rem;
     font-weight: normal;
+    white-space: nowrap;
 }
 
 .chapter-status {
