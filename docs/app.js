@@ -1010,15 +1010,12 @@ class App {
         this.cursorEl.style.transition = 'none';
         this.textDisplay.appendChild(this.cursorEl);
 
-        // Create scroll indicator
+        // Set up scroll indicator (lives outside text-display in the wrapper)
         if (!this.scrollIndicator) {
-            this.scrollIndicator = document.createElement('div');
-            this.scrollIndicator.className = 'scroll-indicator hidden';
-            this.scrollIndicator.innerHTML = '<div class="scroll-indicator-track"></div><div class="scroll-indicator-thumb"></div>';
+            this.scrollIndicator = document.getElementById('scroll-indicator');
             this.scrollThumb = this.scrollIndicator.querySelector('.scroll-indicator-thumb');
             this.textDisplay.addEventListener('scroll', () => this.updateScrollIndicator());
         }
-        this.textDisplay.appendChild(this.scrollIndicator);
 
         // Reset scroll to top for new text
         this.textDisplay.scrollTop = 0;
@@ -1087,7 +1084,7 @@ class App {
     updateScrollIndicator() {
         if (!this.scrollIndicator) return;
         const el = this.textDisplay;
-        const hasOverflow = el.scrollHeight > el.clientHeight;
+        const hasOverflow = el.scrollHeight > el.clientHeight + 1;
         this.scrollIndicator.classList.toggle('hidden', !hasOverflow);
         if (!hasOverflow) return;
         const trackHeight = this.scrollIndicator.clientHeight;

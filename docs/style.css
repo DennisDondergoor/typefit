@@ -419,7 +419,11 @@ body {
     display: none;
 }
 
-/* Custom scroll indicator — always visible */
+.text-display-wrapper {
+    position: relative;
+}
+
+/* Custom scroll indicator — positioned on wrapper, outside scrolling container */
 .scroll-indicator {
     position: absolute;
     top: 2rem;
@@ -797,6 +801,13 @@ body {
 
 .chapter-card.completed {
     opacity: 0.6;
+    color: #2d8a4e;
+}
+
+.chapter-card.completed h4,
+.chapter-card.completed .chapter-number,
+.chapter-card.completed .chapter-status {
+    color: #2d8a4e;
 }
 
 .chapter-info {
