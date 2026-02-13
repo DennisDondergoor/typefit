@@ -13,12 +13,12 @@ class FirebaseSync {
 
     init() {
         const firebaseConfig = {
-            apiKey: "AIzaSyBtXOgsuhUCv3uEDPZFCeFspcrl5z0_KHY",
-            authDomain: "typefit-abf48.firebaseapp.com",
-            projectId: "typefit-abf48",
-            storageBucket: "typefit-abf48.firebasestorage.app",
-            messagingSenderId: "817856774728",
-            appId: "1:817856774728:web:67b4996f69db55f4b08e7d"
+            apiKey: "AIzaSyAasIsRPq0Ciuxf-yyTcgWsL5SFk2WR-ME",
+            authDomain: "typefit-new.firebaseapp.com",
+            projectId: "typefit-new",
+            storageBucket: "typefit-new.firebasestorage.app",
+            messagingSenderId: "999930591014",
+            appId: "1:999930591014:web:e590dc9ec30bf1cbba33e7"
         };
 
         firebase.initializeApp(firebaseConfig);
