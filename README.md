@@ -25,6 +25,60 @@ Open `docs/index.html` directly in your browser (no server required).
 
 ## Practice Modes
 
-1. **Sentences**: Practice with complete sentences (3,500 sentences)
-2. **Python Code**: Code snippets with special characters (1,000 snippets)
-3. **Books**: Type through classic literature with progress saved per book
+1. **Words**: Common English words (~8,000 words)
+2. **Sentences**: Practice with complete sentences (3,500 sentences)
+3. **Python Code**: Code snippets with special characters (1,000 snippets)
+4. **Books**: Type through classic literature with progress saved per book
+
+## Local Development
+
+```bash
+python3 -m http.server 8000 -d docs
+# Open http://localhost:8000
+```
+
+No build step required. Static site served from `docs/` directory.
+
+## Cloud Sync & Security
+
+### Firebase Configuration
+
+The Firebase config in `docs/firebase.js` contains:
+- `apiKey`, `projectId`, `authDomain`, etc.
+
+**These are PUBLIC and safe to commit.** They are designed to be in client-side code.
+
+### Security Model
+
+✅ **Safe in code:**
+- Firebase API keys (public identifiers)
+- Project IDs and app IDs
+
+❌ **Never in code:**
+- Firebase service_role key (admin access)
+- GitHub OAuth Client Secret (in Firebase Console only)
+
+🔒 **Protection:**
+- Firestore Security Rules enforce user data isolation
+- Users can only read/write their own data at `users/{uid}`
+- Authentication required for all database access
+
+### Authentication
+
+Sign in with GitHub to:
+- Sync progress across devices
+- Back up typing sessions to the cloud
+- Access your statistics from anywhere
+
+Progress is saved locally even without signing in.
+
+## Tech Stack
+
+- Vanilla JavaScript (no dependencies)
+- Firebase (Firestore + Auth)
+- GitHub OAuth
+- Static HTML/CSS/JS
+
+## License
+
+Built with Claude Code
