@@ -502,6 +502,11 @@ body {
     margin-bottom: 0.5rem;
 }
 
+.footer-logo {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
 /* Pause Overlay */
 .pause-overlay {
     position: fixed;
@@ -549,6 +554,10 @@ body {
     font-size: 2rem;
     margin-bottom: 2rem;
     color: var(--text-color);
+}
+
+.brand {
+    color: var(--accent-color);
 }
 
 .summary-stats {
