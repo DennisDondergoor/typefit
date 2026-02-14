@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Quick Reference
+
+- **Firebase project**: `typefit-new`
+- **Local dev**: `python3 -m http.server 8000 -d docs` → http://localhost:8000
+- **Production**: https://dennisdondergoor.github.io/typefit/
+- **Firestore path**: `users/{uid}` (flat structure)
+- **GitHub repo**: https://github.com/DennisDondergoor/typefit
+
 ## Development
 
 ```bash
@@ -54,9 +62,25 @@ Auto-advances to next uncompleted paragraph after each completion (no summary sh
 
 **`_suppressSync` flag.** Set during cloud load to prevent the loaded data from immediately triggering a cloud save cycle.
 
+**Large data files.** `data.js` (~333KB) and `books.js` (~735KB) are committed to the repo and served directly. No CDN needed for GitHub Pages.
+
+## Deployment
+
+Deployed via GitHub Pages from the `docs/` folder. To deploy:
+
+```bash
+git add docs/
+git commit -m "Update deployment"
+git push origin main
+```
+
+Changes go live automatically within ~1 minute.
+
 ## Commit Style
 
 Short imperative subject, blank line, explanation of why. End with:
 ```
-Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
 ```
+
+(Adjust model name as appropriate: Claude Sonnet 4.5, Claude Opus 4.6, etc.)
