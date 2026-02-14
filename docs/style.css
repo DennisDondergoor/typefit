@@ -223,6 +223,7 @@ body {
 
 .length-btn:hover {
     border-color: var(--accent-color);
+    background-color: rgba(74, 158, 255, 0.04);
 }
 
 .length-btn.active {
@@ -251,6 +252,7 @@ body {
 
 .font-btn:hover {
     border-color: var(--accent-color);
+    background-color: rgba(74, 158, 255, 0.04);
 }
 
 .font-btn.active {
@@ -552,7 +554,7 @@ body {
 .summary-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    gap: 1rem;
     max-width: 400px;
     margin: 0 auto 2rem;
 }
@@ -611,7 +613,7 @@ body {
 .progress-overview {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    gap: 1rem;
     max-width: 400px;
     margin: 0 auto 2rem;
 }
@@ -679,7 +681,7 @@ body {
 
 .session-stats {
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
     font-size: 1.4rem;
 }
 
@@ -720,6 +722,7 @@ body {
 
 .book-card:hover {
     border-color: var(--accent-color);
+    background-color: rgba(74, 158, 255, 0.04);
 }
 
 .book-info h3 {
@@ -736,7 +739,7 @@ body {
 .book-progress {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
     font-size: 1.2rem;
     color: var(--text-muted);
 }
@@ -769,7 +772,7 @@ body {
 .chapter-list {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
     width: max-content;
     max-width: 90vw;
     margin: 0 auto;
@@ -789,11 +792,12 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
 .chapter-card:hover {
     border-color: var(--accent-color);
+    background-color: rgba(74, 158, 255, 0.04);
 }
 
 .chapter-card.current {
