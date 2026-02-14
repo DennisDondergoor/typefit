@@ -1138,14 +1138,14 @@ class App {
         if (!this.session) return;
 
         const stats = this.session.getStats();
-        this.liveWpm.textContent = `WPM: ${stats.wpm}`;
-        this.liveAccuracy.textContent = `Accuracy: ${stats.accuracy}%`;
+        this.liveWpm.innerHTML = `WPM: <span class="stat-value-inline">${stats.wpm}</span>`;
+        this.liveAccuracy.innerHTML = `Accuracy: <span class="stat-value-inline">${stats.accuracy}%</span>`;
 
         if (this.currentMode === 'books' && this.currentBook && this._cachedBookStats) {
             const bs = this._cachedBookStats;
-            this.liveProgress.textContent = `Chapter ${bs.currentChapter}/${bs.totalChapters} (${bs.percentComplete}% complete)`;
+            this.liveProgress.innerHTML = `Chapter <span class="stat-value-inline">${bs.currentChapter}/${bs.totalChapters}</span> (<span class="stat-value-inline">${bs.percentComplete}%</span> complete)`;
         } else {
-            this.liveProgress.textContent = `Progress: ${stats.progress}%`;
+            this.liveProgress.innerHTML = `Progress: <span class="stat-value-inline">${stats.progress}%</span>`;
         }
     }
 
