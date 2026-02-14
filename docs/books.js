@@ -1,4 +1,4 @@
-// Book data for Typefit typing practice
+// Book data for TypeFit typing practice
 // Sources: Project Gutenberg
 
 const BOOKS = [
