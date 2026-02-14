@@ -989,13 +989,15 @@ class App {
         const text = this.session.text;
         this.textDisplay.innerHTML = text.split('').map((char, i) => {
             let displayChar = char;
+            let extraClass = '';
             if (char === '\n') {
                 displayChar = '\u21b5\n';
+                extraClass = ' newline';
             } else if (char === '\t') {
                 displayChar = '    ';
             }
             const state = i === 0 ? 'current' : 'pending';
-            return `<span class="char ${state}">${this.escapeHtml(displayChar)}</span>`;
+            return `<span class="char ${state}${extraClass}">${this.escapeHtml(displayChar)}</span>`;
         }).join('');
 
         // Store span references for fast updates

@@ -478,6 +478,14 @@ body {
     transition: color 0.05s, background-color 0.05s;
 }
 
+.text-display .char.newline.pending,
+.text-display .char.newline.current,
+.text-display .char.newline.correct,
+.text-display .char.newline.incorrect {
+    color: transparent;
+    background-color: transparent;
+}
+
 .text-display .char.pending {
     color: var(--text-color);
 }
