@@ -938,3 +938,58 @@ body {
         margin-bottom: 1.5rem;
     }
 }
+
+/* Device Not Supported Overlay */
+.device-not-supported {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.device-not-supported.hidden {
+    display: none;
+}
+
+.device-message {
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+}
+
+.device-message h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+
+.device-message-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.device-message-text {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+.device-message-text:last-of-type {
+    margin-bottom: 1.5rem;
+}
+
+.device-icon {
+    font-size: 3rem;
+    opacity: 0.5;
+}

@@ -10,6 +10,41 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <script>
+        // Detect iPhone or small touch-only devices immediately
+        (function() {
+            const isIPhone = /iPhone/.test(navigator.userAgent);
+            const isSmallScreen = window.innerWidth < 768;
+            const isTouchOnly = !window.matchMedia('(pointer: fine)').matches;
+
+            if (isIPhone || (isSmallScreen && isTouchOnly)) {
+                document.addEventListener('DOMContentLoaded', function() {
+                    const overlay = document.getElementById('device-not-supported');
+                    const app = document.getElementById('app');
+                    if (overlay && app) {
+                        overlay.classList.remove('hidden');
+                        app.style.display = 'none';
+                    }
+                });
+            }
+        })();
+    </script>
+
+    <!-- Device Not Supported Overlay -->
+    <div id="device-not-supported" class="device-not-supported hidden">
+        <div class="device-message">
+            <h1>TypeFit</h1>
+            <p class="device-message-title">Keyboard Required</p>
+            <p class="device-message-text">
+                TypeFit is a typing practice app that requires a physical keyboard.
+            </p>
+            <p class="device-message-text">
+                Please visit on a device with a keyboard attached.
+            </p>
+            <div class="device-icon">⌨️</div>
+        </div>
+    </div>
+
     <div id="toast" class="toast hidden"></div>
     <div id="confirm-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
         <div class="modal-content">
