@@ -862,7 +862,10 @@ body {
 
 /* Chapter title in practice */
 .chapter-title {
-    display: none;
+    text-align: center;
+    color: var(--text-color);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
 }
 
 .completed-mark {
