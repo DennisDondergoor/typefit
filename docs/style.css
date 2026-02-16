@@ -25,12 +25,24 @@ body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     padding: 20px;
 }
 
 #app {
     width: 100%;
+    max-width: 1350px;
+}
+
+/* Top-align content-heavy screens */
+#book-selection-screen.active,
+#chapter-selection-screen.active,
+#progress-screen.active {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
     max-width: 1350px;
 }
 
