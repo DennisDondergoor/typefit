@@ -1468,6 +1468,12 @@ class App {
         // Render book cards
         this.bookList.innerHTML = BOOKS.map(book => {
             const stats = this.storage.getBookStats(book);
+
+            // Count total words
+            const totalWords = book.chapters.reduce((sum, ch) => {
+                return sum + ch.paragraphs.reduce((pSum, p) => pSum + p.split(/\s+/).length, 0);
+            }, 0);
+
             return `
                 <div class="book-card" data-book-id="${book.id}">
                     <div class="book-info">
@@ -1482,6 +1488,7 @@ class App {
                     </div>
                     <div class="book-stats">
                         <span class="chapters">${stats.totalChapters} chapters</span>
+                        <span class="words">${totalWords.toLocaleString()} words</span>
                     </div>
                 </div>
             `;

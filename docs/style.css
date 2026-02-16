@@ -778,9 +778,13 @@ body {
 
 .book-stats {
     text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 }
 
-.book-stats .chapters {
+.book-stats .chapters,
+.book-stats .words {
     color: var(--text-muted);
     font-size: 1.2rem;
 }
