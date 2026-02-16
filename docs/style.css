@@ -75,7 +75,7 @@ body {
 .timer-display {
     position: absolute;
     left: 50%;
-    margin-left: 16rem;
+    margin-left: 13rem;
     top: 2.5rem;
     color: var(--text-color);
     font-family: var(--font-family);
