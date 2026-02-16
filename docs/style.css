@@ -390,13 +390,11 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .stats-bar {
-    display: flex;
-    gap: 2rem;
-    color: var(--text-muted);
+    display: none;
 }
 
 .stats-bar span {
@@ -866,11 +864,7 @@ body {
 
 /* Chapter title in practice */
 .chapter-title {
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    padding: 0.5rem;
+    display: none;
 }
 
 .completed-mark {
@@ -924,12 +918,6 @@ body {
 
 /* Responsive */
 @media (max-width: 600px) {
-    .stats-bar {
-        flex-direction: column;
-        gap: 0.5rem;
-        align-items: flex-end;
-    }
-
     .mode-buttons {
         flex-direction: column;
     }
