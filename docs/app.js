@@ -481,12 +481,10 @@ class App {
 
         // Book selection elements
         this.bookList = document.getElementById('book-list');
-        this.backFromBooksBtn = document.getElementById('back-from-books');
 
         // Chapter selection elements
         this.chapterList = document.getElementById('chapter-list');
         this.chapterScreenTitle = document.getElementById('chapter-screen-title');
-        this.backFromChaptersBtn = document.getElementById('back-from-chapters');
 
         // Chapter title in practice
         this.chapterTitle = document.getElementById('chapter-title');
@@ -514,7 +512,6 @@ class App {
         this.fontSizeValue = document.getElementById('font-size-value');
 
         // Practice elements
-        this.backToMenuBtn = document.getElementById('back-to-menu');
         this.textDisplay = document.getElementById('text-display');
         this.liveWpm = document.getElementById('live-wpm');
         this.liveAccuracy = document.getElementById('live-accuracy');
@@ -531,10 +528,8 @@ class App {
         this.summaryTime = document.getElementById('summary-time');
         this.summaryChars = document.getElementById('summary-chars');
         this.practiceAgainBtn = document.getElementById('practice-again');
-        this.backToMenuSummaryBtn = document.getElementById('back-to-menu-summary');
 
         // Progress elements
-        this.backFromProgressBtn = document.getElementById('back-from-progress');
         this.totalSessions = document.getElementById('total-sessions');
         this.avgWpm = document.getElementById('avg-wpm');
         this.avgAccuracy = document.getElementById('avg-accuracy');
@@ -571,16 +566,6 @@ class App {
             });
         });
 
-        // Back from book selection
-        this.backFromBooksBtn.addEventListener('click', () => {
-            this.showMenu();
-        });
-
-        // Back from chapter selection
-        this.backFromChaptersBtn.addEventListener('click', () => {
-            this.showBookSelection();
-        });
-
         // Length modal
         this.lengthBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -608,27 +593,6 @@ class App {
         // View progress
         this.viewProgressBtn.addEventListener('click', () => {
             this.showProgress();
-        });
-
-        // Back to menu buttons
-        this.backToMenuBtn.addEventListener('click', () => {
-            this.stopUpdateInterval();
-            this.session = null;
-            if (this.currentMode === 'books') {
-                this.showChapterSelection();
-            } else {
-                this.showMenu();
-            }
-        });
-        this.backToMenuSummaryBtn.addEventListener('click', () => {
-            if (this.currentMode === 'books' && this.currentBook) {
-                this.showChapterSelection();
-            } else {
-                this.showMenu();
-            }
-        });
-        this.backFromProgressBtn.addEventListener('click', () => {
-            this.showMenu();
         });
 
         // Practice again
@@ -1418,7 +1382,6 @@ class App {
         this.summaryTime.textContent = this.formatTime(stats.elapsedSeconds);
         this.summaryChars.textContent = stats.totalChars;
 
-        this.backToMenuSummaryBtn.textContent = (this.currentMode === 'books' && this.currentBook) ? 'Back to Chapters' : 'Back to Menu';
         this.showScreen(this.summaryScreen);
         this.practiceAgainBtn.focus();
     }
