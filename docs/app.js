@@ -674,7 +674,10 @@ class App {
             if (this.firebase.isSignedIn()) {
                 this.firebase.signOut();
             } else {
-                this.firebase.signIn().catch(() => {});
+                this.firebase.signIn().catch((err) => {
+                    this.showToast('Sign in failed. Please try again.', 4000);
+                    console.error('Sign in error:', err);
+                });
             }
         });
 
@@ -982,7 +985,7 @@ class App {
 
         // Strip Gutenberg _italic_ markers from book text
         if (this.currentMode === 'books') {
-            text = text.replace(/(?<![_])_([^_]+)_(?![_])/g, '$1');
+            text = this.stripGutenbergItalics(text);
         }
 
         this.session = new TypingSession(text);
@@ -1117,6 +1120,11 @@ class App {
         return this._escapeDiv.innerHTML;
     }
 
+    stripGutenbergItalics(text) {
+        // Remove Gutenberg Project _italic_ markers (but not __bold__ with double underscores)
+        return text.replace(/(?<![_])_([^_]+)_(?![_])/g, '$1');
+    }
+
     showConfirm(message, subtitle, onConfirm) {
         const modal = document.getElementById('confirm-modal');
         const title = document.getElementById('confirm-modal-title');
@@ -1125,17 +1133,17 @@ class App {
         const noBtn = document.getElementById('confirm-no-btn');
         title.textContent = message;
         sub.textContent = subtitle || '';
-        sub.style.display = subtitle ? '' : 'none';
+        sub.style.display = (subtitle && subtitle.trim()) ? '' : 'none';
         modal.classList.remove('hidden');
 
-        const cleanup = () => {
+        // Use { once: true } to auto-remove listeners after click (no manual cleanup needed)
+        yesBtn.addEventListener('click', () => {
             modal.classList.add('hidden');
-            yesBtn.replaceWith(yesBtn.cloneNode(true));
-            noBtn.replaceWith(noBtn.cloneNode(true));
-        };
-
-        yesBtn.addEventListener('click', () => { cleanup(); onConfirm(); }, { once: true });
-        noBtn.addEventListener('click', () => { cleanup(); }, { once: true });
+            onConfirm();
+        }, { once: true });
+        noBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        }, { once: true });
     }
 
     showToast(message, duration = 3000) {
@@ -1151,17 +1159,8 @@ class App {
 
     updateLiveStats() {
         if (!this.session) return;
-
-        const stats = this.session.getStats();
-        this.liveWpm.innerHTML = `WPM: <span class="stat-value-inline">${stats.wpm}</span>`;
-        this.liveAccuracy.innerHTML = `Accuracy: <span class="stat-value-inline">${stats.accuracy}%</span>`;
-
-        if (this.currentMode === 'books' && this.currentBook && this._cachedBookStats) {
-            const bs = this._cachedBookStats;
-            this.liveProgress.innerHTML = `Chapter <span class="stat-value-inline">${bs.currentChapter}/${bs.totalChapters}</span> (<span class="stat-value-inline">${bs.percentComplete}%</span> complete)`;
-        } else {
-            this.liveProgress.innerHTML = `Progress: <span class="stat-value-inline">${stats.progress}%</span>`;
-        }
+        // Stats bar is hidden, so no DOM updates needed
+        // Keeping this function in case stats bar is shown in the future
     }
 
     startUpdateInterval() {
@@ -1212,6 +1211,15 @@ class App {
                 } else {
                     this.showMenu();
                 }
+                return;
+            }
+        }
+
+        // Handle Enter/Space on summary screen to practice again
+        if (this.summaryScreen.classList.contains('active')) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.startPractice();
                 return;
             }
         }
@@ -1353,7 +1361,7 @@ class App {
         }
 
         // Strip Gutenberg _italic_ markers
-        text = text.replace(/(?<![_])_([^_]+)_(?![_])/g, '$1');
+        text = this.stripGutenbergItalics(text);
 
         this.session = new TypingSession(text);
         this._cachedBookStats = this.storage.getBookStats(this.currentBook);
@@ -1460,7 +1468,8 @@ class App {
     async showBookSelection() {
         try {
             await this.loadBooks();
-        } catch {
+        } catch (err) {
+            console.error('Failed to load books:', err);
             this.bookList.innerHTML = '<p>Failed to load books.</p>';
             this.showScreen(this.bookSelectionScreen);
             return;
