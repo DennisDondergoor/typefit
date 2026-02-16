@@ -579,11 +579,10 @@ body {
 .progress-header {
     max-width: 750px;
     margin: 0 auto 2rem;
-    text-align: center;
 }
 
 .progress-header h1 {
-    text-align: center;
+    text-align: left;
     font-size: 2rem;
     margin: 0;
 }
