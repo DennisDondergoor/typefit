@@ -26,9 +26,29 @@ Open `docs/index.html` directly in your browser (no server required).
 ## Practice Modes
 
 1. **Words**: Common English words (~8,000 words)
-2. **Sentences**: Practice with complete sentences (3,500 sentences)
-3. **Python Code**: Code snippets with special characters (1,000 snippets)
-4. **Books**: Type through classic literature with progress saved per book
+2. **Sentences**: Practice with complete sentences (~3,500 sentences)
+3. **Python Code**: Code snippets with special characters (~1,000 snippets)
+4. **Books**: Type through classic and contemporary literature with progress saved per book
+
+### Available Books
+
+8 books ranging from 1,000 to 57,000 words (sorted by length):
+
+**Short Stories:**
+- **Printcrime** by Cory Doctorow (1,037 words)
+- **Men I'm Not Married To** by Dorothy Parker (3,118 words)
+- **Big Blonde** by Dorothy Parker (8,467 words)
+
+**Novellas:**
+- **When Sysadmins Ruled the Earth** by Cory Doctorow (12,755 words)
+- **I, Robot** by Cory Doctorow (15,642 words)
+
+**Novels:**
+- **The Time Machine** by H.G. Wells (32,297 words)
+- **Notes from the Underground** by Fyodor Dostoyevsky (44,051 words)
+- **Dracula's Guest** by Bram Stoker (56,861 words)
+
+*Cory Doctorow stories licensed under CC BY-NC-SA 2.5*
 
 ## Local Development
 

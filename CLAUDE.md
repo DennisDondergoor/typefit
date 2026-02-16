@@ -28,7 +28,7 @@ Single-page app with screen toggling (add/remove `active` class). All source is 
 - **app.js** — Main application (~1,600 lines). Contains: `StorageManager` (localStorage wrapper with `_safeParseJSON` for corrupted data), `TypingSession` (single session state/logic), `TextGenerator` (practice text generation with Fisher-Yates shuffle), `App` (controller that wires everything together)
 - **style.css** — All styles. Uses CSS variables in `:root` for theming — changing a variable updates everywhere
 - **data.js** — `WORDS` (~8,000), `SENTENCES` (~3,500), `PYTHON_SNIPPETS` (~1,000) arrays (~333KB)
-- **books.js** — `BOOKS` array with ~1,500 paragraphs across 3 classic novels (~735KB)
+- **books.js** — `BOOKS` array with 8 books: 5 classic novels + 3 Cory Doctorow CC-licensed stories (~981KB)
 - **firebase.js** — `FirebaseSync` class (Firestore compat SDK v10, GitHub OAuth)
 
 ### Typing Engine
@@ -62,7 +62,9 @@ Auto-advances to next uncompleted paragraph after each completion (no summary sh
 
 **`_suppressSync` flag.** Set during cloud load to prevent the loaded data from immediately triggering a cloud save cycle.
 
-**Large data files.** `data.js` (~333KB) and `books.js` (~735KB) are committed to the repo and served directly. No CDN needed for GitHub Pages.
+**Large data files.** `data.js` (~333KB) and `books.js` (~981KB) are committed to the repo and served directly. No CDN needed for GitHub Pages.
+
+**Books sorted by word count.** Books are ordered from shortest to longest (1,037 to 56,861 words) to help users choose based on available time. Word counts are calculated and displayed in the UI.
 
 ## Deployment
 
