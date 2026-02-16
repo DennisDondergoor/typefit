@@ -454,7 +454,6 @@ class App {
         this.firebase = new FirebaseSync();
         this.session = null;
         this.currentMode = 'sentences';
-        this.exerciseLength = 10;
         this.updateInterval = null;
         this.currentBook = null;
         this.bookChapter = 0;
@@ -497,12 +496,6 @@ class App {
         this.authBtn = document.getElementById('auth-btn');
         this.syncStatus = document.getElementById('sync-status');
         this.timerDisplay = document.getElementById('timer-display');
-
-        // Length modal elements
-        this.lengthModal = document.getElementById('length-modal');
-        this.lengthBtns = document.querySelectorAll('.length-btn');
-        this.startPracticeBtn = document.getElementById('start-practice-btn');
-        this.cancelLengthBtn = document.getElementById('cancel-length-btn');
 
         // Settings modal elements
         this.settingsModal = document.getElementById('settings-modal');
@@ -561,25 +554,9 @@ class App {
                 if (this.currentMode === 'books') {
                     this.showBookSelection();
                 } else {
-                    this.showLengthModal();
+                    this.startPractice();
                 }
             });
-        });
-
-        // Length modal
-        this.lengthBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.lengthBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                this.exerciseLength = parseInt(btn.dataset.length);
-            });
-        });
-        this.startPracticeBtn.addEventListener('click', () => {
-            this.hideLengthModal();
-            this.startPractice();
-        });
-        this.cancelLengthBtn.addEventListener('click', () => {
-            this.hideLengthModal();
         });
 
         // Settings modal
@@ -843,14 +820,6 @@ class App {
         this.showScreen(this.menuScreen);
     }
 
-    showLengthModal() {
-        this.lengthModal.classList.remove('hidden');
-    }
-
-    hideLengthModal() {
-        this.lengthModal.classList.add('hidden');
-    }
-
     showSettingsModal() {
         this.settingsModal.classList.remove('hidden');
     }
@@ -945,6 +914,7 @@ class App {
             this.bookHint.classList.add('hidden');
             this.textDisplay.classList.remove('already-completed');
             this._cachedBookStats = null;
+            text = TextGenerator.getText(this.currentMode, 10);
         }
 
         // Strip Gutenberg _italic_ markers from book text
@@ -1147,10 +1117,6 @@ class App {
             const confirmModal = document.getElementById('confirm-modal');
             if (!confirmModal.classList.contains('hidden')) {
                 document.getElementById('confirm-no-btn').click();
-                return;
-            }
-            if (!this.lengthModal.classList.contains('hidden')) {
-                this.hideLengthModal();
                 return;
             }
             if (!this.settingsModal.classList.contains('hidden')) {
