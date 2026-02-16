@@ -694,7 +694,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    width: 700px;
+    width: 850px;
     max-width: 90vw;
     margin: 0 auto;
 }
@@ -768,7 +768,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    width: 700px;
+    width: 850px;
     max-width: 90vw;
     margin: 0 auto;
     padding-right: 1.5rem;
