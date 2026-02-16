@@ -645,6 +645,18 @@ class App {
             this.showMenu();
         });
 
+        // Pause overlay keyboard handling
+        this.pauseOverlay.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                this.hidePause();
+                this.showMenu();
+            } else if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.resumePractice();
+            }
+        });
+
         // Clear data
         this.clearDataBtn.addEventListener('click', () => {
             this.showConfirm('Clear all typing stats?', 'Book progress will be kept.', () => {
@@ -893,6 +905,7 @@ class App {
             this.session.pause();
             this.stopUpdateInterval();
             this.pauseOverlay.classList.remove('hidden');
+            this.pauseOverlay.focus();
         }
     }
 
@@ -1208,13 +1221,13 @@ class App {
             return;
         }
 
-        // If paused, any key resumes (except Escape which quits)
+        // If paused, handle Enter/Space/Escape
         if (this.session.isPaused) {
             e.preventDefault();
             if (e.key === 'Escape') {
                 this.hidePause();
                 this.showMenu();
-            } else {
+            } else if (e.key === 'Enter' || e.key === ' ') {
                 this.resumePractice();
             }
             return;

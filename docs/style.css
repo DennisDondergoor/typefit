@@ -545,9 +545,7 @@ body {
     color: var(--text-color);
 }
 
-.pause-content p {
-    color: var(--text-muted);
-    font-size: 1.2rem;
+.pause-content .hint {
     margin-bottom: 2rem;
 }
 
