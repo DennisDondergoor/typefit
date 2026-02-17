@@ -1,7 +1,3 @@
-// Book data for TypeFit typing practice
-// Sources: Project Gutenberg, Cory Doctorow (CC BY-NC-SA)
-// Books sorted by length (shortest to longest)
-
 const BOOKS = [
   {
     "id": "printcrime",
@@ -34,7 +30,8 @@ const BOOKS = [
           "“Lanie, I’m going to print more printers. Lots more printers. One for everyone. That’s worth going to jail for. That’s worth anything.”"
         ]
       }
-    ]
+    ],
+    "year": 2006
   },
   {
     "id": "men-im-not-married-to",
@@ -136,7 +133,8 @@ const BOOKS = [
           "Albert sprinkled powdered sugar on his sliced tomatoes."
         ]
       }
-    ]
+    ],
+    "year": 1922
   },
   {
     "id": "big-blonde",
@@ -376,7 +374,8 @@ const BOOKS = [
           "\"Yeah,\" said Mrs. Morse. \"Sure.\""
         ]
       }
-    ]
+    ],
+    "year": 1929
   },
   {
     "id": "when-sysadmins-ruled-the-earth",
@@ -838,7 +837,8 @@ const BOOKS = [
           "Machine-readable metadata (humans, ignore this):"
         ]
       }
-    ]
+    ],
+    "year": 2006
   },
   {
     "id": "i-robot-doctorow",
@@ -1251,7 +1251,8 @@ const BOOKS = [
           "“Not for long!” she said, and broke away, skipping forward and whirling around to take it all in."
         ]
       }
-    ]
+    ],
+    "year": 2005
   },
   {
     "id": "after-the-siege",
@@ -1944,7 +1945,8 @@ const BOOKS = [
           "That night, anyway."
         ]
       }
-    ]
+    ],
+    "year": 2007
   },
   {
     "id": "time-machine",
@@ -2349,7 +2351,8 @@ const BOOKS = [
           "One cannot choose but wonder. Will he ever return? It may be that he swept back into the past, and fell among the blood-drinking, hairy savages of the Age of Unpolished Stone; into the abysses of the Cretaceous Sea; or among the grotesque saurians, the huge reptilian brutes of the Jurassic times. He may even now—if I may use the phrase—be wandering on some plesiosaurus-haunted Oolitic coral reef, or beside the lonely saline seas of the Triassic Age. Or did he go forward, into one of the nearer ages, in which men are still men, but with the riddles of our own time answered and its wearisome problems solved? Into the manhood of the race: for I, for my own part, cannot think that these latter days of weak experiment, fragmentary theory, and mutual discord are indeed man's culminating time! I say, for my own part. He, I know—for the question had been discussed among us long before the Time Machine was made—thought but cheerlessly of the Advancement of Mankind, and saw in the growing pile of civilisation only a foolish heaping that must inevitably fall back upon and destroy its makers in the end. If that is so, it remains for us to live as though it were not so. But to me the future is still black and blank—is a vast ignorance, lit at a few casual places by the memory of his story. And I have by me, for my comfort, two strange white flowers—shrivelled now, and brown and flat and brittle—to witness that even when mind and strength had gone, gratitude and a mutual tenderness still lived on in the heart of man."
         ]
       }
-    ]
+    ],
+    "year": 1895
   },
   {
     "id": "draculas-guest",
@@ -3104,6 +3107,7 @@ const BOOKS = [
           "\"I have the honour to be, dear sir, \"Yours very respectfully, \"Joshua Sheeny Cohen Benjamin \"(The MacCallum More.)\""
         ]
       }
-    ]
+    ],
+    "year": 1914
   }
 ];

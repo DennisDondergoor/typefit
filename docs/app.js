@@ -1411,7 +1411,7 @@ class App {
             return `
                 <div class="book-card" data-book-id="${book.id}">
                     <div class="book-info">
-                        <h3>${this.escapeHtml(book.title)}</h3>
+                        <h3>${this.escapeHtml(book.title)} (${book.year})</h3>
                         <p class="book-author">${this.escapeHtml(book.author)}</p>
                         <div class="book-progress">
                             <div class="book-progress-bar">
@@ -1449,7 +1449,7 @@ class App {
     showChapterSelection() {
         if (!this.currentBook) return;
 
-        this.chapterScreenTitle.textContent = this.currentBook.title;
+        this.chapterScreenTitle.textContent = `${this.currentBook.title} (${this.currentBook.year})`;
         const progress = this.storage.getBookProgress(this.currentBook.id);
 
         this.chapterList.innerHTML = this.currentBook.chapters.map((chapter, index) => {
