@@ -117,10 +117,11 @@ class FirebaseSync {
         this.syncTimeout = setTimeout(async () => {
             this.syncTimeout = null;
             this._pendingGetData = null;
+            if (!this.user) return;
             const ok = await this.saveToCloud(getDataFn());
             // Refresh cached token for reliable page-unload sync
             if (this.user) {
-                this.user.getIdToken().then(t => { this._cachedToken = t; }).catch(() => {});
+                this.user.getIdToken().then(t => { this._cachedToken = t; }).catch(e => { console.warn('Token refresh failed:', e); });
             }
             if (this.onSyncResult) this.onSyncResult(ok);
         }, 2000);

@@ -167,6 +167,26 @@ class StorageManager {
         localStorage.setItem(this.KEYS.FONT_FAMILY, font);
     }
 
+    setSessions(sessions) {
+        localStorage.setItem(this.KEYS.SESSIONS, JSON.stringify(sessions));
+    }
+
+    getAllBookProgress() {
+        return this._safeParseJSON(localStorage.getItem(this.KEYS.BOOK_PROGRESS) || '{}', {});
+    }
+
+    setAllBookProgress(allProgress) {
+        localStorage.setItem(this.KEYS.BOOK_PROGRESS, JSON.stringify(allProgress));
+    }
+
+    setTotalTime(seconds) {
+        localStorage.setItem(this.KEYS.TOTAL_TIME, String(seconds));
+    }
+
+    setDailyTime(dailyTime) {
+        localStorage.setItem(this.KEYS.DAILY_TIME, JSON.stringify(dailyTime));
+    }
+
     clearTypingStats() {
         localStorage.removeItem(this.KEYS.SESSIONS);
     }
@@ -666,7 +686,7 @@ class App {
     getAllData() {
         return {
             sessions: this.storage.getSessions(),
-            bookProgress: this.storage._safeParseJSON(localStorage.getItem(this.storage.KEYS.BOOK_PROGRESS) || '{}', {}),
+            bookProgress: this.storage.getAllBookProgress(),
             totalTime: this.storage.getTotalTime(),
             dailyTime: this.storage.getDailyTime(),
             settings: {
@@ -696,12 +716,12 @@ class App {
                 }
             }
             local.sort((a, b) => new Date(b.date) - new Date(a.date));
-            localStorage.setItem(this.storage.KEYS.SESSIONS, JSON.stringify(local.slice(0, 100)));
+            this.storage.setSessions(local.slice(0, 100));
         }
 
         // Merge book progress: union of completed paragraphs
         if (data.bookProgress) {
-            const localData = this.storage._safeParseJSON(localStorage.getItem(this.storage.KEYS.BOOK_PROGRESS) || '{}', {});
+            const localData = this.storage.getAllBookProgress();
             for (const [bookId, cloudProgress] of Object.entries(data.bookProgress)) {
                 const local = localData[bookId] || { chapter: 0, paragraph: 0, completed: {} };
                 const cloud = cloudProgress || { chapter: 0, paragraph: 0, completed: {} };
@@ -731,34 +751,34 @@ class App {
                     completed: mergedCompleted
                 };
             }
-            localStorage.setItem(this.storage.KEYS.BOOK_PROGRESS, JSON.stringify(localData));
+            this.storage.setAllBookProgress(localData);
         }
 
         // Merge total time: take max (never decrease)
         if (data.totalTime) {
             const local = this.storage.getTotalTime();
             const merged = Math.max(local, data.totalTime);
-            localStorage.setItem(this.storage.KEYS.TOTAL_TIME, String(merged));
+            this.storage.setTotalTime(merged);
         }
 
-        // Merge daily time: take max for same day
+        // Merge daily time: take max for same day, keep most recent if dates differ
         if (data.dailyTime) {
             const local = this.storage.getDailyTime();
             if (data.dailyTime.date === local.date) {
                 const merged = Math.max(local.seconds, data.dailyTime.seconds);
-                localStorage.setItem(this.storage.KEYS.DAILY_TIME, JSON.stringify({
-                    date: local.date, seconds: merged
-                }));
+                this.storage.setDailyTime({ date: local.date, seconds: merged });
+            } else if (data.dailyTime.date > local.date) {
+                this.storage.setDailyTime(data.dailyTime);
             }
         }
 
         // Settings: cloud wins
         if (data.settings) {
             if (data.settings.fontSize) {
-                localStorage.setItem(this.storage.KEYS.FONT_SIZE, data.settings.fontSize.toString());
+                this.storage.setFontSize(data.settings.fontSize);
             }
             if (data.settings.fontFamily) {
-                localStorage.setItem(this.storage.KEYS.FONT_FAMILY, data.settings.fontFamily);
+                this.storage.setFontFamily(data.settings.fontFamily);
             }
         }
 
@@ -814,7 +834,6 @@ class App {
     }
 
     showMenu() {
-        this.stopUpdateInterval();
         this.session = null;
         this.updateTimerDisplay();
         this.showScreen(this.menuScreen);
@@ -839,7 +858,6 @@ class App {
     pausePractice() {
         if (this.session) {
             this.session.pause();
-            this.stopUpdateInterval();
             this.pauseOverlay.classList.remove('hidden');
             this.pauseOverlay.focus();
         }
@@ -848,7 +866,6 @@ class App {
     resumePractice() {
         if (this.session) {
             this.session.resume();
-            this.startUpdateInterval();
             this.pauseOverlay.classList.add('hidden');
         }
     }
@@ -865,8 +882,9 @@ class App {
             const progress = this.storage.getBookProgress(this.currentBook.id);
             this.bookChapter = Math.max(0, Math.min(progress.chapter || 0, this.currentBook.chapters.length));
             this.bookParagraph = Math.max(0, progress.paragraph || 0);
-            if (this.bookChapter < this.currentBook.chapters.length) {
-                this.bookParagraph = Math.min(this.bookParagraph, this.currentBook.chapters[this.bookChapter].paragraphs.length - 1);
+            const currentChapter = this.currentBook.chapters[this.bookChapter];
+            if (currentChapter) {
+                this.bookParagraph = Math.min(this.bookParagraph, currentChapter.paragraphs.length - 1);
             }
 
             // Check if book is complete
@@ -909,7 +927,6 @@ class App {
             this.chapterTitle.classList.remove('hidden');
             this.bookHint.classList.remove('hidden');
         } else {
-            text = TextGenerator.getText(this.currentMode, this.exerciseLength);
             this.chapterTitle.classList.add('hidden');
             this.bookHint.classList.add('hidden');
             this.textDisplay.classList.remove('already-completed');
@@ -924,8 +941,6 @@ class App {
 
         this.session = new TypingSession(text);
         this.renderText();
-        this.updateLiveStats();
-        this.startUpdateInterval();
         this.showScreen(this.practiceScreen);
         // Position cursor and scroll indicator after screen is visible (getBoundingClientRect needs layout)
         this.updateCursorPosition();
@@ -1042,7 +1057,8 @@ class App {
         const trackHeight = this.scrollIndicator.clientHeight;
         const thumbRatio = el.clientHeight / el.scrollHeight;
         const thumbHeight = Math.max(12, trackHeight * thumbRatio);
-        const scrollRatio = el.scrollTop / (el.scrollHeight - el.clientHeight);
+        const scrollableHeight = el.scrollHeight - el.clientHeight;
+        const scrollRatio = scrollableHeight > 0 ? el.scrollTop / scrollableHeight : 0;
         const thumbTop = scrollRatio * (trackHeight - thumbHeight);
         this.scrollThumb.style.height = thumbHeight + 'px';
         this.scrollThumb.style.top = thumbTop + 'px';
@@ -1091,25 +1107,6 @@ class App {
         }, duration);
     }
 
-    updateLiveStats() {
-        if (!this.session) return;
-        // Stats bar is hidden, so no DOM updates needed
-        // Keeping this function in case stats bar is shown in the future
-    }
-
-    startUpdateInterval() {
-        this.stopUpdateInterval();
-        this.updateInterval = setInterval(() => {
-            this.updateLiveStats();
-        }, 500);
-    }
-
-    stopUpdateInterval() {
-        if (this.updateInterval) {
-            clearInterval(this.updateInterval);
-            this.updateInterval = null;
-        }
-    }
 
     handleKeyDown(e) {
         // Handle Escape for modals and navigation screens
@@ -1298,11 +1295,10 @@ class App {
         this.updateChapterTitle(newChapterData, newChapter, newParagraph);
         this.renderText();
         this.updateScrollIndicator();
-        this.updateLiveStats();
     }
 
     endSession() {
-        this.stopUpdateInterval();
+        if (!this.session) return;
         const stats = this.session.getStats();
 
         // Save session
