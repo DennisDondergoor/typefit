@@ -789,15 +789,25 @@ class App {
     updateTimerDisplay() {
         const todaySeconds = this.storage.getDailyTime().seconds;
         const totalSeconds = this.storage.getTotalTime();
-        const parts = [];
+
+        const units = (seconds) => {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+            return [h > 0 ? h + 'h' : '', (h > 0 || m > 0) ? m + 'm' : '', s + 's'];
+        };
+
+        const rows = [];
         if (todaySeconds > 0) {
-            const todayClass = todaySeconds > 600 ? ' class="timer-accent"' : '';
-            parts.push(`<span class="timer-label">Today:</span> <span${todayClass}>${this.formatTime(todaySeconds)}</span>`);
+            const accent = todaySeconds > 600 ? ' class="timer-accent"' : '';
+            const [h, m, s] = units(todaySeconds);
+            rows.push(`<span class="timer-label">Today:</span><span class="timer-unit"${accent}>${h}</span><span class="timer-unit"${accent}>${m}</span><span class="timer-unit"${accent}>${s}</span>`);
         }
         if (totalSeconds > 0) {
-            parts.push(`<span class="timer-label">Total:</span> ${this.formatTime(totalSeconds)}`);
+            const [h, m, s] = units(totalSeconds);
+            rows.push(`<span class="timer-label">Total:</span><span class="timer-unit">${h}</span><span class="timer-unit">${m}</span><span class="timer-unit">${s}</span>`);
         }
-        this.timerDisplay.innerHTML = parts.join('<br>');
+        this.timerDisplay.innerHTML = rows.join('');
     }
 
     loadSettings() {
