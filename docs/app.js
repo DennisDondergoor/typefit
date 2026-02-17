@@ -620,13 +620,14 @@ class App {
 
         // Clear data
         this.clearDataBtn.addEventListener('click', () => {
-            this.showConfirm('Clear all typing stats?', 'Book progress will be kept.', () => {
+            this.showConfirm('Clear all typing stats?', 'Book progress will be kept.', async () => {
                 this.storage.clearTypingStats();
                 if (this.firebase.syncTimeout) {
                     clearTimeout(this.firebase.syncTimeout);
                     this.firebase.syncTimeout = null;
+                    this.firebase._pendingGetData = null;
                 }
-                this.firebase.deleteField('sessions');
+                await this.firebase.deleteField('sessions');
                 this.showProgress();
             });
         });
@@ -874,6 +875,15 @@ class App {
         this.pauseOverlay.classList.add('hidden');
     }
 
+    isParagraphEmpty(text) {
+        return !text || text.trim() === '';
+    }
+
+    showBookComplete() {
+        this.showToast('Congratulations! You have completed the entire book!', 5000);
+        this.showBookSelection();
+    }
+
     startPractice() {
         let text;
 
@@ -891,8 +901,7 @@ class App {
             if (this.bookChapter >= this.currentBook.chapters.length) {
                 const next = this.findNextUncompleted(0, -1);
                 if (next.chapter >= this.currentBook.chapters.length) {
-                    this.showToast('Congratulations! You have completed the entire book!', 5000);
-                    this.showBookSelection();
+                    this.showBookComplete();
                     return;
                 }
                 this.bookChapter = next.chapter;
@@ -904,12 +913,11 @@ class App {
             // Get current paragraph (skip empty ones)
             let chapter = this.currentBook.chapters[this.bookChapter];
             text = chapter.paragraphs[this.bookParagraph];
-            while (!text || text.trim() === '') {
+            while (this.isParagraphEmpty(text)) {
                 this.storage.markParagraphCompleted(this.currentBook.id, this.bookChapter, this.bookParagraph);
                 const next = this.findNextUncompleted(this.bookChapter, this.bookParagraph);
                 if (next.chapter >= this.currentBook.chapters.length) {
-                    this.showToast('Congratulations! You have completed the entire book!', 5000);
-                    this.showBookSelection();
+                    this.showBookComplete();
                     return;
                 }
                 this.bookChapter = next.chapter;
@@ -1244,57 +1252,55 @@ class App {
     skipParagraph(direction) {
         if (!this.currentBook) return;
 
-        const chapter = this.currentBook.chapters[this.bookChapter];
-        let newParagraph = this.bookParagraph + direction;
+        let newParagraph = this.bookParagraph;
         let newChapter = this.bookChapter;
+        const step = direction > 0 ? 1 : -1;
+        const maxSteps = 1000;
 
-        // Handle chapter boundaries
-        if (newParagraph < 0) {
-            // Go to previous chapter
-            if (newChapter > 0) {
-                newChapter--;
-                newParagraph = this.currentBook.chapters[newChapter].paragraphs.length - 1;
-            } else {
-                // Already at first paragraph of first chapter
-                return;
+        for (let i = 0; i < maxSteps; i++) {
+            newParagraph += step;
+            const currentChapterData = this.currentBook.chapters[newChapter];
+
+            // Handle chapter boundaries
+            if (newParagraph < 0) {
+                if (newChapter > 0) {
+                    newChapter--;
+                    newParagraph = this.currentBook.chapters[newChapter].paragraphs.length - 1;
+                } else {
+                    return; // Already at first paragraph of first chapter
+                }
+            } else if (newParagraph >= currentChapterData.paragraphs.length) {
+                if (newChapter < this.currentBook.chapters.length - 1) {
+                    newChapter++;
+                    newParagraph = 0;
+                } else {
+                    return; // Already at last paragraph of last chapter
+                }
             }
-        } else if (newParagraph >= chapter.paragraphs.length) {
-            // Go to next chapter
-            if (newChapter < this.currentBook.chapters.length - 1) {
-                newChapter++;
-                newParagraph = 0;
-            } else {
-                // Already at last paragraph of last chapter
-                return;
+
+            const text = this.currentBook.chapters[newChapter].paragraphs[newParagraph];
+
+            // Skip empty paragraphs silently
+            if (this.isParagraphEmpty(text)) {
+                this.storage.markParagraphCompleted(this.currentBook.id, newChapter, newParagraph);
+                this.storage.setBookProgress(this.currentBook.id, newChapter, newParagraph);
+                continue;
             }
-        }
 
-        // Update progress and restart practice
-        this.bookChapter = newChapter;
-        this.bookParagraph = newParagraph;
-        this.storage.setBookProgress(this.currentBook.id, newChapter, newParagraph);
-        this.syncToCloud();
-
-        // Restart with new paragraph
-        const newChapterData = this.currentBook.chapters[newChapter];
-        let text = newChapterData.paragraphs[newParagraph];
-
-        // Skip empty paragraphs
-        if (!text || text.trim() === '') {
-            this.storage.markParagraphCompleted(this.currentBook.id, newChapter, newParagraph);
+            // Found a valid paragraph
+            this.bookChapter = newChapter;
+            this.bookParagraph = newParagraph;
             this.storage.setBookProgress(this.currentBook.id, newChapter, newParagraph);
-            this.skipParagraph(direction > 0 ? 1 : -1);
+            this.syncToCloud();
+
+            const newChapterData = this.currentBook.chapters[newChapter];
+            this.session = new TypingSession(this.stripGutenbergItalics(text));
+            this._cachedBookStats = this.storage.getBookStats(this.currentBook);
+            this.updateChapterTitle(newChapterData, newChapter, newParagraph);
+            this.renderText();
+            this.updateScrollIndicator();
             return;
         }
-
-        // Strip Gutenberg _italic_ markers
-        text = this.stripGutenbergItalics(text);
-
-        this.session = new TypingSession(text);
-        this._cachedBookStats = this.storage.getBookStats(this.currentBook);
-        this.updateChapterTitle(newChapterData, newChapter, newParagraph);
-        this.renderText();
-        this.updateScrollIndicator();
     }
 
     endSession() {
@@ -1324,12 +1330,15 @@ class App {
             this.bookParagraph = next.paragraph;
             this.storage.setBookProgress(this.currentBook.id, this.bookChapter, this.bookParagraph);
 
-            // Auto-advance to next paragraph, or show summary if book is done
+            // Auto-advance to next paragraph, or celebrate book completion
             if (this.bookChapter < this.currentBook.chapters.length) {
                 this.syncToCloud();
                 this.startPractice();
                 return;
             }
+            this.syncToCloud();
+            this.showBookComplete();
+            return;
         }
 
         this.syncToCloud();
@@ -1510,6 +1519,7 @@ class App {
     }
 
     findNextUncompleted(fromChapter, fromParagraph) {
+        if (!this.currentBook) return { chapter: 0, paragraph: 0 };
         // Read progress once to avoid repeated localStorage reads
         const progress = this.storage.getBookProgress(this.currentBook.id);
         // Search from the given position forward

@@ -33,6 +33,12 @@ class FirebaseSync {
                 user.getIdToken().then(t => { this._cachedToken = t; }).catch(() => {});
             } else {
                 this._cachedToken = null;
+                // Cancel any pending sync on sign-out
+                if (this.syncTimeout) {
+                    clearTimeout(this.syncTimeout);
+                    this.syncTimeout = null;
+                }
+                this._pendingGetData = null;
             }
             if (this.onAuthChangeCallback) {
                 this.onAuthChangeCallback(user);

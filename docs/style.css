@@ -122,13 +122,6 @@ body {
     transform: scale(0.97);
 }
 
-.mode-btn:focus-visible,
-.font-btn:focus-visible,
-.book-card:focus-visible,
-.chapter-card:focus-visible {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 3px;
-}
 
 .menu-footer {
     display: flex;
@@ -318,12 +311,6 @@ body {
     transform: scale(0.97);
 }
 
-.primary-btn:focus-visible,
-.secondary-btn:focus-visible,
-.danger-btn:focus-visible {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 3px;
-}
 
 .secondary-btn {
     background-color: var(--card-bg);
@@ -360,12 +347,6 @@ body {
     color: var(--text-color);
 }
 
-.icon-btn:focus-visible,
-.text-btn:focus-visible {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 3px;
-    border-radius: 4px;
-}
 
 /* Practice Screen */
 #practice-screen {
