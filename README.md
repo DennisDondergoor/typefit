@@ -27,7 +27,7 @@ Open `docs/index.html` directly in your browser (no server required).
 
 1. **Words**: Common English words (~8,000 words)
 2. **Sentences**: Practice with complete sentences (~3,500 sentences)
-3. **Python Code**: Code snippets with special characters (~1,000 snippets)
+3. **Python Code**: Code snippets with special characters (~200 snippets)
 4. **Books**: Type through classic and contemporary literature with progress saved per book
 
 ### Available Books
