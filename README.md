@@ -25,8 +25,8 @@ Open `docs/index.html` directly in your browser (no server required).
 
 ## Practice Modes
 
-1. **Sentences**: Practice with complete sentences (~3,500 sentences)
-2. **Python Code**: Code snippets with special characters (~200 snippets)
+1. **Sentences**: Practice with complete sentences (5,001 sentences)
+2. **Python Code**: Code snippets with special characters (200 snippets)
 4. **Books**: Type through classic and contemporary literature with progress saved per book
 
 ### Available Books

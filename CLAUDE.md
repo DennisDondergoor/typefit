@@ -27,7 +27,7 @@ Single-page app with screen toggling (add/remove `active` class). All source is 
 - **index.html** — All screens: menu, practice, summary, progress, book/chapter selection
 - **app.js** — Main application (~1,600 lines). Contains: `StorageManager` (localStorage wrapper with `_safeParseJSON` for corrupted data), `TypingSession` (single session state/logic), `TextGenerator` (practice text generation with Fisher-Yates shuffle), `App` (controller that wires everything together)
 - **style.css** — All styles. Uses CSS variables in `:root` for theming — changing a variable updates everywhere
-- **data.js** — `SENTENCES` (~3,500), `PYTHON_SNIPPETS` (~200) arrays (~412KB)
+- **data.js** — `SENTENCES` (5,001), `PYTHON_SNIPPETS` (200) arrays (~315KB)
 - **books.js** — `BOOKS` array with 8 books: 5 classic novels + 3 Cory Doctorow CC-licensed stories (~981KB)
 - **firebase.js** — `FirebaseSync` class (Firestore compat SDK v10, GitHub OAuth)
 
