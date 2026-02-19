@@ -4,7 +4,7 @@ A web-based typing practice app with adjustable font size and book reading mode.
 
 ## Features
 
-- **Multiple practice modes**: Words, sentences, Python code, and books
+- **Multiple practice modes**: Sentences, Python code, and books
 - **Book mode**: Type through classic novels with progress tracking
 - **Real-time feedback**: WPM, accuracy, and character highlighting
 - **Adjustable font size**: 32-40px range
@@ -25,9 +25,8 @@ Open `docs/index.html` directly in your browser (no server required).
 
 ## Practice Modes
 
-1. **Words**: Common English words (~8,000 words)
-2. **Sentences**: Practice with complete sentences (~3,500 sentences)
-3. **Python Code**: Code snippets with special characters (~200 snippets)
+1. **Sentences**: Practice with complete sentences (~3,500 sentences)
+2. **Python Code**: Code snippets with special characters (~200 snippets)
 4. **Books**: Type through classic and contemporary literature with progress saved per book
 
 ### Available Books
