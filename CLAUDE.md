@@ -27,8 +27,8 @@ Single-page app with screen toggling (add/remove `active` class). All source is 
 - **index.html** — All screens: menu, practice, summary, progress, book/chapter selection
 - **app.js** — Main application (~1,600 lines). Contains: `StorageManager` (localStorage wrapper with `_safeParseJSON` for corrupted data), `TypingSession` (single session state/logic), `TextGenerator` (practice text generation with Fisher-Yates shuffle), `App` (controller that wires everything together)
 - **style.css** — All styles. Uses CSS variables in `:root` for theming — changing a variable updates everywhere
-- **data.js** — `SENTENCES` (5,001), `PYTHON_SNIPPETS` (200) arrays (~315KB)
-- **books.js** — `BOOKS` array with 8 books: 5 classic novels + 3 Cory Doctorow CC-licensed stories (~981KB)
+- **data.js** — `SENTENCES` and `PYTHON_SNIPPETS` arrays (large static dataset, ~315KB)
+- **books.js** — `BOOKS` array. Spans short stories to novels; some CC-licensed (Cory Doctorow). Large file (~1MB), served directly.
 - **firebase.js** — `FirebaseSync` class (Firestore compat SDK v10, GitHub OAuth)
 
 ### Typing Engine
@@ -62,9 +62,9 @@ Auto-advances to next uncompleted paragraph after each completion (no summary sh
 
 **`_suppressSync` flag.** Set during cloud load to prevent the loaded data from immediately triggering a cloud save cycle.
 
-**Large data files.** `data.js` (~333KB) and `books.js` (~981KB) are committed to the repo and served directly. No CDN needed for GitHub Pages.
+**Large data files.** `data.js` and `books.js` are committed to the repo and served directly. No CDN needed for GitHub Pages.
 
-**Books sorted by word count.** Books are ordered from shortest to longest (1,037 to 56,861 words) to help users choose based on available time. Word counts are calculated and displayed in the UI.
+**Books sorted by word count.** Books are ordered from shortest to longest to help users choose based on available time. Word counts are calculated and displayed in the UI.
 
 ## Deployment
 
@@ -82,7 +82,7 @@ Changes go live automatically within ~1 minute.
 
 Short imperative subject, blank line, explanation of why. End with:
 ```
-Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
 ```
 
-(Adjust model name as appropriate: Claude Sonnet 4.5, Claude Opus 4.6, etc.)
+(Adjust model name as appropriate: Claude Sonnet 4.6, Claude Opus 4.6, etc.)

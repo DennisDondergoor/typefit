@@ -7,14 +7,14 @@ A web-based typing practice app with adjustable font size and book reading mode.
 - **Multiple practice modes**: Sentences, Python code, and books
 - **Book mode**: Type through classic novels with progress tracking
 - **Real-time feedback**: WPM, accuracy, and character highlighting
-- **Adjustable font size**: 32-40px range
+- **Adjustable font size**: slider in settings
 - **Statistics tracking**: Session history and problem key analysis
 - **Accent tolerance**: Type 'u' for 'ü', 'i' for 'î', etc.
 - **Tab support**: Press Tab to skip indentation in Python code
 
 ## Usage
 
-Open `docs/index.html` directly in your browser (no server required).
+Run a local server (see Local Development below) and open http://localhost:8000.
 
 ## Controls
 
@@ -25,29 +25,11 @@ Open `docs/index.html` directly in your browser (no server required).
 
 ## Practice Modes
 
-1. **Sentences**: Practice with complete sentences (5,001 sentences)
-2. **Python Code**: Code snippets with special characters (200 snippets)
-4. **Books**: Type through classic and contemporary literature with progress saved per book
+1. **Sentences**: Large collection of practice sentences
+2. **Python Code**: Snippets with Python-specific characters and indentation
+3. **Books**: Type through classic and contemporary literature (short stories to novels), sorted by length with progress saved per book
 
-### Available Books
-
-8 books ranging from 1,000 to 57,000 words (sorted by length):
-
-**Short Stories:**
-- **Printcrime** by Cory Doctorow (1,037 words)
-- **Men I'm Not Married To** by Dorothy Parker (3,118 words)
-- **Big Blonde** by Dorothy Parker (8,467 words)
-
-**Novellas:**
-- **When Sysadmins Ruled the Earth** by Cory Doctorow (12,755 words)
-- **I, Robot** by Cory Doctorow (15,642 words)
-
-**Novels:**
-- **The Time Machine** by H.G. Wells (32,297 words)
-- **Notes from the Underground** by Fyodor Dostoyevsky (44,051 words)
-- **Dracula's Guest** by Bram Stoker (56,861 words)
-
-*Cory Doctorow stories licensed under CC BY-NC-SA 2.5*
+*Some books licensed under CC BY-NC-SA 2.5 (Cory Doctorow)*
 
 ## Local Development
 
