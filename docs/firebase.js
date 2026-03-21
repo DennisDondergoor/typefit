@@ -144,7 +144,7 @@ class FirebaseSync {
         if (this.user && this.db && this._cachedToken) {
             const projectId = this.db.app.options.projectId;
             const uid = this.user.uid;
-            const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${uid}?updateMask.fieldPaths=sessions&updateMask.fieldPaths=bookProgress&updateMask.fieldPaths=totalTime&updateMask.fieldPaths=dailyTime&updateMask.fieldPaths=settings`;
+            const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${uid}?updateMask.fieldPaths=sessions&updateMask.fieldPaths=bookProgress&updateMask.fieldPaths=totalTime&updateMask.fieldPaths=dailyTime`;
             // Convert to Firestore REST format
             const fields = {};
             for (const [key, value] of Object.entries(data)) {

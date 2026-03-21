@@ -24,7 +24,7 @@ No build step, no package manager, no tests. The app is a static site served fro
 
 Single-page app with screen toggling (add/remove `active` class). All source is in `docs/`:
 
-- **index.html** — All screens: menu, practice, summary, progress, book/chapter selection
+- **index.html** — All screens: menu, practice, summary, progress, book/chapter selection. Font (Source Code Pro) and size (38px) are hardcoded in CSS — no settings UI.
 - **app.js** — Main application (~1,600 lines). Contains: `StorageManager` (localStorage wrapper with `_safeParseJSON` for corrupted data), `TypingSession` (single session state/logic), `TextGenerator` (practice text generation with Fisher-Yates shuffle), `App` (controller that wires everything together)
 - **style.css** — All styles. Uses CSS variables in `:root` for theming — changing a variable updates everywhere
 - **data.js** — `SENTENCES` and `PYTHON_SNIPPETS` arrays (large static dataset, ~315KB)
@@ -52,7 +52,7 @@ Auto-advances to next uncompleted paragraph after each completion (no summary sh
 - `scheduleSave()` debounces 2 seconds; pending save flushed on page unload
 - Cloud data loads only on auth state change, not on navigation
 - Auth token pre-cached and refreshed after each save for reliable `flushPendingSync()` during page unload
-- Merge strategy: sessions unioned by date, book progress unions completed sets, total/daily time take max, settings cloud-wins
+- Merge strategy: sessions unioned by date, book progress unions completed sets, total/daily time take max
 
 ## Key Gotchas
 

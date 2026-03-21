@@ -5,8 +5,6 @@ class StorageManager {
     constructor() {
         this.KEYS = {
             SESSIONS: 'typefit_sessions',
-            FONT_SIZE: 'typefit_font_size',
-            FONT_FAMILY: 'typefit_font_family',
             BOOK_PROGRESS: 'typefit_book_progress',
             TOTAL_TIME: 'typefit_total_time',
             DAILY_TIME: 'typefit_daily_time'
@@ -149,22 +147,6 @@ class StorageManager {
         const total = this.getSessions().reduce((sum, s) => sum + (s.time || 0), 0);
         localStorage.setItem(this.KEYS.TOTAL_TIME, String(total));
         return total;
-    }
-
-    getFontSize() {
-        return parseInt(localStorage.getItem(this.KEYS.FONT_SIZE)) || 36;
-    }
-
-    setFontSize(size) {
-        localStorage.setItem(this.KEYS.FONT_SIZE, size.toString());
-    }
-
-    getFontFamily() {
-        return localStorage.getItem(this.KEYS.FONT_FAMILY) || 'Source Code Pro';
-    }
-
-    setFontFamily(font) {
-        localStorage.setItem(this.KEYS.FONT_FAMILY, font);
     }
 
     setSessions(sessions) {
@@ -482,9 +464,6 @@ class App {
 
         this.initElements();
         this.initEventListeners();
-        this._suppressSync = true;
-        this.loadSettings();
-        this._suppressSync = false;
         this.updateTimerDisplay();
         this.initFirebase();
     }
@@ -512,17 +491,9 @@ class App {
         // Menu elements
         this.modeBtns = document.querySelectorAll('.mode-btn');
         this.viewProgressBtn = document.getElementById('view-progress-btn');
-        this.openSettingsBtn = document.getElementById('open-settings-btn');
         this.authBtn = document.getElementById('auth-btn');
         this.syncStatus = document.getElementById('sync-status');
         this.timerDisplay = document.getElementById('timer-display');
-
-        // Settings modal elements
-        this.settingsModal = document.getElementById('settings-modal');
-        this.closeSettingsBtn = document.getElementById('close-settings-btn');
-        this.fontBtns = document.querySelectorAll('.font-btn');
-        this.fontSizeSlider = document.getElementById('font-size-slider');
-        this.fontSizeValue = document.getElementById('font-size-value');
 
         // Practice elements
         this.textDisplay = document.getElementById('text-display');
@@ -552,21 +523,6 @@ class App {
     }
 
     initEventListeners() {
-        // Font buttons
-        this.fontBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                this.fontBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                this.setFontFamily(btn.dataset.font);
-            });
-        });
-
-        // Font size slider
-        this.fontSizeSlider.addEventListener('input', () => {
-            const size = this.fontSizeSlider.value;
-            this.setFontSize(size);
-        });
-
         // Mode buttons
         this.modeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -579,13 +535,6 @@ class App {
             });
         });
 
-        // Settings modal
-        this.openSettingsBtn.addEventListener('click', () => {
-            this.showSettingsModal();
-        });
-        this.closeSettingsBtn.addEventListener('click', () => {
-            this.hideSettingsModal();
-        });
 
         // View progress
         this.viewProgressBtn.addEventListener('click', () => {
@@ -673,7 +622,6 @@ class App {
                 this.syncStatus.textContent = 'Loading from cloud...';
                 this._suppressSync = true;
                 await this.loadFromCloud();
-                this.loadSettings();
                 this._suppressSync = false;
                 this.syncToCloud();
                 this.syncStatus.textContent = `Signed in as ${this.firebase.getUserName()}`;
@@ -690,10 +638,6 @@ class App {
             bookProgress: this.storage.getAllBookProgress(),
             totalTime: this.storage.getTotalTime(),
             dailyTime: this.storage.getDailyTime(),
-            settings: {
-                fontSize: this.storage.getFontSize(),
-                fontFamily: this.storage.getFontFamily(),
-            }
         };
     }
 
@@ -773,16 +717,6 @@ class App {
             }
         }
 
-        // Settings: cloud wins
-        if (data.settings) {
-            if (data.settings.fontSize) {
-                this.storage.setFontSize(data.settings.fontSize);
-            }
-            if (data.settings.fontFamily) {
-                this.storage.setFontFamily(data.settings.fontFamily);
-            }
-        }
-
         this.updateTimerDisplay();
     }
 
@@ -810,34 +744,6 @@ class App {
         this.timerDisplay.innerHTML = rows.join('');
     }
 
-    loadSettings() {
-        // Load font family
-        const fontFamily = this.storage.getFontFamily();
-        this.setFontFamily(fontFamily);
-        this.fontBtns.forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.font === fontFamily);
-        });
-
-        // Load font size
-        const fontSize = this.storage.getFontSize();
-        this.fontSizeSlider.value = fontSize;
-        this.setFontSize(fontSize);
-
-    }
-
-    setFontSize(size) {
-        document.documentElement.style.setProperty('--font-size', `${size}px`);
-        this.fontSizeValue.textContent = `${size}px`;
-        this.storage.setFontSize(size);
-        this.syncToCloud();
-    }
-
-    setFontFamily(font) {
-        document.documentElement.style.setProperty('--font-family', `'${font}', monospace`);
-        this.storage.setFontFamily(font);
-        this.syncToCloud();
-    }
-
     showScreen(screen) {
         [this.menuScreen, this.practiceScreen, this.summaryScreen, this.progressScreen, this.bookSelectionScreen, this.chapterSelectionScreen]
             .forEach(s => s.classList.remove('active'));
@@ -848,14 +754,6 @@ class App {
         this.session = null;
         this.updateTimerDisplay();
         this.showScreen(this.menuScreen);
-    }
-
-    showSettingsModal() {
-        this.settingsModal.classList.remove('hidden');
-    }
-
-    hideSettingsModal() {
-        this.settingsModal.classList.add('hidden');
     }
 
     updateChapterTitle(chapter, chapterIndex, paragraphIndex) {
@@ -1132,10 +1030,6 @@ class App {
             const confirmModal = document.getElementById('confirm-modal');
             if (!confirmModal.classList.contains('hidden')) {
                 document.getElementById('confirm-no-btn').click();
-                return;
-            }
-            if (!this.settingsModal.classList.contains('hidden')) {
-                this.hideSettingsModal();
                 return;
             }
             if (this.progressScreen.classList.contains('active')) {
