@@ -64,7 +64,7 @@ Auto-advances to next uncompleted paragraph after each completion (no summary sh
 
 **Large data files.** `data.js` and `books.js` are committed to the repo and served directly. No CDN needed for GitHub Pages.
 
-**Books sorted by word count.** Books are ordered from shortest to longest to help users choose based on available time. Word counts are calculated and displayed in the UI.
+**Books sorted by word count, completed last.** Books are ordered from shortest to longest to help users choose based on available time. Fully completed books (100%) sink to the bottom, within their own word-count order. Word counts are calculated and displayed in the UI.
 
 ## Deployment
 

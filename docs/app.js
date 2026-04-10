@@ -1312,8 +1312,13 @@ class App {
             this.showScreen(this.bookSelectionScreen);
             return;
         }
-        // Render book cards
-        this.bookList.innerHTML = BOOKS.map(book => {
+        // Render book cards — completed books sink to the bottom, preserving word-count order within each group
+        const sortedBooks = [...BOOKS].sort((a, b) => {
+            const aComplete = this.storage.getBookStats(a).percentComplete === 100;
+            const bComplete = this.storage.getBookStats(b).percentComplete === 100;
+            return aComplete - bComplete;
+        });
+        this.bookList.innerHTML = sortedBooks.map(book => {
             const stats = this.storage.getBookStats(book);
 
             // Count total words
