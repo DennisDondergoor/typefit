@@ -379,29 +379,6 @@ class TextGenerator {
         return a;
     }
 
-    static getWords(count = 25) {
-        // Categorize words by length for better variety
-        const realWords = WORDS.filter(w => w.length >= 2);
-        const short = realWords.filter(w => w.length <= 4);
-        const medium = realWords.filter(w => w.length >= 5 && w.length <= 7);
-        const long = realWords.filter(w => w.length >= 8);
-
-        // Target distribution: 40% short, 40% medium, 20% long
-        const shortCount = Math.round(count * 0.4);
-        const mediumCount = Math.round(count * 0.4);
-        const longCount = count - shortCount - mediumCount;
-
-        const pick = (arr, n) => this.shuffle(arr).slice(0, n);
-
-        const selected = [
-            ...pick(short, shortCount),
-            ...pick(medium, mediumCount),
-            ...pick(long, longCount)
-        ];
-
-        return this.shuffle(selected).join(' ');
-    }
-
     static getSentences(targetWords = 25) {
         // Pick sentences until we reach approximately targetWords
         const shuffled = this.shuffle(SENTENCES);
@@ -437,12 +414,11 @@ class TextGenerator {
 
     static getText(mode, length = 25) {
         switch (mode) {
-            case 'sentences':
-                return this.getSentences(length);
             case 'python':
                 return this.getPythonSnippets(length);
+            case 'sentences':
             default:
-                return this.getWords(length);
+                return this.getSentences(length);
         }
     }
 }

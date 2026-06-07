@@ -25,7 +25,7 @@ No build step, no package manager, no tests. The app is a static site served fro
 Single-page app with screen toggling (add/remove `active` class). All source is in `docs/`:
 
 - **index.html** — All screens: menu, practice, summary, progress, book/chapter selection. Font (Source Code Pro) and size (38px) are hardcoded in CSS — no settings UI.
-- **app.js** — Main application (~1,600 lines). Contains: `StorageManager` (localStorage wrapper with `_safeParseJSON` for corrupted data), `TypingSession` (single session state/logic), `TextGenerator` (practice text generation with Fisher-Yates shuffle), `App` (controller that wires everything together)
+- **app.js** — Main application (~1,470 lines). Contains: `StorageManager` (localStorage wrapper with `_safeParseJSON` for corrupted data), `TypingSession` (single session state/logic), `TextGenerator` (practice text generation with Fisher-Yates shuffle), `App` (controller that wires everything together)
 - **style.css** — All styles. Uses CSS variables in `:root` for theming — changing a variable updates everywhere
 - **data.js** — `SENTENCES` and `PYTHON_SNIPPETS` arrays (large static dataset, ~315KB)
 - **books.js** — `BOOKS` array. Spans short stories to novels; some CC-licensed (Cory Doctorow). Large file (~1MB), served directly.
@@ -58,7 +58,7 @@ Auto-advances to next uncompleted paragraph after each completion (no summary sh
 
 **Firestore merge:true cannot clear nested fields.** `set(data, { merge: true })` with empty objects does NOT remove keys. Use `deleteField()` (which calls `FieldValue.delete()`). Cancel any pending debounced sync before deleting, or stale data gets re-saved.
 
-**WORDS array includes non-words.** Single letters (a-z), abbreviations, web jargon. Filter with `w.length >= 2` when real words are needed.
+**Three practice modes: `books`, `sentences`, `python`** (see `data-mode` buttons in index.html). `TextGenerator.getText()` routes `python`→`getPythonSnippets()` and everything else (`sentences` + `default`)→`getSentences()`. There is no word-list mode — the old `WORDS` array and `getWords()` were removed. To add one, reintroduce a data source and a `getText()` case.
 
 **`_suppressSync` flag.** Set during cloud load to prevent the loaded data from immediately triggering a cloud save cycle.
 
