@@ -286,14 +286,6 @@ body {
     margin-bottom: 1rem;
 }
 
-.stats-bar {
-    display: none;
-}
-
-.stats-bar span {
-    font-size: 1.4rem;
-}
-
 .stat-value-inline {
     color: var(--accent-color);
 }

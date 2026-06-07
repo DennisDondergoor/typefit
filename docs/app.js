@@ -20,9 +20,7 @@ class StorageManager {
     }
 
     getBookProgress(bookId) {
-        const data = localStorage.getItem(this.KEYS.BOOK_PROGRESS);
-        const allProgress = data ? this._safeParseJSON(data, {}) : {};
-        const progress = allProgress[bookId] || { chapter: 0, paragraph: 0 };
+        const progress = this.getAllBookProgress()[bookId] || { chapter: 0, paragraph: 0 };
         if (!progress.completed) {
             progress.completed = {};
         }
@@ -30,18 +28,16 @@ class StorageManager {
     }
 
     setBookProgress(bookId, chapter, paragraph) {
-        const data = localStorage.getItem(this.KEYS.BOOK_PROGRESS);
-        const allProgress = data ? this._safeParseJSON(data, {}) : {};
+        const allProgress = this.getAllBookProgress();
         const existing = allProgress[bookId] || { completed: {} };
         existing.chapter = chapter;
         existing.paragraph = paragraph;
         allProgress[bookId] = existing;
-        localStorage.setItem(this.KEYS.BOOK_PROGRESS, JSON.stringify(allProgress));
+        this.setAllBookProgress(allProgress);
     }
 
     markParagraphCompleted(bookId, chapter, paragraph) {
-        const data = localStorage.getItem(this.KEYS.BOOK_PROGRESS);
-        const allProgress = data ? this._safeParseJSON(data, {}) : {};
+        const allProgress = this.getAllBookProgress();
         const existing = allProgress[bookId] || { chapter: 0, paragraph: 0, completed: {} };
         if (!existing.completed[chapter]) {
             existing.completed[chapter] = [];
@@ -50,7 +46,7 @@ class StorageManager {
             existing.completed[chapter].push(paragraph);
         }
         allProgress[bookId] = existing;
-        localStorage.setItem(this.KEYS.BOOK_PROGRESS, JSON.stringify(allProgress));
+        this.setAllBookProgress(allProgress);
     }
 
     isParagraphCompleted(bookId, chapter, paragraph) {
@@ -114,9 +110,8 @@ class StorageManager {
         }));
     }
 
-    _todayStr() {
-        const now = new Date();
-        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    _todayStr(date = new Date()) {
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     }
 
     getDailyTime() {
@@ -131,9 +126,7 @@ class StorageManager {
         const sessions = this.getSessions();
         let seconds = 0;
         for (const s of sessions) {
-            const d = new Date(s.date);
-            const sLocal = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-            if (sLocal === today) seconds += s.time || 0;
+            if (this._todayStr(new Date(s.date)) === today) seconds += s.time || 0;
         }
         const result = { date: today, seconds };
         localStorage.setItem(this.KEYS.DAILY_TIME, JSON.stringify(result));
@@ -396,9 +389,10 @@ class TextGenerator {
 
     static getPythonSnippets(targetWords = 25) {
         // Pick snippets until we reach approximately targetWords
-        // Filter out snippets that start with whitespace (they're continuations)
-        const validSnippets = PYTHON_SNIPPETS.filter(s => s.length > 0 && !/^\s/.test(s));
-        const shuffled = this.shuffle(validSnippets);
+        // Filter out snippets that start with whitespace (they're continuations).
+        // PYTHON_SNIPPETS is static, so compute the valid subset once.
+        this._validSnippets ??= PYTHON_SNIPPETS.filter(s => s.length > 0 && !/^\s/.test(s));
+        const shuffled = this.shuffle(this._validSnippets);
         const selected = [];
         let wordCount = 0;
 
@@ -413,13 +407,9 @@ class TextGenerator {
     }
 
     static getText(mode, length = 25) {
-        switch (mode) {
-            case 'python':
-                return this.getPythonSnippets(length);
-            case 'sentences':
-            default:
-                return this.getSentences(length);
-        }
+        return mode === 'python'
+            ? this.getPythonSnippets(length)
+            : this.getSentences(length);
     }
 }
 
@@ -473,9 +463,6 @@ class App {
 
         // Practice elements
         this.textDisplay = document.getElementById('text-display');
-        this.liveWpm = document.getElementById('live-wpm');
-        this.liveAccuracy = document.getElementById('live-accuracy');
-        this.liveProgress = document.getElementById('live-progress');
 
         // Pause elements
         this.pauseOverlay = document.getElementById('pause-overlay');
@@ -1065,14 +1052,10 @@ class App {
 
         // Paragraph navigation for books mode
         if (this.currentMode === 'books' && this.currentBook) {
-            if (e.key === 'PageDown') {
+            const dir = e.key === 'PageDown' ? 1 : e.key === 'PageUp' ? -1 : 0;
+            if (dir) {
                 e.preventDefault();
-                this.skipParagraph(1);
-                return;
-            }
-            if (e.key === 'PageUp') {
-                e.preventDefault();
-                this.skipParagraph(-1);
+                this.skipParagraph(dir);
                 return;
             }
         }
@@ -1211,12 +1194,11 @@ class App {
             this.storage.setBookProgress(this.currentBook.id, this.bookChapter, this.bookParagraph);
 
             // Auto-advance to next paragraph, or celebrate book completion
+            this.syncToCloud();
             if (this.bookChapter < this.currentBook.chapters.length) {
-                this.syncToCloud();
                 this.startPractice();
                 return;
             }
-            this.syncToCloud();
             this.showBookComplete();
             return;
         }
@@ -1289,13 +1271,14 @@ class App {
             return;
         }
         // Render book cards — completed books sink to the bottom, preserving word-count order within each group
+        const statsByBook = new Map(BOOKS.map(book => [book.id, this.storage.getBookStats(book)]));
         const sortedBooks = [...BOOKS].sort((a, b) => {
-            const aComplete = this.storage.getBookStats(a).percentComplete === 100;
-            const bComplete = this.storage.getBookStats(b).percentComplete === 100;
+            const aComplete = statsByBook.get(a.id).percentComplete === 100;
+            const bComplete = statsByBook.get(b.id).percentComplete === 100;
             return aComplete - bComplete;
         });
         this.bookList.innerHTML = sortedBooks.map(book => {
-            const stats = this.storage.getBookStats(book);
+            const stats = statsByBook.get(book.id);
 
             // Count total words
             const totalWords = book.chapters.reduce((sum, ch) => {
