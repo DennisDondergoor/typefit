@@ -144,6 +144,9 @@ class FirebaseSync {
         if (this.user && this.db && this._cachedToken) {
             const projectId = this.db.app.options.projectId;
             const uid = this.user.uid;
+            // NOTE: the updateMask field paths below must stay in sync with the keys
+            // returned by App.getAllData(). A new key won't persist on unload until
+            // it's added here as an updateMask.fieldPaths entry.
             const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${uid}?updateMask.fieldPaths=sessions&updateMask.fieldPaths=bookProgress&updateMask.fieldPaths=totalTime&updateMask.fieldPaths=dailyTime`;
             // Convert to Firestore REST format
             const fields = {};

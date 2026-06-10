@@ -54,12 +54,6 @@ class StorageManager {
         return !!(progress.completed[chapter] && progress.completed[chapter].includes(paragraph));
     }
 
-    getChapterCompletedCount(bookId, chapterIndex) {
-        const progress = this.getBookProgress(bookId);
-        const completed = progress.completed[chapterIndex];
-        return completed ? completed.length : 0;
-    }
-
     getBookStats(book) {
         const progress = this.getBookProgress(book.id);
         let totalChars = 0;
@@ -422,7 +416,6 @@ class App {
         this.firebase = new FirebaseSync();
         this.session = null;
         this.currentMode = 'sentences';
-        this.updateInterval = null;
         this.currentBook = null;
         this.bookChapter = 0;
         this.bookParagraph = 0;
@@ -798,9 +791,6 @@ class App {
                 text = chapter.paragraphs[this.bookParagraph];
             }
 
-            // Cache book stats for live display (avoids repeated localStorage reads)
-            this._cachedBookStats = this.storage.getBookStats(this.currentBook);
-
             // Show chapter title with paragraph info
             this.updateChapterTitle(chapter, this.bookChapter, this.bookParagraph);
             this.chapterTitle.classList.remove('hidden');
@@ -809,7 +799,6 @@ class App {
             this.chapterTitle.classList.add('hidden');
             this.bookHint.classList.add('hidden');
             this.textDisplay.classList.remove('already-completed');
-            this._cachedBookStats = null;
             text = TextGenerator.getText(this.currentMode, 10);
         }
 
@@ -1158,7 +1147,6 @@ class App {
 
             const newChapterData = this.currentBook.chapters[newChapter];
             this.session = new TypingSession(this.stripGutenbergItalics(text));
-            this._cachedBookStats = this.storage.getBookStats(this.currentBook);
             this.updateChapterTitle(newChapterData, newChapter, newParagraph);
             this.renderText();
             this.updateScrollIndicator();
@@ -1185,7 +1173,6 @@ class App {
         if (this.currentMode === 'books' && this.currentBook) {
             // Mark current paragraph as completed
             this.storage.markParagraphCompleted(this.currentBook.id, this.bookChapter, this.bookParagraph);
-            this._cachedBookStats = this.storage.getBookStats(this.currentBook);
 
             // Find next uncompleted paragraph
             const next = this.findNextUncompleted(this.bookChapter, this.bookParagraph);

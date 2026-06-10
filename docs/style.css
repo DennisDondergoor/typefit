@@ -279,17 +279,6 @@ body {
     display: flex;
 }
 
-.practice-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.stat-value-inline {
-    color: var(--accent-color);
-}
-
 .text-display {
     font-size: var(--font-size);
     line-height: 1.8;
