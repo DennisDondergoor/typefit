@@ -748,7 +748,7 @@ class App {
         this.showBookSelection();
     }
 
-    startPractice() {
+    async startPractice() {
         let text;
 
         if (this.currentMode === 'books' && this.currentBook) {
@@ -799,6 +799,13 @@ class App {
             this.chapterTitle.classList.add('hidden');
             this.bookHint.classList.add('hidden');
             this.textDisplay.classList.remove('already-completed');
+            try {
+                await this.loadData();
+            } catch (err) {
+                console.error('Failed to load practice data:', err);
+                this.showToast('Failed to load practice content.', 4000);
+                return;
+            }
             text = TextGenerator.getText(this.currentMode, 10);
         }
 
@@ -1242,6 +1249,17 @@ class App {
         return new Promise((resolve, reject) => {
             const script = document.createElement('script');
             script.src = 'books.js';
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+    }
+
+    async loadData() {
+        if (typeof SENTENCES !== 'undefined') return;
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = 'data.js';
             script.onload = resolve;
             script.onerror = reject;
             document.head.appendChild(script);
