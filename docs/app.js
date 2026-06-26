@@ -366,38 +366,28 @@ class TextGenerator {
         return a;
     }
 
-    static getSentences(targetWords = 25) {
-        // Pick sentences until we reach approximately targetWords
-        const shuffled = this.shuffle(SENTENCES);
+    // Shuffle a pool and pick items until reaching approximately targetWords.
+    static _selectByWordCount(pool, targetWords, joiner) {
+        const shuffled = this.shuffle(pool);
         const selected = [];
         let wordCount = 0;
-
-        for (const sentence of shuffled) {
-            selected.push(sentence);
-            wordCount += sentence.split(/\s+/).length;
+        for (const item of shuffled) {
+            selected.push(item);
+            wordCount += item.split(/\s+/).length;
             if (wordCount >= targetWords) break;
         }
+        return selected.join(joiner);
+    }
 
-        return selected.join(' ');
+    static getSentences(targetWords = 25) {
+        return this._selectByWordCount(SENTENCES, targetWords, ' ');
     }
 
     static getPythonSnippets(targetWords = 25) {
-        // Pick snippets until we reach approximately targetWords
         // Filter out snippets that start with whitespace (they're continuations).
         // PYTHON_SNIPPETS is static, so compute the valid subset once.
         this._validSnippets ??= PYTHON_SNIPPETS.filter(s => s.length > 0 && !/^\s/.test(s));
-        const shuffled = this.shuffle(this._validSnippets);
-        const selected = [];
-        let wordCount = 0;
-
-        for (const snippet of shuffled) {
-            selected.push(snippet);
-            // Count words (split on whitespace)
-            wordCount += snippet.split(/\s+/).length;
-            if (wordCount >= targetWords) break;
-        }
-
-        return selected.join('\n\n');
+        return this._selectByWordCount(this._validSnippets, targetWords, '\n\n');
     }
 
     static getText(mode, length = 25) {

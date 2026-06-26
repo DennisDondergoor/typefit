@@ -11,6 +11,14 @@ class FirebaseSync {
         this._cachedToken = null;
     }
 
+    // Cache the current user's ID token for synchronous use during page unload.
+    _cacheToken() {
+        if (!this.user) return;
+        this.user.getIdToken()
+            .then(t => { this._cachedToken = t; })
+            .catch(e => { console.warn('Token cache failed:', e); });
+    }
+
     init() {
         const firebaseConfig = {
             apiKey: "AIzaSyAasIsRPq0Ciuxf-yyTcgWsL5SFk2WR-ME",
@@ -30,7 +38,7 @@ class FirebaseSync {
             this.user = user;
             // Pre-cache token for reliable page-unload sync
             if (user) {
-                user.getIdToken().then(t => { this._cachedToken = t; }).catch(() => {});
+                this._cacheToken();
             } else {
                 this._cachedToken = null;
                 // Cancel any pending sync on sign-out
@@ -126,9 +134,7 @@ class FirebaseSync {
             if (!this.user) return;
             const ok = await this.saveToCloud(getDataFn());
             // Refresh cached token for reliable page-unload sync
-            if (this.user) {
-                this.user.getIdToken().then(t => { this._cachedToken = t; }).catch(e => { console.warn('Token refresh failed:', e); });
-            }
+            this._cacheToken();
             if (this.onSyncResult) this.onSyncResult(ok);
         }, 2000);
     }
@@ -144,15 +150,16 @@ class FirebaseSync {
         if (this.user && this.db && this._cachedToken) {
             const projectId = this.db.app.options.projectId;
             const uid = this.user.uid;
-            // NOTE: the updateMask field paths below must stay in sync with the keys
-            // returned by App.getAllData(). A new key won't persist on unload until
-            // it's added here as an updateMask.fieldPaths entry.
-            const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${uid}?updateMask.fieldPaths=sessions&updateMask.fieldPaths=bookProgress&updateMask.fieldPaths=totalTime&updateMask.fieldPaths=dailyTime`;
-            // Convert to Firestore REST format
+            // Derive the updateMask from the data keys so it can never drift from
+            // whatever App.getAllData() returns — a new key persists automatically.
             const fields = {};
             for (const [key, value] of Object.entries(data)) {
                 fields[key] = this._toFirestoreValue(value);
             }
+            const mask = Object.keys(data)
+                .map(f => `updateMask.fieldPaths=${encodeURIComponent(f)}`)
+                .join('&');
+            const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${uid}?${mask}`;
             // Use cached token synchronously — no async await during unload
             fetch(url, {
                 method: 'PATCH',
