@@ -150,16 +150,16 @@ class FirebaseSync {
         if (this.user && this.db && this._cachedToken) {
             const projectId = this.db.app.options.projectId;
             const uid = this.user.uid;
-            // Derive the updateMask from the data keys so it can never drift from
-            // whatever App.getAllData() returns — a new key persists automatically.
+            // Build the Firestore fields and the updateMask in one pass. Deriving
+            // the mask from the data keys means it can never drift from whatever
+            // App.getAllData() returns — a new key persists automatically.
             const fields = {};
+            const maskParts = [];
             for (const [key, value] of Object.entries(data)) {
                 fields[key] = this._toFirestoreValue(value);
+                maskParts.push(`updateMask.fieldPaths=${encodeURIComponent(key)}`);
             }
-            const mask = Object.keys(data)
-                .map(f => `updateMask.fieldPaths=${encodeURIComponent(f)}`)
-                .join('&');
-            const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${uid}?${mask}`;
+            const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${uid}?${maskParts.join('&')}`;
             // Use cached token synchronously — no async await during unload
             fetch(url, {
                 method: 'PATCH',
