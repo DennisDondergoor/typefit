@@ -25,10 +25,12 @@ No build step, no package manager, no tests. The app is a static site served fro
 Single-page app with screen toggling (add/remove `active` class). All source is in `docs/`:
 
 - **index.html** — All screens: menu, practice, summary, progress, book/chapter selection. Font (Source Code Pro) and size (38px) are hardcoded in CSS — no settings UI.
-- **app.js** — Main application (~1,470 lines). Contains: `StorageManager` (localStorage wrapper with `_safeParseJSON` for corrupted data), `TypingSession` (single session state/logic), `TextGenerator` (practice text generation with Fisher-Yates shuffle), `App` (controller that wires everything together)
+- **app.js** — Main application (~1,450 lines). Contains: `StorageManager` (localStorage wrapper with `_safeParseJSON` for corrupted data), `TypingSession` (single session state/logic), `TextGenerator` (practice text generation with Fisher-Yates shuffle), `App` (controller that wires everything together)
 - **style.css** — All styles. Uses CSS variables in `:root` for theming — changing a variable updates everywhere
-- **data.js** — `SENTENCES` and `PYTHON_SNIPPETS` arrays (large static dataset, ~315KB)
-- **books.js** — `BOOKS` array. Spans short stories to novels; some CC-licensed (Cory Doctorow). Large file (~1MB), served directly.
+- **data.js** — `SENTENCES` and `PYTHON_SNIPPETS` arrays (large static dataset, ~315KB). Lazy-loaded via `App.loadData()` on first sentences/python practice.
+- **books.js** — `BOOKS` array. Spans short stories to novels; some CC-licensed (Cory Doctorow). Large file (~1MB). Lazy-loaded via `App.loadBooks()` on first books practice.
+
+Only `firebase.js` and `app.js` are loaded eagerly from index.html. The two large content files are pulled in on demand by injecting a `<script>` tag, so the initial page load never pays for content the user may not reach. `startPractice()` is `async` and awaits the relevant loader (toast + early return on fetch failure).
 - **firebase.js** — `FirebaseSync` class (Firestore compat SDK v10, GitHub OAuth)
 
 ### Typing Engine
@@ -62,7 +64,7 @@ Auto-advances to next uncompleted paragraph after each completion (no summary sh
 
 **`_suppressSync` flag.** Set during cloud load to prevent the loaded data from immediately triggering a cloud save cycle.
 
-**Large data files.** `data.js` and `books.js` are committed to the repo and served directly. No CDN needed for GitHub Pages.
+**Large data files.** `data.js` and `books.js` are committed to the repo and served directly (no CDN needed for GitHub Pages), but loaded lazily — `loadData()` and `loadBooks()` are `typeof`-guarded mirrors that inject a `<script>` tag on first use. Don't reference `SENTENCES`/`PYTHON_SNIPPETS`/`BOOKS` before their loader has run.
 
 **Books sorted by word count, completed last.** Books are ordered from shortest to longest to help users choose based on available time. Fully completed books (100%) sink to the bottom, within their own word-count order. Word counts are calculated and displayed in the UI.
 
