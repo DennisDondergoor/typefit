@@ -41,12 +41,7 @@ class FirebaseSync {
                 this._cacheToken();
             } else {
                 this._cachedToken = null;
-                // Cancel any pending sync on sign-out
-                if (this.syncTimeout) {
-                    clearTimeout(this.syncTimeout);
-                    this.syncTimeout = null;
-                }
-                this._pendingGetData = null;
+                this.cancelPendingSync();
             }
             if (this.onAuthChangeCallback) {
                 this.onAuthChangeCallback(user);
@@ -118,6 +113,15 @@ class FirebaseSync {
         } catch (error) {
             console.error('Cloud field delete failed:', error);
         }
+    }
+
+    // Drop any pending debounced save so stale data isn't re-saved.
+    cancelPendingSync() {
+        if (this.syncTimeout) {
+            clearTimeout(this.syncTimeout);
+            this.syncTimeout = null;
+        }
+        this._pendingGetData = null;
     }
 
     // Debounced sync - waits 2 seconds after last change before syncing

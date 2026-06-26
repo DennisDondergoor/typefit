@@ -160,8 +160,7 @@ class StorageManager {
         localStorage.removeItem(this.KEYS.SESSIONS);
     }
 
-    getStats() {
-        const sessions = this.getSessions();
+    getStats(sessions = this.getSessions()) {
         if (sessions.length === 0) {
             return { totalSessions: 0, avgWpm: 0, avgAccuracy: 0, bestWpm: 0 };
         }
@@ -425,6 +424,16 @@ class App {
         this.progressScreen = document.getElementById('progress-screen');
         this.bookSelectionScreen = document.getElementById('book-selection-screen');
         this.chapterSelectionScreen = document.getElementById('chapter-selection-screen');
+        // All screens, for showScreen() — derived from markup so it can't drift
+        this.screens = document.querySelectorAll('.screen');
+
+        // Confirm modal + toast (cached like every other element)
+        this.confirmModal = document.getElementById('confirm-modal');
+        this.confirmModalTitle = document.getElementById('confirm-modal-title');
+        this.confirmModalSubtitle = document.getElementById('confirm-modal-subtitle');
+        this.confirmYesBtn = document.getElementById('confirm-yes-btn');
+        this.confirmNoBtn = document.getElementById('confirm-no-btn');
+        this.toast = document.getElementById('toast');
 
         // Book selection elements
         this.bookList = document.getElementById('book-list');
@@ -517,11 +526,8 @@ class App {
         this.clearDataBtn.addEventListener('click', () => {
             this.showConfirm('Clear all typing stats?', 'Book progress will be kept.', async () => {
                 this.storage.clearTypingStats();
-                if (this.firebase.syncTimeout) {
-                    clearTimeout(this.firebase.syncTimeout);
-                    this.firebase.syncTimeout = null;
-                    this.firebase._pendingGetData = null;
-                }
+                // Cancel any pending debounced sync so stale sessions aren't re-saved
+                this.firebase.cancelPendingSync();
                 await this.firebase.deleteField('sessions');
                 this.showProgress();
             });
@@ -585,6 +591,11 @@ class App {
             totalTime: this.storage.getTotalTime(),
             dailyTime: this.storage.getDailyTime(),
         };
+    }
+
+    // True when actively practicing a book (mode selected AND a book is loaded).
+    get inBookMode() {
+        return this.currentMode === 'books' && !!this.currentBook;
     }
 
     syncToCloud() {
@@ -671,9 +682,7 @@ class App {
         const totalSeconds = this.storage.getTotalTime();
 
         const units = (seconds) => {
-            const h = Math.floor(seconds / 3600);
-            const m = Math.floor((seconds % 3600) / 60);
-            const s = seconds % 60;
+            const { h, m, s } = this._hms(seconds);
             return [h > 0 ? h + 'h' : '', (h > 0 || m > 0) ? m + 'm' : '', s + 's'];
         };
 
@@ -691,8 +700,7 @@ class App {
     }
 
     showScreen(screen) {
-        [this.menuScreen, this.practiceScreen, this.summaryScreen, this.progressScreen, this.bookSelectionScreen, this.chapterSelectionScreen]
-            .forEach(s => s.classList.remove('active'));
+        this.screens.forEach(s => s.classList.remove('active'));
         screen.classList.add('active');
     }
 
@@ -741,7 +749,7 @@ class App {
     async startPractice() {
         let text;
 
-        if (this.currentMode === 'books' && this.currentBook) {
+        if (this.inBookMode) {
             // Load book progress (clamp to valid bounds in case of corrupted data)
             const progress = this.storage.getBookProgress(this.currentBook.id);
             this.bookChapter = Math.max(0, Math.min(progress.chapter || 0, this.currentBook.chapters.length));
@@ -800,7 +808,7 @@ class App {
         }
 
         // Strip Gutenberg _italic_ markers from book text
-        if (this.currentMode === 'books') {
+        if (this.inBookMode) {
             text = this.stripGutenbergItalics(text);
         }
 
@@ -882,15 +890,24 @@ class App {
             }
         }
 
-        // Update cursor position
-        this.updateCursorPosition();
+        // Measure the cursor span + container once and reuse for both cursor
+        // positioning and the scroll-into-view check (avoids a double reflow).
+        const container = this.textDisplay;
+        const cursorSpan = this.charSpans[Math.min(pos, this.charSpans.length - 1)];
+        if (!cursorSpan) {
+            this.updateCursorPosition();
+            return;
+        }
+        const containerRect = container.getBoundingClientRect();
+        const spanRect = cursorSpan.getBoundingClientRect();
 
-        // Scroll current character + cursor underline into view
-        const span = this.charSpans[pos];
-        if (span) {
-            const container = this.textDisplay;
-            const containerRect = container.getBoundingClientRect();
-            const spanRect = span.getBoundingClientRect();
+        // Cursor's content-coordinate top is invariant to the scrollTop write below,
+        // so positioning it with the pre-scroll rects is safe.
+        this.updateCursorPosition(spanRect, containerRect);
+
+        // Scroll current character + cursor underline into view (only when pos is a
+        // real character; at end-of-text charSpans[pos] is undefined → nothing to do).
+        if (pos < this.charSpans.length) {
             const cursorBottom = spanRect.bottom + 3; // 3px cursor underline
             if (spanRect.top < containerRect.top) {
                 container.scrollTop += spanRect.top - containerRect.top;
@@ -900,14 +917,14 @@ class App {
         }
     }
 
-    updateCursorPosition() {
+    updateCursorPosition(spanRect = null, containerRect = null) {
         if (!this.cursorEl || !this.charSpans) return;
         const pos = this.session ? this.session.position : 0;
         const span = this.charSpans[Math.min(pos, this.charSpans.length - 1)];
         if (!span) return;
         const container = this.textDisplay;
-        const spanRect = span.getBoundingClientRect();
-        const containerRect = container.getBoundingClientRect();
+        spanRect ??= span.getBoundingClientRect();
+        containerRect ??= container.getBoundingClientRect();
         this.cursorEl.style.left = (spanRect.left - containerRect.left + container.scrollLeft) + 'px';
         this.cursorEl.style.top = (spanRect.top - containerRect.top + container.scrollTop + spanRect.height) + 'px';
         this.cursorEl.style.width = spanRect.width + 'px';
@@ -930,9 +947,12 @@ class App {
     }
 
     escapeHtml(text) {
-        this._escapeDiv ??= document.createElement('div');
-        this._escapeDiv.textContent = text;
-        return this._escapeDiv.innerHTML;
+        // Pure-string escape (no DOM round-trip) — renderText calls this once per
+        // character, so a textContent/innerHTML bounce per char is wasteful.
+        return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
     }
 
     stripGutenbergItalics(text) {
@@ -941,11 +961,11 @@ class App {
     }
 
     showConfirm(message, subtitle, onConfirm) {
-        const modal = document.getElementById('confirm-modal');
-        const title = document.getElementById('confirm-modal-title');
-        const sub = document.getElementById('confirm-modal-subtitle');
-        const yesBtn = document.getElementById('confirm-yes-btn');
-        const noBtn = document.getElementById('confirm-no-btn');
+        const modal = this.confirmModal;
+        const title = this.confirmModalTitle;
+        const sub = this.confirmModalSubtitle;
+        const yesBtn = this.confirmYesBtn;
+        const noBtn = this.confirmNoBtn;
         title.textContent = message;
         sub.textContent = subtitle || '';
         sub.style.display = (subtitle && subtitle.trim()) ? '' : 'none';
@@ -962,7 +982,7 @@ class App {
     }
 
     showToast(message, duration = 3000) {
-        const toast = document.getElementById('toast');
+        const toast = this.toast;
         toast.textContent = message;
         toast.classList.remove('hidden', 'fade-out');
         clearTimeout(this._toastTimeout);
@@ -976,9 +996,8 @@ class App {
     handleKeyDown(e) {
         // Handle Escape for modals and navigation screens
         if (e.key === 'Escape') {
-            const confirmModal = document.getElementById('confirm-modal');
-            if (!confirmModal.classList.contains('hidden')) {
-                document.getElementById('confirm-no-btn').click();
+            if (!this.confirmModal.classList.contains('hidden')) {
+                this.confirmNoBtn.click();
                 return;
             }
             if (this.progressScreen.classList.contains('active')) {
@@ -994,7 +1013,7 @@ class App {
                 return;
             }
             if (this.summaryScreen.classList.contains('active')) {
-                if (this.currentMode === 'books' && this.currentBook) {
+                if (this.inBookMode) {
                     this.showChapterSelection();
                 } else {
                     this.showMenu();
@@ -1037,7 +1056,7 @@ class App {
         }
 
         // Paragraph navigation for books mode
-        if (this.currentMode === 'books' && this.currentBook) {
+        if (this.inBookMode) {
             const dir = e.key === 'PageDown' ? 1 : e.key === 'PageUp' ? -1 : 0;
             if (dir) {
                 e.preventDefault();
@@ -1167,7 +1186,7 @@ class App {
         this.storage.saveSession(sessionData);
 
         // Advance book progress if in books mode
-        if (this.currentMode === 'books' && this.currentBook) {
+        if (this.inBookMode) {
             // Mark current paragraph as completed
             this.storage.markParagraphCompleted(this.currentBook.id, this.bookChapter, this.bookParagraph);
 
@@ -1204,8 +1223,8 @@ class App {
     }
 
     showProgress() {
-        const stats = this.storage.getStats();
         const sessions = this.storage.getSessions();
+        const stats = this.storage.getStats(sessions);
 
         // Overview stats
         this.totalSessions.textContent = stats.totalSessions;
@@ -1234,26 +1253,34 @@ class App {
         this.showScreen(this.progressScreen);
     }
 
-    async loadBooks() {
-        if (typeof BOOKS !== 'undefined') return;
+    _loadScript(src) {
         return new Promise((resolve, reject) => {
             const script = document.createElement('script');
-            script.src = 'books.js';
+            script.src = src;
             script.onload = resolve;
             script.onerror = reject;
             document.head.appendChild(script);
         });
     }
 
+    async loadBooks() {
+        if (typeof BOOKS === 'undefined') await this._loadScript('books.js');
+    }
+
     async loadData() {
-        if (typeof SENTENCES !== 'undefined') return;
-        return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = 'data.js';
-            script.onload = resolve;
-            script.onerror = reject;
-            document.head.appendChild(script);
-        });
+        if (typeof SENTENCES === 'undefined') await this._loadScript('data.js');
+    }
+
+    // Total word count for a book. BOOKS is static, so compute once and cache by id.
+    _bookWordCount(book) {
+        this._wordCounts ??= new Map();
+        let count = this._wordCounts.get(book.id);
+        if (count === undefined) {
+            count = book.chapters.reduce((sum, ch) =>
+                sum + ch.paragraphs.reduce((pSum, p) => pSum + p.split(/\s+/).length, 0), 0);
+            this._wordCounts.set(book.id, count);
+        }
+        return count;
     }
 
     async showBookSelection() {
@@ -1274,11 +1301,7 @@ class App {
         });
         this.bookList.innerHTML = sortedBooks.map(book => {
             const stats = statsByBook.get(book.id);
-
-            // Count total words
-            const totalWords = book.chapters.reduce((sum, ch) => {
-                return sum + ch.paragraphs.reduce((pSum, p) => pSum + p.split(/\s+/).length, 0);
-            }, 0);
+            const totalWords = this._bookWordCount(book);
 
             return `
                 <div class="book-card" data-book-id="${book.id}">
@@ -1400,10 +1423,17 @@ class App {
         return { chapter: this.currentBook.chapters.length, paragraph: 0 };
     }
 
+    // Split seconds into whole hours/minutes/seconds.
+    _hms(seconds) {
+        return {
+            h: Math.floor(seconds / 3600),
+            m: Math.floor((seconds % 3600) / 60),
+            s: seconds % 60
+        };
+    }
+
     formatTime(seconds) {
-        const h = Math.floor(seconds / 3600);
-        const m = Math.floor((seconds % 3600) / 60);
-        const s = seconds % 60;
+        const { h, m, s } = this._hms(seconds);
         if (h > 0) return `${h}h ${m}m ${s}s`;
         if (m > 0) return `${m}m ${s}s`;
         return `${s}s`;

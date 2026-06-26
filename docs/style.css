@@ -126,7 +126,6 @@ body {
 }
 
 .mode-btn:active,
-.font-btn:active,
 .book-card:active,
 .chapter-card:active {
     transform: scale(0.97);
@@ -194,8 +193,7 @@ body {
     width: 90%;
 }
 
-.modal-content h1,
-.modal-content h2 {
+.modal-content h1 {
     font-size: 2rem;
     margin-bottom: 1.5rem;
     color: var(--text-color);
@@ -887,9 +885,4 @@ body {
 
 .device-message-text:last-of-type {
     margin-bottom: 1.5rem;
-}
-
-.device-icon {
-    font-size: 3rem;
-    opacity: 0.5;
 }
