@@ -113,10 +113,9 @@ class StorageManager {
         const stored = localStorage.getItem(this.KEYS.DAILY_TIME);
         if (stored) {
             const parsed = this._safeParseJSON(stored, null);
-            if (!parsed) return { date: today, seconds: 0 };
-            if (parsed.date === today) return parsed;
+            if (parsed && parsed.date === today && Number.isFinite(parsed.seconds)) return parsed;
         }
-        // Migration or new day: compute from existing sessions
+        // Missing, corrupted, or new day: compute from existing sessions
         const sessions = this.getSessions();
         let seconds = 0;
         for (const s of sessions) {
@@ -128,9 +127,9 @@ class StorageManager {
     }
 
     getTotalTime() {
-        const stored = localStorage.getItem(this.KEYS.TOTAL_TIME);
-        if (stored !== null) return parseInt(stored, 10);
-        // Migration: compute from existing sessions
+        const stored = parseInt(localStorage.getItem(this.KEYS.TOTAL_TIME), 10);
+        if (Number.isFinite(stored)) return stored;
+        // Missing or corrupted: recompute from existing sessions
         const total = this.getSessions().reduce((sum, s) => sum + (s.time || 0), 0);
         localStorage.setItem(this.KEYS.TOTAL_TIME, String(total));
         return total;
@@ -715,7 +714,6 @@ class App {
         if (this.session) {
             this.session.pause();
             this.pauseOverlay.classList.remove('hidden');
-            this.pauseOverlay.focus();
             // Arrow keys + Enter drive the overlay buttons; start on Resume
             this._initKeyNav([[this.resumeBtn, this.quitBtn]]);
         }
@@ -770,10 +768,13 @@ class App {
             // Get current paragraph (skip empty ones)
             let chapter = this.currentBook.chapters[this.bookChapter];
             text = chapter.paragraphs[this.bookParagraph];
+            let skippedEmpty = false;
             while (this.isParagraphEmpty(text)) {
+                skippedEmpty = true;
                 this.storage.markParagraphCompleted(this.currentBook.id, this.bookChapter, this.bookParagraph);
                 const next = this.findNextUncompleted(this.bookChapter, this.bookParagraph);
                 if (next.chapter >= this.currentBook.chapters.length) {
+                    this.syncToCloud();
                     this.showBookComplete();
                     return;
                 }
@@ -782,6 +783,10 @@ class App {
                 this.storage.setBookProgress(this.currentBook.id, next.chapter, next.paragraph);
                 chapter = this.currentBook.chapters[this.bookChapter];
                 text = chapter.paragraphs[this.bookParagraph];
+            }
+            // Persist progress advanced by skipping, like skipParagraph/endSession do
+            if (skippedEmpty) {
+                this.syncToCloud();
             }
 
             // Show chapter title with paragraph info
@@ -965,7 +970,14 @@ class App {
         sub.textContent = subtitle || '';
         sub.style.display = (subtitle && subtitle.trim()) ? '' : 'none';
         modal.classList.remove('hidden');
-        // Left/Right + Enter drive the modal buttons; start on Cancel for safety
+        // Left/Right + Enter drive the modal buttons; start on Cancel for
+        // safety. Snapshot the underlying screen's nav state for restore.
+        const savedNav = {
+            rows: this._navRows,
+            row: this._navRow,
+            col: this._navCol,
+            container: this._navContainer
+        };
         this._initKeyNav([[yesBtn, noBtn]], { startCol: 1 });
 
         // Abort removes BOTH listeners on close — { once: true } would leave the
@@ -974,6 +986,14 @@ class App {
         const close = () => {
             modal.classList.add('hidden');
             controller.abort();
+            // Put keyboard nav back on the screen under the modal
+            if (savedNav.rows) {
+                this._initKeyNav(savedNav.rows, {
+                    startRow: savedNav.row,
+                    startCol: savedNav.col,
+                    scrollContainer: savedNav.container
+                });
+            }
         };
         yesBtn.addEventListener('click', () => {
             close();
@@ -1029,17 +1049,11 @@ class App {
             }
         }
 
-        // Handle Enter/Space on summary screen to practice again
-        if (this.summaryScreen.classList.contains('active')) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                this.startPractice();
-                return;
-            }
-        }
-
-        // Arrow-key navigation on menu and book/chapter selection screens
+        // Arrow-key navigation on menu, summary, progress, and book/chapter
+        // selection screens
         if (this.menuScreen.classList.contains('active') ||
+            this.summaryScreen.classList.contains('active') ||
+            this.progressScreen.classList.contains('active') ||
             this.bookSelectionScreen.classList.contains('active') ||
             this.chapterSelectionScreen.classList.contains('active')) {
             this.handleNavKey(e);
@@ -1239,7 +1253,13 @@ class App {
         this.summaryChars.textContent = stats.totalChars;
 
         this.showScreen(this.summaryScreen);
-        this.practiceAgainBtn.focus();
+        this._initKeyNav([[this.practiceAgainBtn]]);
+    }
+
+    // Stored mode values → menu button labels ('python' is stored in existing
+    // session data, but the menu calls it "Code"). Others use CSS capitalize.
+    _modeLabel(mode) {
+        return mode === 'python' ? 'Code' : mode;
     }
 
     showProgress() {
@@ -1257,7 +1277,7 @@ class App {
             this.sessionHistory.innerHTML = sessions.slice(0, 20).map(session => `
                 <div class="session-item">
                     <div>
-                        <span class="session-mode">${this.escapeHtml(session.mode)}</span>
+                        <span class="session-mode">${this.escapeHtml(this._modeLabel(session.mode))}</span>
                         <span class="session-date">${this.formatDate(session.date)}</span>
                     </div>
                     <div class="session-stats">
@@ -1271,6 +1291,9 @@ class App {
         }
 
         this.showScreen(this.progressScreen);
+        // Clear button reachable by keyboard, but its danger highlight only
+        // appears after the first arrow press
+        this._initKeyNav([[this.clearDataBtn]], { startRow: -1 });
     }
 
     _loadScript(src) {
@@ -1316,7 +1339,10 @@ class App {
         this._navContainer = scrollContainer;
         this._navRow = -1;
         this._navCol = 0;
-        this._selectNav(startRow, startCol);
+        // startRow -1 = nothing highlighted until the first arrow press
+        if (startRow >= 0) {
+            this._selectNav(startRow, startCol);
+        }
     }
 
     // Single-column card list (book/chapter selection)
@@ -1368,7 +1394,7 @@ class App {
         if (dRow || dCol) {
             e.preventDefault();
             this._selectNav(this._navRow + dRow, this._navCol + dCol);
-        } else if (e.key === 'Enter') {
+        } else if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             if (this._navRow >= 0) {
                 // Reuse the element's click handler so keyboard and mouse
