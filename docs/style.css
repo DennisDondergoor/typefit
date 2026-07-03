@@ -119,7 +119,8 @@ body {
     transition: all 0.2s;
 }
 
-.mode-btn:hover {
+.mode-btn:hover,
+.mode-btn.selected {
     background-color: var(--accent-color);
     border-color: var(--accent-color);
 }
@@ -148,7 +149,8 @@ body {
     transition: color 0.2s;
 }
 
-.text-btn:hover {
+.text-btn:hover,
+.text-btn.selected {
     color: var(--accent-color);
 }
 
@@ -231,7 +233,8 @@ body {
     border: 2px solid var(--border-color);
 }
 
-.secondary-btn:hover {
+.secondary-btn:hover,
+.secondary-btn.selected {
     background-color: var(--border-color);
 }
 
@@ -241,7 +244,8 @@ body {
     border: 2px solid var(--error-color);
 }
 
-.danger-btn:hover {
+.danger-btn:hover,
+.danger-btn.selected {
     background-color: var(--error-color);
     color: white;
 }
@@ -256,8 +260,9 @@ body {
     padding: 0.5rem;
 }
 
-.icon-btn:hover {
-    color: var(--text-color);
+.icon-btn:hover,
+.icon-btn.selected {
+    color: var(--accent-color);
 }
 
 
@@ -696,6 +701,13 @@ body {
 .chapter-card.current {
     border-color: var(--success-color);
     background-color: rgba(74, 222, 128, 0.1);
+}
+
+/* Keyboard-highlighted card (arrow keys + Enter) — matches hover styling */
+.book-card.selected,
+.chapter-card.selected {
+    border-color: var(--accent-color);
+    background-color: rgba(74, 158, 255, 0.04);
 }
 
 .chapter-card.completed {

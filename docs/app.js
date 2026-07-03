@@ -412,7 +412,7 @@ class App {
 
         this.initElements();
         this.initEventListeners();
-        this.updateTimerDisplay();
+        this.showMenu();
         this.initFirebase();
     }
 
@@ -696,6 +696,11 @@ class App {
         this.session = null;
         this.updateTimerDisplay();
         this.showScreen(this.menuScreen);
+        // Two nav rows: the mode buttons, then the footer (progress + sign in).
+        // Start the highlight on the current mode's button.
+        const modeBtns = [...this.modeBtns];
+        const modeIndex = modeBtns.findIndex(btn => btn.dataset.mode === this.currentMode);
+        this._initKeyNav([modeBtns, [this.viewProgressBtn, this.authBtn]], { startCol: Math.max(0, modeIndex) });
     }
 
     updateChapterTitle(chapter, chapterIndex, paragraphIndex) {
@@ -711,6 +716,8 @@ class App {
             this.session.pause();
             this.pauseOverlay.classList.remove('hidden');
             this.pauseOverlay.focus();
+            // Arrow keys + Enter drive the overlay buttons; start on Resume
+            this._initKeyNav([[this.resumeBtn, this.quitBtn]]);
         }
     }
 
@@ -958,6 +965,8 @@ class App {
         sub.textContent = subtitle || '';
         sub.style.display = (subtitle && subtitle.trim()) ? '' : 'none';
         modal.classList.remove('hidden');
+        // Left/Right + Enter drive the modal buttons; start on Cancel for safety
+        this._initKeyNav([[yesBtn, noBtn]], { startCol: 1 });
 
         // Abort removes BOTH listeners on close — { once: true } would leave the
         // other button's listener attached, firing a stale callback next time.
@@ -986,12 +995,18 @@ class App {
 
 
     handleKeyDown(e) {
-        // Handle Escape for modals and navigation screens
-        if (e.key === 'Escape') {
-            if (!this.confirmModal.classList.contains('hidden')) {
+        // Confirm modal captures all keys while open
+        if (!this.confirmModal.classList.contains('hidden')) {
+            if (e.key === 'Escape') {
                 this.confirmNoBtn.click();
-                return;
+            } else {
+                this.handleNavKey(e);
             }
+            return;
+        }
+
+        // Handle Escape for navigation screens
+        if (e.key === 'Escape') {
             if (this.progressScreen.classList.contains('active')) {
                 this.showMenu();
                 return;
@@ -1023,19 +1038,32 @@ class App {
             }
         }
 
+        // Arrow-key navigation on menu and book/chapter selection screens
+        if (this.menuScreen.classList.contains('active') ||
+            this.bookSelectionScreen.classList.contains('active') ||
+            this.chapterSelectionScreen.classList.contains('active')) {
+            this.handleNavKey(e);
+            return;
+        }
+
         // Only handle keys during practice
         if (!this.session || !this.practiceScreen.classList.contains('active')) {
             return;
         }
 
-        // If paused, handle Enter/Space/Escape
-        if (this.session.isPaused) {
+        // If the pause overlay is up: Space always resumes, Escape quits,
+        // arrows + Enter drive the Resume/Quit buttons. Check the overlay, not
+        // session.isPaused — pausing before the first keystroke shows the
+        // overlay without the session clock having started.
+        if (!this.pauseOverlay.classList.contains('hidden')) {
             e.preventDefault();
             if (e.key === 'Escape') {
                 this.hidePause();
                 this.showMenu();
-            } else if (e.key === 'Enter' || e.key === ' ') {
+            } else if (e.key === ' ') {
                 this.resumePractice();
+            } else {
+                this.handleNavKey(e);
             }
             return;
         }
@@ -1275,6 +1303,81 @@ class App {
         return count;
     }
 
+    // Set up arrow-key navigation over a grid of elements (rows of columns):
+    // Up/Down move between rows, Left/Right within a row, Enter activates.
+    // Must run after showScreen() — scrolling the highlight into view needs layout.
+    _initKeyNav(rows, { startRow = 0, startCol = 0, scrollContainer = null } = {}) {
+        // Clear the previous group's highlight — menu/pause/modal elements
+        // persist in the DOM across screen switches, so it would go stale
+        if (this._navRows && this._navRow >= 0) {
+            this._navRows[this._navRow][this._navCol].classList.remove('selected');
+        }
+        this._navRows = rows.filter(row => row.length > 0);
+        this._navContainer = scrollContainer;
+        this._navRow = -1;
+        this._navCol = 0;
+        this._selectNav(startRow, startCol);
+    }
+
+    // Single-column card list (book/chapter selection)
+    _initListNav(container, startIndex = 0) {
+        const cards = [...container.querySelectorAll('.book-card, .chapter-card')];
+        this._initKeyNav(cards.map(card => [card]), { startRow: startIndex, scrollContainer: container });
+    }
+
+    _selectNav(row, col) {
+        if (this._navRows.length === 0) return;
+        const r = Math.max(0, Math.min(row, this._navRows.length - 1));
+        const c = Math.max(0, Math.min(col, this._navRows[r].length - 1));
+        if (this._navRow >= 0) {
+            this._navRows[this._navRow][this._navCol].classList.remove('selected');
+        }
+        this._navRow = r;
+        this._navCol = c;
+        const el = this._navRows[r][c];
+        el.classList.add('selected');
+        this._scrollNavIntoView(el);
+    }
+
+    _scrollNavIntoView(el) {
+        const rect = el.getBoundingClientRect();
+        const margin = 8;
+        const container = this._navContainer;
+        if (container && container.scrollHeight > container.clientHeight + 1) {
+            // Scrollable list (chapters): adjust the container's own scrollTop —
+            // scrollIntoView() would scroll the whole page.
+            const cRect = container.getBoundingClientRect();
+            if (rect.top < cRect.top) {
+                container.scrollTop += rect.top - cRect.top - margin;
+            } else if (rect.bottom > cRect.bottom) {
+                container.scrollTop += rect.bottom - cRect.bottom + margin;
+            }
+        } else {
+            // Everything else scrolls at page level (no-op when already visible)
+            if (rect.top < 0) {
+                window.scrollBy(0, rect.top - margin);
+            } else if (rect.bottom > window.innerHeight) {
+                window.scrollBy(0, rect.bottom - window.innerHeight + margin);
+            }
+        }
+    }
+
+    handleNavKey(e) {
+        const dRow = e.key === 'ArrowDown' ? 1 : e.key === 'ArrowUp' ? -1 : 0;
+        const dCol = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (dRow || dCol) {
+            e.preventDefault();
+            this._selectNav(this._navRow + dRow, this._navCol + dCol);
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (this._navRow >= 0) {
+                // Reuse the element's click handler so keyboard and mouse
+                // selection go through the same path
+                this._navRows[this._navRow][this._navCol].click();
+            }
+        }
+    }
+
     async showBookSelection() {
         try {
             await this.loadBooks();
@@ -1282,6 +1385,7 @@ class App {
             console.error('Failed to load books:', err);
             this.bookList.innerHTML = '<p>Failed to load books.</p>';
             this.showScreen(this.bookSelectionScreen);
+            this._initListNav(this.bookList);
             return;
         }
         // Render book cards — completed books sink to the bottom, preserving word-count order within each group
@@ -1324,6 +1428,8 @@ class App {
         });
 
         this.showScreen(this.bookSelectionScreen);
+        // Start on the first card — incomplete books sort before completed ones
+        this._initListNav(this.bookList);
     }
 
     selectBook(bookId) {
@@ -1379,6 +1485,10 @@ class App {
         });
 
         this.showScreen(this.chapterSelectionScreen);
+        // Start on the current chapter (clamped: progress.chapter can be one
+        // past the end when the book is complete)
+        const startIndex = Math.min(progress.chapter || 0, this.currentBook.chapters.length - 1);
+        this._initListNav(this.chapterList, Math.max(0, startIndex));
     }
 
     selectChapter(chapterIndex) {
