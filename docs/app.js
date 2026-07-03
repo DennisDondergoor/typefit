@@ -510,18 +510,6 @@ class App {
             this.showMenu();
         });
 
-        // Pause overlay keyboard handling
-        this.pauseOverlay.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                e.preventDefault();
-                this.hidePause();
-                this.showMenu();
-            } else if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                this.resumePractice();
-            }
-        });
-
         // Clear data
         this.clearDataBtn.addEventListener('click', () => {
             this.showConfirm('Clear all typing stats?', 'Book progress will be kept.', async () => {
@@ -971,14 +959,18 @@ class App {
         sub.style.display = (subtitle && subtitle.trim()) ? '' : 'none';
         modal.classList.remove('hidden');
 
-        // Use { once: true } to auto-remove listeners after click (no manual cleanup needed)
+        // Abort removes BOTH listeners on close — { once: true } would leave the
+        // other button's listener attached, firing a stale callback next time.
+        const controller = new AbortController();
+        const close = () => {
+            modal.classList.add('hidden');
+            controller.abort();
+        };
         yesBtn.addEventListener('click', () => {
-            modal.classList.add('hidden');
+            close();
             onConfirm();
-        }, { once: true });
-        noBtn.addEventListener('click', () => {
-            modal.classList.add('hidden');
-        }, { once: true });
+        }, { signal: controller.signal });
+        noBtn.addEventListener('click', close, { signal: controller.signal });
     }
 
     showToast(message, duration = 3000) {
