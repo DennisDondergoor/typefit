@@ -531,6 +531,17 @@ class App {
             }
         });
 
+        // Keyboard-only app: block real mouse clicks everywhere. Keyboard
+        // navigation activates elements via synthetic .click() calls, which
+        // are untrusted events and pass through. Click listeners on elements
+        // remain as the shared activation plumbing.
+        document.addEventListener('click', (e) => {
+            if (e.isTrusted) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }, true);
+
         // Keyboard handling
         document.addEventListener('keydown', (e) => this.handleKeyDown(e));
 

@@ -58,6 +58,8 @@ Auto-advances to next uncompleted paragraph after each completion (no summary sh
 
 ## Key Gotchas
 
+**The app is keyboard-only — real mouse clicks are blocked.** A capture-phase listener in `initEventListeners` swallows every trusted click (`e.isTrusted`). Keyboard navigation (`_initKeyNav`/`handleNavKey`) activates the highlighted element via synthetic `.click()`, which is untrusted and passes through — so click listeners on elements remain as the shared activation plumbing. New interactive elements must be added to a nav grid via `_initKeyNav`; mouse-dependent UI will silently not respond. There are no `:hover`/`:active`/`cursor: pointer` styles; `.selected` is the only highlight.
+
 **Firestore merge:true cannot clear nested fields.** `set(data, { merge: true })` with empty objects does NOT remove keys. Use `deleteField()` (which calls `FieldValue.delete()`). Cancel any pending debounced sync before deleting, or stale data gets re-saved.
 
 **Three practice modes: `books`, `sentences`, `python`** (see `data-mode` buttons in index.html). `TextGenerator.getText()` routes `python`→`getPythonSnippets()` and everything else (`sentences` + `default`)→`getSentences()`. There is no word-list mode — the old `WORDS` array and `getWords()` were removed. To add one, reintroduce a data source and a `getText()` case.
