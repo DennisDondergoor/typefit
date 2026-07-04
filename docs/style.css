@@ -472,17 +472,20 @@ body {
 }
 
 #session-history::-webkit-scrollbar,
+.book-list::-webkit-scrollbar,
 .chapter-list::-webkit-scrollbar {
     width: 6px;
 }
 
 #session-history::-webkit-scrollbar-track,
+.book-list::-webkit-scrollbar-track,
 .chapter-list::-webkit-scrollbar-track {
     background: var(--border-color);
     border-radius: 3px;
 }
 
 #session-history::-webkit-scrollbar-thumb,
+.book-list::-webkit-scrollbar-thumb,
 .chapter-list::-webkit-scrollbar-thumb {
     background: var(--accent-color);
     border-radius: 3px;
@@ -538,6 +541,11 @@ body {
     width: 850px;
     max-width: 90vw;
     margin: 0 auto;
+    padding-right: 1.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-color) var(--border-color);
+    max-height: 70vh;
+    overflow-y: auto;
 }
 
 .book-card {
