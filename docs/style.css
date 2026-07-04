@@ -226,19 +226,6 @@ body {
     color: white;
 }
 
-.icon-btn {
-    background: none;
-    border: none;
-    color: var(--text-color);
-    font-size: 1.4rem;
-    font-family: inherit;
-    padding: 0.5rem;
-}
-
-.icon-btn.selected {
-    color: var(--accent-color);
-}
-
 
 /* Practice Screen */
 #practice-screen {
