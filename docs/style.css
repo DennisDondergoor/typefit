@@ -351,20 +351,10 @@ body {
     color: white;
 }
 
-.practice-footer {
-    margin-top: 2rem;
-    text-align: center;
-}
-
 .hint {
     color: var(--text-color);
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
-}
-
-.footer-logo {
-    color: var(--accent-color);
-    font-weight: 600;
 }
 
 /* Pause Overlay */
@@ -391,12 +381,8 @@ body {
 
 .pause-content h1 {
     font-size: 2rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     color: var(--text-color);
-}
-
-.pause-content .hint {
-    margin-bottom: 2rem;
 }
 
 .pause-content button {
@@ -412,10 +398,6 @@ body {
     font-size: 2rem;
     margin-bottom: 2rem;
     color: var(--text-color);
-}
-
-.brand {
-    color: var(--accent-color);
 }
 
 .summary-stats {
@@ -452,10 +434,6 @@ body {
     gap: 1rem;
     justify-content: center;
     margin-top: 2rem;
-}
-
-.summary-hint {
-    margin-top: 1.5rem;
 }
 
 /* Progress Screen */
@@ -730,8 +708,7 @@ body {
     color: var(--completed-color);
 }
 
-.chapter-title.hidden,
-.book-hint.hidden {
+.chapter-title.hidden {
     display: none;
 }
 

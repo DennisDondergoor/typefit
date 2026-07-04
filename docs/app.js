@@ -425,7 +425,6 @@ class App {
 
         // Chapter title in practice
         this.chapterTitle = document.getElementById('chapter-title');
-        this.bookHint = document.querySelector('.book-hint');
 
         // Menu elements
         this.modeBtns = document.querySelectorAll('.mode-btn');
@@ -785,10 +784,8 @@ class App {
             // Show chapter title with paragraph info
             this.updateChapterTitle(chapter, this.bookChapter, this.bookParagraph);
             this.chapterTitle.classList.remove('hidden');
-            this.bookHint.classList.remove('hidden');
         } else {
             this.chapterTitle.classList.add('hidden');
-            this.bookHint.classList.add('hidden');
             this.textDisplay.classList.remove('already-completed');
             try {
                 await this.loadData();
