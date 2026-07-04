@@ -6,10 +6,11 @@
     --accent-color: #4a9eff;
     --success-color: #4ade80;
     --completed-color: #2d8a4e;
-    --error-color: #f87171;
-    --error-bg: #dc2626;
+    --error-color: #f87171;   /* soft red: danger buttons */
+    --mistype-bg: #dc2626;     /* strong red: fill behind a mistyped character */
     --card-bg: #111;
     --border-color: #333;
+    --overlay-bg: rgba(0, 0, 0, 0.9);
 }
 
 * {
@@ -159,7 +160,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: var(--overlay-bg);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -346,7 +347,7 @@ body {
 }
 
 .text-display .char.incorrect {
-    background-color: var(--error-bg);
+    background-color: var(--mistype-bg);
     color: white;
 }
 
@@ -373,7 +374,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: var(--overlay-bg);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -816,7 +817,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: var(--overlay-bg);
     display: flex;
     justify-content: center;
     align-items: center;

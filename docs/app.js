@@ -181,7 +181,6 @@ class TypingSession {
     constructor(text) {
         this.text = text;
         this.position = 0;
-        this.mistakes = {};
         this.startTime = null;
         this.endTime = null;
         this.correctChars = 0;
@@ -249,8 +248,6 @@ class TypingSession {
         } else {
             // Don't advance position on incorrect key
             this.lastKeyIncorrect = true;
-            const displayKey = this.getDisplayKey(expected);
-            this.mistakes[displayKey] = (this.mistakes[displayKey] || 0) + 1;
         }
 
         return false;
@@ -286,7 +283,6 @@ class TypingSession {
             if (this.position >= this.maxPosition) {
                 this.totalTyped++;
             }
-            this.mistakes['Tab'] = (this.mistakes['Tab'] || 0) + 1;
             return false;
         }
 
@@ -310,13 +306,6 @@ class TypingSession {
         return false;
     }
 
-    getDisplayKey(char) {
-        if (char === ' ') return 'Space';
-        if (char === '\n') return 'Enter';
-        if (char === '\t') return 'Tab';
-        return char;
-    }
-
     getStats() {
         const endTime = this.endTime || Date.now();
         const totalElapsedMs = endTime - (this.startTime || endTime);
@@ -334,18 +323,11 @@ class TypingSession {
             ? Math.round((this.correctChars / this.totalTyped) * 100)
             : 100;
 
-        const progress = this.text.length > 0
-            ? Math.round((this.position / this.text.length) * 100)
-            : 100;
-
         return {
             wpm,
             accuracy,
-            progress,
             elapsedSeconds,
-            totalChars: this.text.length,
-            correctChars: this.correctChars,
-            mistakes: { ...this.mistakes }
+            totalChars: this.text.length
         };
     }
 
@@ -388,7 +370,7 @@ class TextGenerator {
         return this._selectByWordCount(this._validSnippets, targetWords, '\n\n');
     }
 
-    static getText(mode, length = 25) {
+    static getText(mode, length) {
         return mode === 'python'
             ? this.getPythonSnippets(length)
             : this.getSentences(length);
@@ -963,7 +945,9 @@ class App {
         return String(text)
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
     }
 
     stripGutenbergItalics(text) {

@@ -157,12 +157,16 @@ class FirebaseSync {
             // Build the Firestore fields and the updateMask in one pass. Deriving
             // the mask from the data keys means it can never drift from whatever
             // App.getAllData() returns — a new key persists automatically.
+            // Mask paths descend into nested maps so the PATCH deep-merges like
+            // saveToCloud's set(..., { merge: true }) instead of replacing whole
+            // top-level fields (which could drop another device's book progress).
             const fields = {};
-            const maskParts = [];
+            const paths = [];
             for (const [key, value] of Object.entries(data)) {
                 fields[key] = this._toFirestoreValue(value);
-                maskParts.push(`updateMask.fieldPaths=${encodeURIComponent(key)}`);
+                this._collectMaskPaths(value, this._escapeFieldPath(key), paths);
             }
+            const maskParts = paths.map(p => `updateMask.fieldPaths=${encodeURIComponent(p)}`);
             const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${uid}?${maskParts.join('&')}`;
             // Use cached token synchronously — no async await during unload
             fetch(url, {
@@ -172,6 +176,25 @@ class FirebaseSync {
                 keepalive: true
             }).catch(() => {});
         }
+    }
+
+    // Recurse into plain maps and emit leaf field paths for the updateMask.
+    // Arrays and scalars are leaves (merge:true replaces those wholesale too);
+    // empty maps emit nothing, matching merge:true's no-op on {}.
+    _collectMaskPaths(value, prefix, out) {
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+            for (const [k, v] of Object.entries(value)) {
+                this._collectMaskPaths(v, `${prefix}.${this._escapeFieldPath(k)}`, out);
+            }
+        } else {
+            out.push(prefix);
+        }
+    }
+
+    // Quote map keys that aren't simple identifiers (Firestore field path syntax).
+    _escapeFieldPath(key) {
+        if (/^[A-Za-z_][A-Za-z0-9_]*$/.test(key)) return key;
+        return '`' + key.replace(/\\/g, '\\\\').replace(/`/g, '\\`') + '`';
     }
 
     _toFirestoreValue(value) {
