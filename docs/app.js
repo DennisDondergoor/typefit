@@ -72,17 +72,16 @@ class StorageManager {
         }
 
         return {
-            currentChapter: Math.min(progress.chapter + 1, book.chapters.length),
             totalChapters: book.chapters.length,
-            completedChars,
-            totalChars,
             percentComplete: totalChars > 0 ? Math.round((completedChars / totalChars) * 100) : 0
         };
     }
 
     getSessions() {
         const data = localStorage.getItem(this.KEYS.SESSIONS);
-        return data ? this._safeParseJSON(data, []) : [];
+        const parsed = data ? this._safeParseJSON(data, []) : [];
+        // Valid JSON of the wrong shape counts as corrupted too
+        return Array.isArray(parsed) ? parsed : [];
     }
 
     saveSession(session) {
@@ -140,7 +139,9 @@ class StorageManager {
     }
 
     getAllBookProgress() {
-        return this._safeParseJSON(localStorage.getItem(this.KEYS.BOOK_PROGRESS) || '{}', {});
+        const parsed = this._safeParseJSON(localStorage.getItem(this.KEYS.BOOK_PROGRESS) || '{}', {});
+        // Valid JSON of the wrong shape counts as corrupted too
+        return (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) ? parsed : {};
     }
 
     setAllBookProgress(allProgress) {

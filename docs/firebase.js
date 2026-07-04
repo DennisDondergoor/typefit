@@ -55,12 +55,7 @@ class FirebaseSync {
 
     async signIn() {
         const provider = new firebase.auth.GithubAuthProvider();
-        try {
-            await this.auth.signInWithPopup(provider);
-        } catch (error) {
-            console.error('Sign in failed:', error);
-            throw error;
-        }
+        await this.auth.signInWithPopup(provider);
     }
 
     async signOut() {
