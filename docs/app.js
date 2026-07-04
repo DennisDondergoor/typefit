@@ -1470,23 +1470,28 @@ class App {
 
         this.chapterScreenTitle.textContent = `${this.currentBook.title} (${this.currentBook.year})`;
         const progress = this.storage.getBookProgress(this.currentBook.id);
+        // Only mark a "current" chapter once the book has actually been
+        // started — on a fresh book the resume pointer sits at chapter 0
+        // and the green treatment would suggest progress that isn't there
+        const bookStarted = Object.values(progress.completed).some(arr => (arr || []).length > 0);
 
         this.chapterList.innerHTML = this.currentBook.chapters.map((chapter, index) => {
             const paragraphCount = chapter.paragraphs.length;
             const completedInChapter = progress.completed[index] || [];
             const completedCount = completedInChapter.length;
-            const isCurrent = index === progress.chapter;
+            const isCurrent = bookStarted && index === progress.chapter;
             const isCompleted = completedCount === paragraphCount;
+            const paragraphNoun = paragraphCount === 1 ? 'paragraph' : 'paragraphs';
 
             let statusText;
             let statusClass = '';
             if (isCompleted) {
                 statusText = 'Completed';
             } else if (completedCount > 0 || isCurrent) {
-                statusText = `${completedCount}/${paragraphCount} paragraphs`;
+                statusText = `${completedCount}/${paragraphCount} ${paragraphNoun}`;
                 statusClass = 'in-progress';
             } else {
-                statusText = `${paragraphCount} paragraphs`;
+                statusText = `${paragraphCount} ${paragraphNoun}`;
             }
 
             const cardClass = isCompleted ? 'completed' : ((completedCount > 0 || isCurrent) ? 'current' : '');
