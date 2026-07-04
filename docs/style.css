@@ -235,7 +235,7 @@ body {
     height: 100dvh;
     max-height: 100vh;
     max-height: 100dvh;
-    padding: 1rem 0 2rem;
+    padding: 1rem 0;
 }
 
 #practice-screen.active {
@@ -740,46 +740,6 @@ body {
 
 .toast.fade-out {
     opacity: 0;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-    .mode-buttons {
-        flex-direction: column;
-    }
-
-    .mode-btn {
-        width: 100%;
-    }
-
-    .summary-stats {
-        max-width: 280px;
-    }
-
-    .stat-box {
-        width: 100%;
-        max-width: 200px;
-    }
-
-    .summary-actions {
-        flex-direction: column;
-    }
-
-    .summary-actions button {
-        width: 100%;
-    }
-
-    .text-display {
-        font-size: calc(var(--font-size) * 0.85);
-        padding: 1rem;
-    }
-
-    .timer-display {
-        position: static;
-        margin-left: 0;
-        text-align: center;
-        margin-bottom: 1.5rem;
-    }
 }
 
 /* Device Not Supported Overlay */

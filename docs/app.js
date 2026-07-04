@@ -1248,8 +1248,8 @@ class App {
         this._initKeyNav([[this.practiceAgainBtn]]);
     }
 
-    // Stored mode values → menu button labels ('python' is stored in existing
-    // session data, but the menu calls it "Code"). Others use CSS capitalize.
+    // Stored mode values → display labels ('python' is stored in existing
+    // session data, but the menu calls it "Code").
     _modeLabel(mode) {
         const labels = { books: 'Books', sentences: 'Sentences', python: 'Code' };
         return labels[mode] || mode;
@@ -1402,7 +1402,7 @@ class App {
             await this.loadBooks();
         } catch (err) {
             console.error('Failed to load books:', err);
-            this.bookList.innerHTML = '<p>Failed to load books.</p>';
+            this.bookList.innerHTML = '<p class="empty-state">Failed to load books.</p>';
             this.showScreen(this.bookSelectionScreen);
             this._initListNav(this.bookList);
             return;
