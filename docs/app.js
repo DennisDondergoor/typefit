@@ -1432,7 +1432,7 @@ class App {
                         </div>
                     </div>
                     <div class="book-stats">
-                        <span class="chapters">${stats.totalChapters} chapters</span>
+                        <span class="chapters">${stats.totalChapters === 1 ? `${book.chapters[0].paragraphs.length} paragraphs` : `${stats.totalChapters} chapters`}</span>
                         <span class="words">${totalWords.toLocaleString()} words</span>
                     </div>
                 </div>
@@ -1455,7 +1455,13 @@ class App {
     selectBook(bookId) {
         this.currentBook = BOOKS.find(b => b.id === bookId);
         if (this.currentBook) {
-            this.showChapterSelection();
+            // Single-chapter books skip the one-card chapter list and go
+            // straight into practice, same as selecting that chapter would
+            if (this.currentBook.chapters.length === 1) {
+                this.selectChapter(0);
+            } else {
+                this.showChapterSelection();
+            }
         }
     }
 
