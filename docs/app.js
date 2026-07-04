@@ -1251,7 +1251,8 @@ class App {
     // Stored mode values → menu button labels ('python' is stored in existing
     // session data, but the menu calls it "Code"). Others use CSS capitalize.
     _modeLabel(mode) {
-        return mode === 'python' ? 'Code' : mode;
+        const labels = { books: 'Books', sentences: 'Sentences', python: 'Code' };
+        return labels[mode] || mode;
     }
 
     showProgress() {

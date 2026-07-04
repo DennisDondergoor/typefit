@@ -508,9 +508,8 @@ body {
 }
 
 .session-mode {
-    color: var(--accent-color);
+    color: var(--text-color);
     font-size: 1.4rem;
-    text-transform: capitalize;
 }
 
 .session-stats {
@@ -561,6 +560,7 @@ body {
 
 .book-info h3 {
     font-size: 1.4rem;
+    font-weight: normal;
     margin-bottom: 0.25rem;
 }
 
