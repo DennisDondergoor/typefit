@@ -1,16 +1,16 @@
 # Typefit
 
-A web-based typing practice app with adjustable font size and book reading mode.
+A web-based, keyboard-only typing practice app with sentence, Python code, and book reading modes.
 
 ## Features
 
 - **Multiple practice modes**: Sentences, Python code, and books
-- **Book mode**: Type through classic novels with progress tracking
+- **Book mode**: Type through classic novels with progress tracking, sorted shortest to longest
 - **Real-time feedback**: WPM, accuracy, and character highlighting
-- **Adjustable font size**: slider in settings
-- **Statistics tracking**: Session history and problem key analysis
+- **Statistics tracking**: Session history
 - **Accent tolerance**: Type 'u' for 'ü', 'i' for 'î', etc.
 - **Tab support**: Press Tab to skip indentation in Python code
+- **Keyboard-only**: no mouse required — the whole app is navigable and playable from the keyboard
 
 ## Usage
 
@@ -21,7 +21,8 @@ Run a local server (see Local Development below) and open http://localhost:8000.
 - **Type normally**: During practice sessions
 - **Backspace**: Fix errors
 - **Tab**: Skip up to 4 spaces (for Python indentation)
-- **Escape**: Return to menu
+- **Escape**: Return to menu / go back
+- **Arrow keys**: Navigate menus and lists
 
 ## Practice Modes
 
