@@ -25,7 +25,7 @@ No build step, no package manager, no tests. The app is a static site served fro
 Single-page app with screen toggling (add/remove `active` class). All source is in `docs/`:
 
 - **index.html** — All screens: menu, practice, summary, progress, book/chapter selection. Font (Source Code Pro) and size (38px) are hardcoded in CSS — no settings UI.
-- **app.js** — Main application (~1,450 lines). Contains: `StorageManager` (localStorage wrapper with `_safeParseJSON` for corrupted data), `TypingSession` (single session state/logic), `TextGenerator` (practice text generation with Fisher-Yates shuffle), `App` (controller that wires everything together)
+- **app.js** — Main application (~1,600 lines). Contains: `StorageManager` (localStorage wrapper with `_safeParseJSON` for corrupted data), `TypingSession` (single session state/logic), `TextGenerator` (practice text generation with Fisher-Yates shuffle), `App` (controller that wires everything together)
 - **style.css** — All styles. Uses CSS variables in `:root` for theming — changing a variable updates everywhere
 - **data.js** — `SENTENCES` and `PYTHON_SNIPPETS` arrays (large static dataset, ~315KB). Lazy-loaded via `App.loadData()` on first sentences/python practice.
 - **books.js** — `BOOKS` array. Spans short stories to novels; some CC-licensed (Cory Doctorow). Large file (~1MB). Lazy-loaded via `App.loadBooks()` on first books practice.
@@ -46,14 +46,15 @@ Only `firebase.js` and `app.js` are loaded eagerly from index.html. The two larg
 
 ### Books Mode
 
-Auto-advances to next uncompleted paragraph after each completion (no summary shown). PageUp/PageDown skip between paragraphs across chapters. Progress stored per book as `{chapter, paragraph, completed: {chapterIdx: [paragraphIdx...]}}`.
+Auto-advances to next uncompleted paragraph after each completion (no summary shown). PageUp/PageDown skip between paragraphs across chapters. Progress stored per book as `{chapter, paragraph, completed: {chapterIdx: [paragraphIdx...]}}`. Single-chapter books skip the chapter-selection screen and go straight to practice.
 
 ### Cloud Sync (Firebase)
 
 - Single Firestore document per user at `users/{uid}`, saved with `{ merge: true }`
-- `scheduleSave()` debounces 2 seconds; pending save flushed on page unload
+- `scheduleSave()` debounces 2 seconds (takes a getter function, not a data snapshot); pending save flushed on page unload
 - Cloud data loads only on auth state change, not on navigation
-- Auth token pre-cached and refreshed after each save for reliable `flushPendingSync()` during page unload
+- `flushPendingSync()` uses `fetch` with `keepalive: true` against the Firestore REST API; its `updateMask` is built recursively (`_collectMaskPaths`) so it deep-merges nested maps like `merge: true` instead of replacing whole top-level fields
+- Auth token pre-cached (`_cachedToken`) and refreshed after each save so the unload flush can run synchronously
 - Merge strategy: sessions unioned by date, book progress unions completed sets, total/daily time take max
 
 ## Key Gotchas
@@ -69,6 +70,14 @@ Auto-advances to next uncompleted paragraph after each completion (no summary sh
 **Large data files.** `data.js` and `books.js` are committed to the repo and served directly (no CDN needed for GitHub Pages), but loaded lazily — `loadData()` and `loadBooks()` are `typeof`-guarded mirrors that inject a `<script>` tag on first use. Don't reference `SENTENCES`/`PYTHON_SNIPPETS`/`BOOKS` before their loader has run.
 
 **Books sorted by word count, completed last.** Books are ordered from shortest to longest to help users choose based on available time. Fully completed books (100%) sink to the bottom, within their own word-count order. Word counts are calculated and displayed in the UI.
+
+## UI Conventions
+
+- **No keyboard hints or screen footers anywhere.** All hint lines, screen footers, and the pause-overlay hint were deliberately removed — don't add them back. The only `.hint`-classed element left is the confirm modal's subtitle, which is content, not a key hint. Branding appears only as the menu title.
+- **All text is white** (`--text-color`); hierarchy comes from font size, not color (`--text-muted` was removed). Two tiers: 1.4rem primary (buttons, labels, card titles), 1.2rem secondary (dates, metadata, status). Stat values are 2rem.
+- Title case for headings/labels, sentence case for descriptive text; no `text-transform: uppercase`.
+- Border radius 8px on buttons/cards, 12px on modal content; component borders 2px, internal dividers 1px.
+- Native `confirm()` is never used — call `showConfirm(title, subtitle, onConfirm)`. Escape navigates back on every screen.
 
 ## Deployment
 
@@ -86,7 +95,7 @@ Changes go live automatically within ~1 minute.
 
 Short imperative subject, blank line, explanation of why. End with:
 ```
-Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
-(Adjust model name as appropriate: Claude Sonnet 4.6, Claude Opus 4.6, etc.)
+(Or use the current model's name, e.g. `Claude Fable 5`.) Never commit or push unless explicitly instructed.
