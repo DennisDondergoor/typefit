@@ -1,5 +1,38 @@
 const BOOKS = [
   {
+    "id": "printcrime",
+    "title": "Printcrime",
+    "author": "Cory Doctorow",
+    "chapters": [
+      {
+        "number": 1,
+        "title": "Printcrime",
+        "paragraphs": [
+          "Overclocked is dedicated to Pat York, who made my stories better.",
+          "Printcrime came out of a discussion I had with a friend who’d been to hear a spokesman for the British recording industry talk about the future of “intellectual property.” The record exec opined the recording industry’s great and hysterical spasm would form the template for a never-ending series of spasms as 3D printers, fabricators and rapid prototypers laid waste to every industry that relied on trademarks or patents.",
+          "My friend thought that, as kinky as this was, it did show a fair amount of foresight, coming as it did from the notoriously technosqueamish record industry.",
+          "I was less impressed.",
+          "It’s almost certainly true that control over the production of trademarked and patented objects will diminish over the coming years of object-on-demand printing, but to focus on 3D printers’ impact on trademarks is a stupendously weird idea.",
+          "It’s as if the railroad were looming on the horizon, and the most visionary thing the futurists of the day can think of to say about it is that these iron horses will have a disastrous effect on the hardworking manufacturers of oat-bags for horses. It’s true, as far as it goes, but it’s so tunnel-visioned as to be practically blind.",
+          "When Nature magazine asked me if I’d write a short-short story for their back-page, I told them I’d do it, then went home, sat down on the bed and banged this one out. They bought it the next morning, and we were in business.",
+          "The coppers smashed my father’s printer when I was eight. I remember the hot, cling-film-in-a-microwave smell of it, and Da’s look of ferocious concentration as he filled it with fresh goop, and the warm, fresh-baked feel of the objects that came out of it.",
+          "The coppers came through the door with truncheons swinging, one of them reciting the terms of the warrant through a bullhorn. One of Da’s customers had shopped him. The ipolice paid in high-grade pharmaceuticals—performance enhancers, memory supplements, metabolic boosters. The kind of thing that cost a fortune over the counter; the kind of thing you could print at home, if you didn’t mind the risk of having your kitchen filled with a sudden crush of big, beefy bodies, hard truncheons whistling through the air, smashing anyone and anything that got in the way.",
+          "They destroyed grandma’s trunk, the one she’d brought from the old country. They smashed our little refrigerator and the purifier unit over the window. My tweetybird escaped death by hiding in a corner of his cage as a big, booted foot crushed most of it into a sad tangle of printer-wire.",
+          "Da. What they did to him. When he was done, he looked like he’d been brawling with an entire rugby side. They brought him out the door and let the newsies get a good look at him as they tossed him in the car, while a spokesman told the world that my Da’s organized-crime bootlegging operation had been responsible for at least twenty million in contraband, and that my Da, the desperate villain, had resisted arrest.",
+          "I saw it all from my phone, in the remains of the sitting room, watching it on the screen and wondering how, just how anyone could look at our little flat and our terrible, manky estate and mistake it for the home of an organized crime kingpin. They took the printer away, of course, and displayed it like a trophy for the newsies. Its little shrine in the kitchenette seemed horribly empty. When I roused myself and picked up the flat and rescued my peeping poor tweetybird, I put a blender there. It was made out of printed parts, so it would only last a month before I’d need to print new bearings and other moving parts. Back then, I could take apart and reassemble anything that could be printed.",
+          "By the time I turned eighteen, they were ready to let Da out of prison. I’d visited him three times—on my tenth birthday, on his fiftieth, and when Ma died. It had been two years since I’d last seen him and he was in bad shape. A prison fight had left him with a limp, and he looked over his shoulder so often it was like he had a tic. I was embarrassed when the minicab dropped us off in front of the estate, and tried to keep my distance from this ruined, limping skeleton as we went inside and up the stairs.",
+          "“Lanie,” he said, as he sat me down. “You’re a smart girl, I know that. Trig. You wouldn’t know where your old Da could get a printer and some goop?”",
+          "I squeezed my hands into fists so tight my fingernails cut into my palms. I closed my eyes. “You’ve been in prison for ten years, Da. Ten. Years. You’re going to risk another ten years to print out more blenders and pharma, more laptops and designer hats?”",
+          "He grinned. “I’m not stupid, Lanie. I’ve learned my lesson. There’s no hat or laptop that’s worth going to jail for. I’m not going to print none of that rubbish, never again.” He had a cup of tea, and he drank it now like it was whisky, a sip and then a long, satisfied exhalation. He closed his eyes and leaned back in his chair.",
+          "“Come here, Lanie, let me whisper in your ear. Let me tell you the thing that I decided while I spent ten years in lockup. Come here and listen to your stupid Da.”",
+          "I felt a guilty pang about ticking him off. He was off his rocker, that much was clear. God knew what he went through in prison. “What, Da?” I said, leaning in close.",
+          "“Lanie, I’m going to print more printers. Lots more printers. One for everyone. That’s worth going to jail for. That’s worth anything.”"
+        ]
+      }
+    ],
+    "year": 2006
+  },
+  {
     "id": "story-of-an-hour",
     "title": "The Story of an Hour",
     "author": "Kate Chopin",
@@ -35,40 +68,6 @@ const BOOKS = [
         ]
       }
     ]
-  },
-  {
-    "id": "printcrime",
-    "title": "Printcrime",
-    "author": "Cory Doctorow",
-    "chapters": [
-      {
-        "number": 1,
-        "title": "Printcrime",
-        "paragraphs": [
-          "“This song is Copyrighted in U.S., under Seal of Copyright #154085, for a period of 28 years, and anybody caught singin it without our permission, will be mighty good friends of ourn, cause we don’t give a dern. Publish it. Write it. Sing it. Swing to it. Yodel it. We wrote it, that’s all we wanted to do.”",
-          "Overclocked is dedicated to Pat York, who made my stories better.",
-          "Printcrime came out of a discussion I had with a friend who’d been to hear a spokesman for the British recording industry talk about the future of “intellectual property.” The record exec opined the recording industry’s great and hysterical spasm would form the template for a never-ending series of spasms as 3D printers, fabricators and rapid prototypers laid waste to every industry that relied on trademarks or patents.",
-          "My friend thought that, as kinky as this was, it did show a fair amount of foresight, coming as it did from the notoriously technosqueamish record industry.",
-          "I was less impressed.",
-          "It’s almost certainly true that control over the production of trademarked and patented objects will diminish over the coming years of object-on-demand printing, but to focus on 3D printers’ impact on trademarks is a stupendously weird idea.",
-          "It’s as if the railroad were looming on the horizon, and the most visionary thing the futurists of the day can think of to say about it is that these iron horses will have a disastrous effect on the hardworking manufacturers of oat-bags for horses. It’s true, as far as it goes, but it’s so tunnel-visioned as to be practically blind.",
-          "When Nature magazine asked me if I’d write a short-short story for their back-page, I told them I’d do it, then went home, sat down on the bed and banged this one out. They bought it the next morning, and we were in business.",
-          "The coppers smashed my father’s printer when I was eight. I remember the hot, cling-film-in-a-microwave smell of it, and Da’s look of ferocious concentration as he filled it with fresh goop, and the warm, fresh-baked feel of the objects that came out of it.",
-          "The coppers came through the door with truncheons swinging, one of them reciting the terms of the warrant through a bullhorn. One of Da’s customers had shopped him. The ipolice paid in high-grade pharmaceuticals—performance enhancers, memory supplements, metabolic boosters. The kind of thing that cost a fortune over the counter; the kind of thing you could print at home, if you didn’t mind the risk of having your kitchen filled with a sudden crush of big, beefy bodies, hard truncheons whistling through the air, smashing anyone and anything that got in the way.",
-          "They destroyed grandma’s trunk, the one she’d brought from the old country. They smashed our little refrigerator and the purifier unit over the window. My tweetybird escaped death by hiding in a corner of his cage as a big, booted foot crushed most of it into a sad tangle of printer-wire.",
-          "Da. What they did to him. When he was done, he looked like he’d been brawling with an entire rugby side. They brought him out the door and let the newsies get a good look at him as they tossed him in the car, while a spokesman told the world that my Da’s organized-crime bootlegging operation had been responsible for at least twenty million in contraband, and that my Da, the desperate villain, had resisted arrest.",
-          "I saw it all from my phone, in the remains of the sitting room, watching it on the screen and wondering how, just how anyone could look at our little flat and our terrible, manky estate and mistake it for the home of an organized crime kingpin. They took the printer away, of course, and displayed it like a trophy for the newsies. Its little shrine in the kitchenette seemed horribly empty. When I roused myself and picked up the flat and rescued my peeping poor tweetybird, I put a blender there. It was made out of printed parts, so it would only last a month before I’d need to print new bearings and other moving parts. Back then, I could take apart and reassemble anything that could be printed.",
-          "By the time I turned eighteen, they were ready to let Da out of prison. I’d visited him three times—on my tenth birthday, on his fiftieth, and when Ma died. It had been two years since I’d last seen him and he was in bad shape. A prison fight had left him with a limp, and he looked over his shoulder so often it was like he had a tic. I was embarrassed when the minicab dropped us off in front of the estate, and tried to keep my distance from this ruined, limping skeleton as we went inside and up the stairs.",
-          "“Lanie,” he said, as he sat me down. “You’re a smart girl, I know that. Trig. You wouldn’t know where your old Da could get a printer and some goop?”",
-          "I squeezed my hands into fists so tight my fingernails cut into my palms. I closed my eyes. “You’ve been in prison for ten years, Da. Ten. Years. You’re going to risk another ten years to print out more blenders and pharma, more laptops and designer hats?”",
-          "He grinned. “I’m not stupid, Lanie. I’ve learned my lesson. There’s no hat or laptop that’s worth going to jail for. I’m not going to print none of that rubbish, never again.” He had a cup of tea, and he drank it now like it was whisky, a sip and then a long, satisfied exhalation. He closed his eyes and leaned back in his chair.",
-          "“Come here, Lanie, let me whisper in your ear. Let me tell you the thing that I decided while I spent ten years in lockup. Come here and listen to your stupid Da.”",
-          "I felt a guilty pang about ticking him off. He was off his rocker, that much was clear. God knew what he went through in prison. “What, Da?” I said, leaning in close.",
-          "“Lanie, I’m going to print more printers. Lots more printers. One for everyone. That’s worth going to jail for. That’s worth anything.”"
-        ]
-      }
-    ],
-    "year": 2006
   },
   {
     "id": "the-open-window",
@@ -1829,20 +1828,7 @@ const BOOKS = [
           "“Don’t stick around here all night again,” Felix said. “You need your sleep, too.”",
           "“You’re too good to us grunts,” Van said, and went back to typing.",
           "Felix went to the door and walked out into the night. Behind him, the biodiesel generator hummed and made its acrid fumes. The harvest moon was up, which he loved. Tomorrow, he’d go back and fix another computer and fight off entropy again. And why not?",
-          "It was what he did. He was a sysadmin.",
-          "Creative Commons License Deed",
-          "Attribution-NonCommercial-ShareAlike 2.5",
-          "* to Share—to copy, distribute, display, and perform the work",
-          "* to Remix—to make derivative works",
-          "Under the following conditions:",
-          "* Attribution. You must attribute the work in the manner specified by the author or licensor.",
-          "* Noncommercial. You may not use this work for commercial purposes.",
-          "* Share Alike. If you alter, transform, or build upon this work, you may distribute the resulting work only under a license identical to this one.",
-          "* For any reuse or distribution, you must make clear to others the license terms of this work.",
-          "* Any of these conditions can be waived if you get permission from the copyright holder.",
-          "Disclaimer: Your fair use and other rights are in no way affected by the above.",
-          "This is a human-readable summary of the Legal Code (the full license):",
-          "Machine-readable metadata (humans, ignore this):"
+          "It was what he did. He was a sysadmin."
         ]
       }
     ],
@@ -1857,7 +1843,6 @@ const BOOKS = [
         "number": 1,
         "title": "I, Robot",
         "paragraphs": [
-          "“This song is Copyrighted in U.S., under Seal of Copyright #154085, for a period of 28 years, and anybody caught singin it without our permission, will be mighty good friends of ourn, cause we don’t give a dern. Publish it. Write it. Sing it. Swing to it. Yodel it. We wrote it, that’s all we wanted to do.”",
           "Overclocked is dedicated to Pat York, who made my stories better.",
           "I was suckled on the Asimov Robots books, taken down off my father’s bookshelf and enjoyed again and again. I read dozens of Asimov novels, and my writing career began in earnest when I started to sell stories to Asimov’s Science Fiction Magazine, which I had read for so long as I’d had the pocket money to buy it on the stands.",
           "When Wired Magazine asked me to interview the director of the film I, Robot, I went back and re-read that old canon. I was struck immediately by one of the thin places in Asimov’s world-building: how could you have a society where only one company was allowed to make only one kind of robot?",
@@ -2271,7 +2256,6 @@ const BOOKS = [
         "number": 1,
         "title": "Introduction",
         "paragraphs": [
-          "“This song is Copyrighted in U.S., under Seal of Copyright #154085, for a period of 28 years, and anybody caught singin it without our permission, will be mighty good friends of ourn, cause we don’t give a dern. Publish it. Write it. Sing it. Swing to it. Yodel it. We wrote it, that’s all we wanted to do.”",
           "Overclocked is dedicated to Pat York, who made my stories better.",
           "My grandmother, Valentina Rachman (now Valerie Goldman), was a little girl when Hitler laid siege to Leningrad, 12 years old. All my life, she told me that she’d experienced horrors during the war that I’d never comprehend, but I’m afraid that in my callow youth, I discounted this. My grandmother wasn’t in a concentration camp, and as far as I knew, all that had happened is that she’d met my grandfather—a Red Army conscript—in Siberia, they’d deserted and gone to Azerbaijan, and my father had been born in a refugee camp near Baku. That’s dramatic, but hardly a major trauma.",
           "Then I went to St Petersburg with my family in the summer of 2005, and my grandmother walked us through the streets of her girlhood, and for the first time, she opened up about the war to me. She pointed out the corners where she’d seen frozen, starved corpses, their asses sliced away by black-market butchers; the windows from which she’d heaved the bodies of her starved neighbors when she grew too weak to carry them.",
