@@ -85,6 +85,15 @@ class StorageManager {
     }
 
     saveSession(session) {
+        // Read the running totals BEFORE the new session is stored. Both
+        // getTotalTime() and getDailyTime() fall back to recomputing from the
+        // stored sessions (key missing/corrupted, or a new day), and that
+        // recompute would already include the session being added — so reading
+        // them afterwards counts its seconds twice.
+        const secs = session.time || 0;
+        const priorTotal = this.getTotalTime();
+        const priorDaily = this.getDailyTime();
+
         const sessions = this.getSessions();
         sessions.unshift(session);
         // Keep last 100 sessions
@@ -92,14 +101,12 @@ class StorageManager {
             sessions.pop();
         }
         localStorage.setItem(this.KEYS.SESSIONS, JSON.stringify(sessions));
+
         // Accumulate time (never reset by clearing stats)
-        const secs = session.time || 0;
-        const total = this.getTotalTime() + secs;
-        localStorage.setItem(this.KEYS.TOTAL_TIME, String(total));
-        const daily = this.getDailyTime();
+        localStorage.setItem(this.KEYS.TOTAL_TIME, String(priorTotal + secs));
         localStorage.setItem(this.KEYS.DAILY_TIME, JSON.stringify({
-            date: daily.date,
-            seconds: daily.seconds + secs
+            date: priorDaily.date,
+            seconds: priorDaily.seconds + secs
         }));
     }
 
