@@ -172,9 +172,13 @@ class StorageManager {
             return { totalSessions: 0, avgWpm: 0, avgAccuracy: 0, bestWpm: 0 };
         }
 
+        // Averages are weighted by characters typed, so a two-word book
+        // paragraph can't count as much as a 300-word one
         const totalSessions = sessions.length;
-        const avgWpm = Math.round(sessions.reduce((sum, s) => sum + s.wpm, 0) / totalSessions);
-        const avgAccuracy = Math.round(sessions.reduce((sum, s) => sum + s.accuracy, 0) / totalSessions);
+        const weight = s => s.chars || 1;
+        const totalWeight = sessions.reduce((sum, s) => sum + weight(s), 0);
+        const avgWpm = Math.round(sessions.reduce((sum, s) => sum + s.wpm * weight(s), 0) / totalWeight);
+        const avgAccuracy = Math.round(sessions.reduce((sum, s) => sum + s.accuracy * weight(s), 0) / totalWeight);
         const bestWpm = Math.max(...sessions.map(s => s.wpm));
 
         return { totalSessions, avgWpm, avgAccuracy, bestWpm };
@@ -200,10 +204,11 @@ class TypingSession {
         this.totalPausedTime = 0;
     }
 
-    pause() {
+    // `at` backdates the pause (idle auto-pause starts it at the last keystroke)
+    pause(at = Date.now()) {
         if (!this.isPaused && this.startTime) {
             this.isPaused = true;
-            this.pauseStartTime = Date.now();
+            this.pauseStartTime = Math.max(at, this.startTime);
         }
     }
 
@@ -262,6 +267,12 @@ class TypingSession {
     }
 
     handleBackspace() {
+        // A wrong key never advanced the cursor, so the first Backspace only
+        // clears the error mark instead of deleting a correctly typed char
+        if (this.lastKeyIncorrect) {
+            this.lastKeyIncorrect = false;
+            return;
+        }
         if (this.position > 0) {
             this.position--;
             if (this.correctChars > 0) {
@@ -388,6 +399,10 @@ class TextGenerator {
 // ============================================
 // App Controller
 // ============================================
+// No keystroke for this long mid-session = walked away; auto-pause and
+// exclude the idle stretch from the session's time
+const IDLE_PAUSE_MS = 15000;
+
 class App {
     constructor() {
         this.storage = new StorageManager();
@@ -537,8 +552,13 @@ class App {
         // Flush pending cloud sync when page is hidden or unloading
         const flushSync = () => this.firebase.flushPendingSync();
         document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'hidden') flushSync();
+            if (document.visibilityState === 'hidden') {
+                this.autoPause();
+                flushSync();
+            }
         });
+        // Keystrokes can't reach an unfocused window, so pause on blur too
+        window.addEventListener('blur', () => this.autoPause());
         window.addEventListener('beforeunload', flushSync);
     }
 
@@ -693,6 +713,7 @@ class App {
 
     showMenu() {
         this.session = null;
+        clearTimeout(this._idleTimeout);
         this.updateTimerDisplay();
         this.showScreen(this.menuScreen);
         // Two nav rows: the mode buttons, then the footer (progress + sign in).
@@ -723,7 +744,25 @@ class App {
         if (this.session) {
             this.session.resume();
             this.pauseOverlay.classList.add('hidden');
+            this._resetIdleTimer();
         }
+    }
+
+    // Pause a running session that the user left (window hidden/blurred or
+    // idle). `at` backdates the pause so idle seconds aren't counted.
+    autoPause(at = Date.now()) {
+        if (this.session && this.session.startTime && !this.session.endTime &&
+            this.practiceScreen.classList.contains('active') &&
+            this.pauseOverlay.classList.contains('hidden')) {
+            this.session.pause(at);
+            this.pausePractice();
+        }
+    }
+
+    _resetIdleTimer() {
+        clearTimeout(this._idleTimeout);
+        const lastKey = Date.now();
+        this._idleTimeout = setTimeout(() => this.autoPause(lastKey), IDLE_PAUSE_MS);
     }
 
     hidePause() {
@@ -1088,6 +1127,8 @@ class App {
             this.pausePractice();
             return;
         }
+
+        this._resetIdleTimer();
 
         // Paragraph navigation for books mode
         if (this.inBookMode) {

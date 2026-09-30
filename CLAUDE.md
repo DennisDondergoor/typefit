@@ -39,7 +39,10 @@ Only `firebase.js` and `app.js` are loaded eagerly from index.html. The two larg
 - Accent normalization (`u` accepted for `ü`, etc.)
 - Dash matching (`-` accepted for em/en dash)
 - Tab skips up to 4 consecutive spaces (Python indentation)
+- Backspace right after a wrong key only clears the error mark (the cursor never advanced)
 - WPM = `(correctChars / 5) / minutes`, paused time excluded
+- Auto-pause on window blur/hidden and after `IDLE_PAUSE_MS` (15s) without a keystroke; the idle pause is backdated to the last keystroke
+- Progress-screen averages (WPM, accuracy) are weighted by session `chars`
 - `maxPosition` high-water mark ensures retyping after backspace doesn't inflate `totalTyped` or penalize accuracy
 
 `renderText()` creates all character spans once; `updateCharDisplay(fromPos)` incrementally updates only 2-3 spans around the cursor for performance.
