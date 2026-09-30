@@ -21,7 +21,7 @@ Run a local server (see Local Development below) and open http://localhost:8000.
 - **Type normally**: During practice sessions
 - **Backspace**: Fix errors
 - **Tab**: Skip up to 4 spaces (for Python indentation)
-- **Escape**: Return to menu / go back
+- **Escape**: Pause during practice (Space resumes); go back on other screens
 - **Arrow keys**: Navigate menus and lists
 
 ## Practice Modes
