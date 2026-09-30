@@ -11,14 +11,6 @@ class FirebaseSync {
         this._cachedToken = null;
     }
 
-    // Cache the current user's ID token for synchronous use during page unload.
-    _cacheToken() {
-        if (!this.user) return;
-        this.user.getIdToken()
-            .then(t => { this._cachedToken = t; })
-            .catch(e => { console.warn('Token cache failed:', e); });
-    }
-
     init() {
         const firebaseConfig = {
             apiKey: "AIzaSyAasIsRPq0Ciuxf-yyTcgWsL5SFk2WR-ME",
@@ -33,14 +25,26 @@ class FirebaseSync {
         this.auth = firebase.auth();
         this.db = firebase.firestore();
 
+        // Cache the ID token for synchronous use during page unload. This fires
+        // on sign-in, sign-out and every token refresh (the SDK refreshes
+        // before the 1-hour expiry), so the cached token never goes stale.
+        this.auth.onIdTokenChanged((user) => {
+            if (!user) {
+                this._cachedToken = null;
+                return;
+            }
+            user.getIdToken()
+                .then(t => {
+                    // Skip if the user signed out while the token was fetching
+                    if (this.auth.currentUser === user) this._cachedToken = t;
+                })
+                .catch(e => { console.warn('Token cache failed:', e); });
+        });
+
         // Listen for auth state changes
         this.auth.onAuthStateChanged((user) => {
             this.user = user;
-            // Pre-cache token for reliable page-unload sync
-            if (user) {
-                this._cacheToken();
-            } else {
-                this._cachedToken = null;
+            if (!user) {
                 this.cancelPendingSync();
             }
             if (this.onAuthChangeCallback) {
@@ -132,8 +136,6 @@ class FirebaseSync {
             this._pendingGetData = null;
             if (!this.user) return;
             const ok = await this.saveToCloud(getDataFn());
-            // Refresh cached token for reliable page-unload sync
-            this._cacheToken();
             if (this.onSyncResult) this.onSyncResult(ok);
         }, 2000);
     }
