@@ -7,7 +7,8 @@ class StorageManager {
             SESSIONS: 'typefit_sessions',
             BOOK_PROGRESS: 'typefit_book_progress',
             TOTAL_TIME: 'typefit_total_time',
-            DAILY_TIME: 'typefit_daily_time'
+            DAILY_TIME: 'typefit_daily_time',
+            LIFETIME: 'typefit_lifetime'
         };
     }
 
@@ -93,6 +94,7 @@ class StorageManager {
         const secs = session.time || 0;
         const priorTotal = this.getTotalTime();
         const priorDaily = this.getDailyTime();
+        const priorLifetime = this.getLifetimeStats();
 
         const sessions = this.getSessions();
         sessions.unshift(session);
@@ -108,6 +110,47 @@ class StorageManager {
             date: priorDaily.date,
             seconds: priorDaily.seconds + secs
         }));
+        this.setLifetimeStats(this._addToLifetime(priorLifetime, session));
+    }
+
+    // All-time stats tally, kept alongside the session list because that
+    // list is capped at 100 (and every book paragraph is a session).
+    // Averages are weighted by characters typed.
+    _emptyLifetime() {
+        return { sessions: 0, chars: 0, wpmChars: 0, accChars: 0, bestWpm: 0 };
+    }
+
+    _addToLifetime(lifetime, session) {
+        const w = session.chars || 1;
+        return {
+            sessions: lifetime.sessions + 1,
+            chars: lifetime.chars + w,
+            wpmChars: lifetime.wpmChars + (session.wpm || 0) * w,
+            accChars: lifetime.accChars + (session.accuracy || 0) * w,
+            bestWpm: Math.max(lifetime.bestWpm, session.wpm || 0)
+        };
+    }
+
+    lifetimeFromSessions(sessions = this.getSessions()) {
+        return sessions.reduce((acc, s) => this._addToLifetime(acc, s), this._emptyLifetime());
+    }
+
+    isValidLifetime(value) {
+        return !!value && typeof value === 'object' &&
+            Object.keys(this._emptyLifetime()).every(k => Number.isFinite(value[k]) && value[k] >= 0);
+    }
+
+    getLifetimeStats() {
+        const parsed = this._safeParseJSON(localStorage.getItem(this.KEYS.LIFETIME), null);
+        if (this.isValidLifetime(parsed)) return parsed;
+        // Missing or corrupted: rebuild from the sessions still stored
+        const lifetime = this.lifetimeFromSessions();
+        this.setLifetimeStats(lifetime);
+        return lifetime;
+    }
+
+    setLifetimeStats(lifetime) {
+        localStorage.setItem(this.KEYS.LIFETIME, JSON.stringify(lifetime));
     }
 
     _todayStr(date = new Date()) {
@@ -165,23 +208,20 @@ class StorageManager {
 
     clearTypingStats() {
         localStorage.removeItem(this.KEYS.SESSIONS);
+        localStorage.removeItem(this.KEYS.LIFETIME);
     }
 
-    getStats(sessions = this.getSessions()) {
-        if (sessions.length === 0) {
+    getStats() {
+        const l = this.getLifetimeStats();
+        if (l.sessions === 0) {
             return { totalSessions: 0, avgWpm: 0, avgAccuracy: 0, bestWpm: 0 };
         }
-
-        // Averages are weighted by characters typed, so a two-word book
-        // paragraph can't count as much as a 300-word one
-        const totalSessions = sessions.length;
-        const weight = s => s.chars || 1;
-        const totalWeight = sessions.reduce((sum, s) => sum + weight(s), 0);
-        const avgWpm = Math.round(sessions.reduce((sum, s) => sum + s.wpm * weight(s), 0) / totalWeight);
-        const avgAccuracy = Math.round(sessions.reduce((sum, s) => sum + s.accuracy * weight(s), 0) / totalWeight);
-        const bestWpm = Math.max(...sessions.map(s => s.wpm));
-
-        return { totalSessions, avgWpm, avgAccuracy, bestWpm };
+        return {
+            totalSessions: l.sessions,
+            avgWpm: Math.round(l.wpmChars / l.chars),
+            avgAccuracy: Math.round(l.accChars / l.chars),
+            bestWpm: l.bestWpm
+        };
     }
 
 }
@@ -520,6 +560,7 @@ class App {
                 // Cancel any pending debounced sync so stale sessions aren't re-saved
                 this.firebase.cancelPendingSync();
                 await this.firebase.deleteField('sessions');
+                await this.firebase.deleteField('lifetime');
                 this.showProgress();
             });
         });
@@ -596,6 +637,7 @@ class App {
             sessions: this.storage.getSessions(),
             bookProgress: this.storage.getAllBookProgress(),
             totalTime: this.storage.getTotalTime(),
+            lifetime: this.storage.getLifetimeStats(),
             dailyTime: this.storage.getDailyTime(),
         };
     }
@@ -627,6 +669,13 @@ class App {
             local.sort((a, b) => new Date(b.date) - new Date(a.date));
             this.storage.setSessions(local.slice(0, 100));
         }
+
+        // Merge lifetime stats: keep whichever tally covers the most sessions —
+        // local, cloud, or a rebuild from the merged list (covers cloud data
+        // saved before the tally existed)
+        const candidates = [this.storage.getLifetimeStats(), this.storage.lifetimeFromSessions()];
+        if (this.storage.isValidLifetime(data.lifetime)) candidates.push(data.lifetime);
+        this.storage.setLifetimeStats(candidates.reduce((a, b) => (b.sessions > a.sessions ? b : a)));
 
         // Merge book progress: union of completed paragraphs
         if (data.bookProgress) {
@@ -1306,7 +1355,7 @@ class App {
 
     showProgress() {
         const sessions = this.storage.getSessions();
-        const stats = this.storage.getStats(sessions);
+        const stats = this.storage.getStats();
 
         // Overview stats
         this.totalSessions.textContent = stats.totalSessions;

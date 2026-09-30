@@ -42,7 +42,7 @@ Only `firebase.js` and `app.js` are loaded eagerly from index.html. The two larg
 - Backspace right after a wrong key only clears the error mark (the cursor never advanced)
 - WPM = `(correctChars / 5) / minutes`, paused time excluded
 - Auto-pause on window blur/hidden and after `IDLE_PAUSE_MS` (15s) without a keystroke; the idle pause is backdated to the last keystroke
-- Progress-screen averages (WPM, accuracy) are weighted by session `chars`
+- Progress-screen stats come from an all-time tally (`typefit_lifetime`), not the session list (capped at 100). Averages are weighted by session `chars`. The tally is rebuilt from stored sessions if missing, cleared with typing stats, and on cloud load the tally covering the most sessions wins
 - `maxPosition` high-water mark ensures retyping after backspace doesn't inflate `totalTyped` or penalize accuracy
 
 `renderText()` creates all character spans once; `updateCharDisplay(fromPos)` incrementally updates only 2-3 spans around the cursor for performance.
